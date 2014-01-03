@@ -100,7 +100,7 @@ class Currency
         $result = \QUI::getDB()->select(array(
             'from' => self::Table(),
             'where' => array(
-            	'currency' => $currency
+                'currency' => $currency
             )
         ));
 
@@ -160,144 +160,144 @@ class Currency
     static function allCurrencies()
     {
         return array(
-        	'EUR' => array(
-            	'text' => 'Euro',
+            'EUR' => array(
+                'text' => 'Euro',
                 'sign' => '&euro;'
             ),
-        	'USD' => array(
-            	'text' => 'US dollar',
+            'USD' => array(
+                'text' => 'US dollar',
                 'sign' => '$'
             ),
             'JPY' => array(
-            	'text' => 'Japanese yen',
+                'text' => 'Japanese yen',
                 'sign' => '&yen;'
             ),
             'BGN' => array(
-            	'text' => 'Bulgarian lev',
+                'text' => 'Bulgarian lev',
                 'sign' => 'лв'
             ),
             'CZK' => array(
-            	'text' => 'Czech koruna',
+                'text' => 'Czech koruna',
                 'sign' => 'Kč'
             ),
             'DKK' => array(
-            	'text' => 'Danish krone',
+                'text' => 'Danish krone',
                 'sign' => 'kr'
             ),
             'GBP' => array(
-            	'text' => 'Pound sterling',
+                'text' => 'Pound sterling',
                 'sign' => '&pound;'
             ),
             'HUF' => array(
-            	'text' => 'Hungarian forint',
+                'text' => 'Hungarian forint',
                 'sign' => ''
             ),
             'LTL' => array(
-            	'text' => 'Lithuanian litas',
+                'text' => 'Lithuanian litas',
                 'sign' => 'Lt'
             ),
             'LVL' => array(
-            	'text' => 'Latvian lats',
+                'text' => 'Latvian lats',
                 'sign' => 'Ls'
             ),
             'PLN' => array(
-            	'text' => 'Polish zloty',
+                'text' => 'Polish zloty',
                 'sign' => 'zł'
             ),
             'RON' => array(
-            	'text' => 'New Romanian',
+                'text' => 'New Romanian',
                 'sign' => 'RON'
             ),
             'SEK' => array(
-            	'text' => 'Swedish krona',
+                'text' => 'Swedish krona',
                 'sign' => 'kr'
             ),
             'CHF' => array(
-            	'text' => 'Swiss franc',
+                'text' => 'Swiss franc',
                 'sign' => ''
             ),
             'NOK' => array(
-            	'text' => 'Norwegian krone',
+                'text' => 'Norwegian krone',
                 'sign' => ''
             ),
             'HRK' => array(
-            	'text' => 'Croatian kuna',
+                'text' => 'Croatian kuna',
                 'sign' => 'kn'
             ),
             'RUB' => array(
-            	'text' => 'Russian rouble',
+                'text' => 'Russian rouble',
                 'sign' => 'руб'
             ),
             'TRY' => array(
-            	'text' => 'Turkish lira',
+                'text' => 'Turkish lira',
                 'sign' => '₤'
             ),
             'AUD' => array(
-            	'text' => 'Australian dollar',
+                'text' => 'Australian dollar',
                 'sign' => 'A$'
             ),
             'BRL' => array(
-            	'text' => 'Brasilian real',
+                'text' => 'Brasilian real',
                 'sign' => ''
             ),
             'CAD' => array(
-            	'text' => 'Canadian dollar',
+                'text' => 'Canadian dollar',
                 'sign' => 'C$'
             ),
             'CNY' => array(
-            	'text' => 'Chinese yuan renminbi',
+                'text' => 'Chinese yuan renminbi',
                 'sign' => ''
             ),
             'HKD' => array(
-            	'text' => 'Hong Kong dollar',
+                'text' => 'Hong Kong dollar',
                 'sign' => 'HK$'
             ),
             'IDR' => array(
-            	'text' => 'Indonesian rupiah',
+                'text' => 'Indonesian rupiah',
                 'sign' => ''
             ),
             'ILS' => array(
-            	'text' => 'Israeli shekel',
+                'text' => 'Israeli shekel',
                 'sign' => ''
             ),
             'INR' => array(
-            	'text' => 'Indian rupee',
+                'text' => 'Indian rupee',
                 'sign' => ''
             ),
             'KRW' => array(
-            	'text' => 'South Korean won',
+                'text' => 'South Korean won',
                 'sign' => ''
             ),
             'MXN' => array(
-            	'text' => 'Mexican peso',
+                'text' => 'Mexican peso',
                 'sign' => ''
             ),
             'MYR' => array(
-            	'text' => 'Malaysian ringgit',
+                'text' => 'Malaysian ringgit',
                 'sign' => ''
             ),
             'NZD' => array(
-            	'text' => 'New Zealand dollar',
+                'text' => 'New Zealand dollar',
                 'sign' => 'NZ$'
             ),
             'PHP' => array(
-            	'text' => 'Philippine peso',
+                'text' => 'Philippine peso',
                 'sign' => ''
             ),
             'SGD' => array(
-            	'text' => 'Singapore dollar',
+                'text' => 'Singapore dollar',
                 'sign' => 'S$'
             ),
             'THB' => array(
-            	'text' => 'Thai baht',
+                'text' => 'Thai baht',
                 'sign' => ''
             ),
             'ZAR' => array(
-            	'text' => 'South African rand',
+                'text' => 'South African rand',
                 'sign' => ''
             ),
             'ISK' => array(
-            	'text' => 'Icelandic krona',
+                'text' => 'Icelandic krona',
                 'sign' => ''
             )
         );
@@ -311,7 +311,7 @@ class Currency
      */
     static function import($xmlfile='http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml')
     {
-	    $Dom = new DOMDocument();
+        $Dom = new DOMDocument();
         $Dom->load( $xmlfile );
 
         $list = $Dom->getElementsByTagName( 'Cube' );
@@ -362,13 +362,11 @@ class Currency
                 $DataBase->addData(
                     self::Table(),
                     array(
-                    	'rate'     => $rate,
-                    	'currency' => $currency
+                        'rate'     => $rate,
+                        'currency' => $currency
                     )
                 );
             }
         }
     }
 }
-
-?>
