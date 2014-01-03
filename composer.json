@@ -17,7 +17,7 @@
     },
 
     "require": {
-        "quiqqer/quiqqer" : "dev-master"
+        "quiqqer/quiqqer" : "*"
     },
 
     "autoload": {
