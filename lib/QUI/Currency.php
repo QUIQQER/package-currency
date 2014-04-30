@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains QUI_Currency
+ * This file contains \QUI\Currency
  */
 
 namespace QUI;
