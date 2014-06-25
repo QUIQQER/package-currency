@@ -19,6 +19,12 @@ use DOMDocument;
 class Currency
 {
     /**
+     * currency temp list
+     * @var array
+     */
+    static $currencies = array();
+
+    /**
      * Return the real table name
      *
      * @return String
@@ -26,6 +32,16 @@ class Currency
     static function Table()
     {
         return QUI_DB_PRFX . 'currency';
+    }
+
+    /**
+     * Return the default currency
+     *
+     * @return string
+     */
+    static function getDefaultCurrency()
+    {
+        return 'EUR';
     }
 
     /**
@@ -49,11 +65,11 @@ class Currency
         $signs = self::allCurrencies();
 
         if ( !isset( $signs[ $currency_from ] ) && $currency_from !== 'EUR' ) {
-            throw new \QException( 'Unknown currency: '. $currency_from );
+            throw new \QUI\Exception( 'Unknown currency: '. $currency_from );
         }
 
         if ( !isset( $signs[ $currency_to ] ) && $currency_to !== 'EUR' ) {
-            throw new \QException( 'Unknown currency: '. $currency_to );
+            throw new \QUI\Exception( 'Unknown currency: '. $currency_to );
         }
 
         $rate_from_to_euro = self::getRate( $currency_from );
@@ -90,6 +106,37 @@ class Currency
     }
 
     /**
+     * Format a currency value
+     *
+     * @param unknown $amount
+     * @param unknown $currency
+     * @param unknown $locale
+     *
+     * @return String
+     */
+    static function format($amount, $currency, $locale='de_DE')
+    {
+        if ( strpos( $locale, '.UTF-8' ) === false ) {
+            $locale = $locale .'.UTF-8';
+        }
+
+        setlocale( LC_MONETARY, $locale );
+
+        $result = money_format(
+            '%!n',
+            \QUI\Utils\String::parseFloat( $amount )
+        );
+
+        $sign = self::getSign( $currency );
+
+        if ( $locale === 'de_DE.UTF-8' ) {
+            return $result .' '. $sign;
+        }
+
+        return $sign .' '. $result;
+    }
+
+    /**
      * Get the exchange rate
      *
      * @param String $currency
@@ -97,18 +144,44 @@ class Currency
      */
     static function getRate($currency)
     {
-        $result = \QUI::getDB()->select(array(
-            'from' => self::Table(),
+        if ( isset( self::$currencies[ $currency ] ) ) {
+            return self::$currencies[ $currency ];
+        }
+
+        $result = \QUI::getDataBase()->fetch(array(
+            'from'  => self::Table(),
             'where' => array(
                 'currency' => $currency
             )
         ));
 
-        if ( isset( $result[0] ) ) {
-            return (float) $result[0]['rate'];
+        if ( isset( $result[0] ) )
+        {
+            self::$currencies[ $currency ] = (float)$result[0]['rate'];
+
+            return (float)$result[0]['rate'];
         }
 
         return false;
+    }
+
+    /**
+     * Return the exchange rate between two currencies
+     *
+     * @param String $currencyFrom
+     * @param String $currencyTo
+     * @return float
+     */
+    static function getRateFromTo($currencyFrom, $currencyTo)
+    {
+        $from = self::getRate( $currencyFrom );
+        $to   = self::getRate( $currencyTo );
+
+        if ( !$from || !$to ) {
+            return false;
+        }
+
+        return round($from / $to, 8);
     }
 
     /**
@@ -150,6 +223,16 @@ class Currency
         }
 
         return $signs[ $currency ][ 'sign' ];
+    }
+
+    /**
+     * Check if an exchange rate for the currency exists
+     *
+     * @return Bool
+     */
+    static function existCurrency($currency)
+    {
+        return self::getRate( $currency ) ? true : false;
     }
 
     /**
@@ -338,11 +421,11 @@ class Currency
             $values[ $currency ] = $rate;
         }
 
-        $DataBase = \QUI::getDB();
+        $DataBase = \QUI::getDataBase();
 
         foreach ( $values as $currency => $rate )
         {
-            $result = $DataBase->select(array(
+            $result = $DataBase->fetch(array(
                 'from'  => self::Table(),
                 'where' => array(
                     'currency' => $currency
@@ -352,14 +435,14 @@ class Currency
             // Update
             if ( isset( $result[0] ) )
             {
-                $DataBase->updateData(
+                $DataBase->update(
                     self::Table(),
                     array( 'rate' => $rate ),
                     array( 'currency' => $currency )
                 );
             } else
             {
-                $DataBase->addData(
+                $DataBase->insert(
                     self::Table(),
                     array(
                         'rate'     => $rate,
