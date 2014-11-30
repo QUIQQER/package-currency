@@ -6,6 +6,7 @@
 
 namespace QUI;
 
+use QUI;
 use DOMDocument;
 
 /**
@@ -13,9 +14,8 @@ use DOMDocument;
  * Conversion and currency sign
  *
  * @author www.pcsg.de (Henning Leutz)
- * @package com.pcsg.qui
+ * @package quiqqer/currency
  */
-
 class Currency
 {
     /**
@@ -50,8 +50,8 @@ class Currency
      * @param float $amount
      * @param String $currency_from
      * @param String $currency_to
-     *
      * @return float
+     * @throws QUI\Exception
      *
      * @example \QUI\Currency::calc( 1.45, 'USD', 'EUR' )
      * @example \QUI\Currency::calc( 1.45, 'USD' )
@@ -65,11 +65,11 @@ class Currency
         $signs = self::allCurrencies();
 
         if ( !isset( $signs[ $currency_from ] ) && $currency_from !== 'EUR' ) {
-            throw new \QUI\Exception( 'Unknown currency: '. $currency_from );
+            throw new QUI\Exception( 'Unknown currency: '. $currency_from );
         }
 
         if ( !isset( $signs[ $currency_to ] ) && $currency_to !== 'EUR' ) {
-            throw new \QUI\Exception( 'Unknown currency: '. $currency_to );
+            throw new QUI\Exception( 'Unknown currency: '. $currency_to );
         }
 
         $rate_from_to_euro = self::getRate( $currency_from );
@@ -108,9 +108,9 @@ class Currency
     /**
      * Format a currency value
      *
-     * @param unknown $amount
-     * @param unknown $currency
-     * @param unknown $locale
+     * @param integer|float $amount
+     * @param string $currency - currency code
+     * @param string $locale - locale name
      *
      * @return String
      */
@@ -124,7 +124,7 @@ class Currency
 
         $result = money_format(
             '%!n',
-            \QUI\Utils\String::parseFloat( $amount )
+            QUI\Utils\String::parseFloat( $amount )
         );
 
         $sign = self::getSign( $currency );
@@ -140,7 +140,7 @@ class Currency
      * Get the exchange rate
      *
      * @param String $currency
-     * @return float || false
+     * @return float|false
      */
     static function getRate($currency)
     {
@@ -148,7 +148,7 @@ class Currency
             return self::$currencies[ $currency ];
         }
 
-        $result = \QUI::getDataBase()->fetch(array(
+        $result = QUI::getDataBase()->fetch(array(
             'from'  => self::Table(),
             'where' => array(
                 'currency' => $currency
@@ -187,7 +187,7 @@ class Currency
     /**
      * Return the currency sign data (text and sign)
      *
-     * @param unknown_type $currency
+     * @param string $currency - currency code
      * @return Array
      */
     static function getSignData($currency)
@@ -204,8 +204,8 @@ class Currency
     /**
      * return the currency sign
      *
-     * @param String $currency (EUR or USD or JPY ...)
-     * @return String
+     * @param string $currency - currency code (EUR or USD or JPY ...)
+     * @return string
      *
      * @example
      * echo \QUI\Currency::getSign('EUR');
@@ -228,7 +228,8 @@ class Currency
     /**
      * Check if an exchange rate for the currency exists
      *
-     * @return Bool
+     * @param string $currency - currency name
+     * @return bool
      */
     static function existCurrency($currency)
     {
@@ -238,7 +239,7 @@ class Currency
     /**
      * Get all currency entries
      *
-     * @return Array
+     * @return array
      */
     static function allCurrencies()
     {
@@ -409,6 +410,7 @@ class Currency
 
         for ( $c = 0; $c < $list->length; $c++ )
         {
+            /* @var $Cube \DOMElement */
             $Cube = $list->item( $c );
 
             $currency = $Cube->getAttribute( 'currency' );
@@ -421,7 +423,7 @@ class Currency
             $values[ $currency ] = $rate;
         }
 
-        $DataBase = \QUI::getDataBase();
+        $DataBase = QUI::getDataBase();
 
         foreach ( $values as $currency => $rate )
         {
