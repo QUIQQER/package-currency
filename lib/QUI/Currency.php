@@ -13,13 +13,14 @@ use DOMDocument;
  * Currency class
  * Conversion and currency sign
  *
- * @author www.pcsg.de (Henning Leutz)
+ * @author  www.pcsg.de (Henning Leutz)
  * @package quiqqer/currency
  */
 class Currency
 {
     /**
      * currency temp list
+     *
      * @var array
      */
     static $currencies = array();
@@ -31,7 +32,7 @@ class Currency
      */
     static function Table()
     {
-        return QUI_DB_PRFX . 'currency';
+        return QUI_DB_PRFX.'currency';
     }
 
     /**
@@ -47,105 +48,107 @@ class Currency
     /**
      * Calculation
      *
-     * @param float $amount
+     * @param float  $amount
      * @param String $currency_from
      * @param String $currency_to
+     *
      * @return float
      * @throws QUI\Exception
      *
      * @example \QUI\Currency::calc( 1.45, 'USD', 'EUR' )
      * @example \QUI\Currency::calc( 1.45, 'USD' )
      */
-    static function calc($amount, $currency_from, $currency_to='EUR')
+    static function calc($amount, $currency_from, $currency_to = 'EUR')
     {
-        if ( $currency_from === 'EUR' && $currency_to === 'EUR' ) {
+        if ($currency_from === 'EUR' && $currency_to === 'EUR') {
             return $amount;
         }
 
         $signs = self::allCurrencies();
 
-        if ( !isset( $signs[ $currency_from ] ) && $currency_from !== 'EUR' ) {
-            throw new QUI\Exception( 'Unknown currency: '. $currency_from );
+        if (!isset($signs[$currency_from]) && $currency_from !== 'EUR') {
+            throw new QUI\Exception('Unknown currency: '.$currency_from);
         }
 
-        if ( !isset( $signs[ $currency_to ] ) && $currency_to !== 'EUR' ) {
-            throw new QUI\Exception( 'Unknown currency: '. $currency_to );
+        if (!isset($signs[$currency_to]) && $currency_to !== 'EUR') {
+            throw new QUI\Exception('Unknown currency: '.$currency_to);
         }
 
-        $rate_from_to_euro = self::getRate( $currency_from );
+        $rate_from_to_euro = self::getRate($currency_from);
 
         // nach euro
-        if ( $currency_to === 'EUR' ) {
-            return $amount * ( 1 / $rate_from_to_euro );
+        if ($currency_to === 'EUR') {
+            return $amount * (1 / $rate_from_to_euro);
         }
 
-        if ( $currency_from === 'EUR' ) {
-            return $amount * self::getRate( $currency_to );
+        if ($currency_from === 'EUR') {
+            return $amount * self::getRate($currency_to);
         }
 
-        $eur = self::calc( $amount, $currency_from );
+        $eur = self::calc($amount, $currency_from);
 
-        return $eur * self::getRate( $currency_to );
+        return $eur * self::getRate($currency_to);
     }
 
     /**
      * Calculation width Sign
      *
-     * @param float $amount
+     * @param float  $amount
      * @param String $currency_from
      * @param String $currency_to
      *
      * @return String
      */
-    static function calcWithSign($amount, $currency_from, $currency_to='EUR')
+    static function calcWithSign($amount, $currency_from, $currency_to = 'EUR')
     {
-        $amount = self::calc( $amount, $currency_from, $currency_to );
-        $sign   = self::getSign( $currency_to );
+        $amount = self::calc($amount, $currency_from, $currency_to);
+        $sign = self::getSign($currency_to);
 
-        return  $amount .' '. $sign;
+        return $amount.' '.$sign;
     }
 
     /**
      * Format a currency value
      *
      * @param integer|float $amount
-     * @param string $currency - currency code
-     * @param string $locale - locale name
+     * @param string        $currency - currency code
+     * @param string        $locale   - locale name
      *
      * @return String
      */
-    static function format($amount, $currency, $locale='de_DE')
+    static function format($amount, $currency, $locale = 'de_DE')
     {
-        if ( strpos( $locale, '.UTF-8' ) === false ) {
-            $locale = $locale .'.UTF-8';
+        if (strpos($locale, '.UTF-8') === false) {
+            $locale = $locale.'.UTF-8';
         }
 
-        setlocale( LC_MONETARY, $locale );
+        setlocale(LC_MONETARY, $locale);
 
         $result = money_format(
             '%!n',
-            QUI\Utils\String::parseFloat( $amount )
+            QUI\Utils\String::parseFloat($amount)
         );
 
-        $sign = self::getSign( $currency );
+        $sign = self::getSign($currency);
 
-        if ( $locale === 'de_DE.UTF-8' ) {
-            return $result .' '. $sign;
+        if ($locale === 'de_DE.UTF-8') {
+            return $result.' '.$sign;
         }
 
-        return $sign .' '. $result;
+        return $sign.' '.$result;
     }
 
     /**
      * Get the exchange rate
      *
      * @param String $currency
+     *
      * @return float|false
      */
     static function getRate($currency)
     {
-        if ( isset( self::$currencies[ $currency ] ) ) {
-            return self::$currencies[ $currency ];
+        if (isset(self::$currencies[$currency])) {
+            return self::$currencies[$currency];
         }
 
         $result = QUI::getDataBase()->fetch(array(
@@ -155,9 +158,8 @@ class Currency
             )
         ));
 
-        if ( isset( $result[0] ) )
-        {
-            self::$currencies[ $currency ] = (float)$result[0]['rate'];
+        if (isset($result[0])) {
+            self::$currencies[$currency] = (float)$result[0]['rate'];
 
             return (float)$result[0]['rate'];
         }
@@ -170,14 +172,15 @@ class Currency
      *
      * @param String $currencyFrom
      * @param String $currencyTo
+     *
      * @return float
      */
     static function getRateFromTo($currencyFrom, $currencyTo)
     {
-        $from = self::getRate( $currencyFrom );
-        $to   = self::getRate( $currencyTo );
+        $from = self::getRate($currencyFrom);
+        $to = self::getRate($currencyTo);
 
-        if ( !$from || !$to ) {
+        if (!$from || !$to) {
             return false;
         }
 
@@ -188,14 +191,15 @@ class Currency
      * Return the currency sign data (text and sign)
      *
      * @param string $currency - currency code
+     *
      * @return Array
      */
     static function getSignData($currency)
     {
         $signs = self::allCurrencies();
 
-        if ( isset( $signs[ $currency ] ) ) {
-            return $signs[ $currency ];
+        if (isset($signs[$currency])) {
+            return $signs[$currency];
         }
 
         return array();
@@ -205,6 +209,7 @@ class Currency
      * return the currency sign
      *
      * @param string $currency - currency code (EUR or USD or JPY ...)
+     *
      * @return string
      *
      * @example
@@ -214,26 +219,27 @@ class Currency
     {
         $signs = self::allCurrencies();
 
-        if ( !isset( $signs[ $currency ] ) ) {
+        if (!isset($signs[$currency])) {
             return $currency;
         }
 
-        if ( empty( $signs[ $currency ][ 'sign' ] ) ) {
+        if (empty($signs[$currency]['sign'])) {
             return $currency;
         }
 
-        return $signs[ $currency ][ 'sign' ];
+        return $signs[$currency]['sign'];
     }
 
     /**
      * Check if an exchange rate for the currency exists
      *
      * @param string $currency - currency name
+     *
      * @return bool
      */
     static function existCurrency($currency)
     {
-        return self::getRate( $currency ) ? true : false;
+        return self::getRate($currency) ? true : false;
     }
 
     /**
@@ -393,14 +399,15 @@ class Currency
      *
      * @param String $xmlfile - Path to XML File
      */
-    static function import($xmlfile='http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml')
-    {
+    static function import(
+        $xmlfile = 'http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml'
+    ) {
         $Dom = new DOMDocument();
-        $Dom->load( $xmlfile );
+        $Dom->load($xmlfile);
 
-        $list = $Dom->getElementsByTagName( 'Cube' );
+        $list = $Dom->getElementsByTagName('Cube');
 
-        if ( !$list->length ) {
+        if (!$list->length) {
             return;
         }
 
@@ -408,25 +415,23 @@ class Currency
             'EUR' => '1.0'
         );
 
-        for ( $c = 0; $c < $list->length; $c++ )
-        {
+        for ($c = 0; $c < $list->length; $c++) {
             /* @var $Cube \DOMElement */
-            $Cube = $list->item( $c );
+            $Cube = $list->item($c);
 
-            $currency = $Cube->getAttribute( 'currency' );
-            $rate     = $Cube->getAttribute( 'rate' );
+            $currency = $Cube->getAttribute('currency');
+            $rate = $Cube->getAttribute('rate');
 
-            if ( empty( $currency ) ) {
+            if (empty($currency)) {
                 continue;
             }
 
-            $values[ $currency ] = $rate;
+            $values[$currency] = $rate;
         }
 
         $DataBase = QUI::getDataBase();
 
-        foreach ( $values as $currency => $rate )
-        {
+        foreach ($values as $currency => $rate) {
             $result = $DataBase->fetch(array(
                 'from'  => self::Table(),
                 'where' => array(
@@ -435,15 +440,13 @@ class Currency
             ));
 
             // Update
-            if ( isset( $result[0] ) )
-            {
+            if (isset($result[0])) {
                 $DataBase->update(
                     self::Table(),
-                    array( 'rate' => $rate ),
-                    array( 'currency' => $currency )
+                    array('rate' => $rate),
+                    array('currency' => $currency)
                 );
-            } else
-            {
+            } else {
                 $DataBase->insert(
                     self::Table(),
                     array(
