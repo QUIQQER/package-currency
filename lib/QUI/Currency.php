@@ -23,16 +23,16 @@ class Currency
      *
      * @var array
      */
-    static $currencies = array();
+    public static $currencies = array();
 
     /**
      * Return the real table name
      *
      * @return String
      */
-    static function Table()
+    public static function Table()
     {
-        return QUI_DB_PRFX.'currency';
+        return QUI_DB_PRFX . 'currency';
     }
 
     /**
@@ -40,7 +40,7 @@ class Currency
      *
      * @return string
      */
-    static function getDefaultCurrency()
+    public static function getDefaultCurrency()
     {
         return 'EUR';
     }
@@ -48,7 +48,7 @@ class Currency
     /**
      * Calculation
      *
-     * @param float  $amount
+     * @param float $amount
      * @param String $currency_from
      * @param String $currency_to
      *
@@ -58,7 +58,7 @@ class Currency
      * @example \QUI\Currency::calc( 1.45, 'USD', 'EUR' )
      * @example \QUI\Currency::calc( 1.45, 'USD' )
      */
-    static function calc($amount, $currency_from, $currency_to = 'EUR')
+    public static function calc($amount, $currency_from, $currency_to = 'EUR')
     {
         if ($currency_from === 'EUR' && $currency_to === 'EUR') {
             return $amount;
@@ -67,11 +67,11 @@ class Currency
         $signs = self::allCurrencies();
 
         if (!isset($signs[$currency_from]) && $currency_from !== 'EUR') {
-            throw new QUI\Exception('Unknown currency: '.$currency_from);
+            throw new QUI\Exception('Unknown currency: ' . $currency_from);
         }
 
         if (!isset($signs[$currency_to]) && $currency_to !== 'EUR') {
-            throw new QUI\Exception('Unknown currency: '.$currency_to);
+            throw new QUI\Exception('Unknown currency: ' . $currency_to);
         }
 
         $rate_from_to_euro = self::getRate($currency_from);
@@ -93,49 +93,49 @@ class Currency
     /**
      * Calculation width Sign
      *
-     * @param float  $amount
+     * @param float $amount
      * @param String $currency_from
      * @param String $currency_to
      *
      * @return String
      */
-    static function calcWithSign($amount, $currency_from, $currency_to = 'EUR')
+    public static function calcWithSign($amount, $currency_from, $currency_to = 'EUR')
     {
         $amount = self::calc($amount, $currency_from, $currency_to);
-        $sign = self::getSign($currency_to);
+        $sign   = self::getSign($currency_to);
 
-        return $amount.' '.$sign;
+        return $amount . ' ' . $sign;
     }
 
     /**
      * Format a currency value
      *
      * @param integer|float $amount
-     * @param string        $currency - currency code
-     * @param string        $locale   - locale name
+     * @param string $currency - currency code
+     * @param string $locale - locale name
      *
      * @return String
      */
-    static function format($amount, $currency, $locale = 'de_DE')
+    public static function format($amount, $currency, $locale = 'de_DE')
     {
         if (strpos($locale, '.UTF-8') === false) {
-            $locale = $locale.'.UTF-8';
+            $locale = $locale . '.UTF-8';
         }
 
         setlocale(LC_MONETARY, $locale);
 
         $result = money_format(
             '%!n',
-            QUI\Utils\String::parseFloat($amount)
+            QUI\Utils\StringHelper::parseFloat($amount)
         );
 
         $sign = self::getSign($currency);
 
         if ($locale === 'de_DE.UTF-8') {
-            return $result.' '.$sign;
+            return $result . ' ' . $sign;
         }
 
-        return $sign.' '.$result;
+        return $sign . ' ' . $result;
     }
 
     /**
@@ -145,14 +145,14 @@ class Currency
      *
      * @return float|false
      */
-    static function getRate($currency)
+    public static function getRate($currency)
     {
         if (isset(self::$currencies[$currency])) {
             return self::$currencies[$currency];
         }
 
         $result = QUI::getDataBase()->fetch(array(
-            'from'  => self::Table(),
+            'from' => self::Table(),
             'where' => array(
                 'currency' => $currency
             )
@@ -175,10 +175,10 @@ class Currency
      *
      * @return float
      */
-    static function getRateFromTo($currencyFrom, $currencyTo)
+    public static function getRateFromTo($currencyFrom, $currencyTo)
     {
         $from = self::getRate($currencyFrom);
-        $to = self::getRate($currencyTo);
+        $to   = self::getRate($currencyTo);
 
         if (!$from || !$to) {
             return false;
@@ -192,9 +192,9 @@ class Currency
      *
      * @param string $currency - currency code
      *
-     * @return Array
+     * @return array
      */
-    static function getSignData($currency)
+    public static function getSignData($currency)
     {
         $signs = self::allCurrencies();
 
@@ -215,7 +215,7 @@ class Currency
      * @example
      * echo \QUI\Currency::getSign('EUR');
      */
-    static function getSign($currency)
+    public static function getSign($currency)
     {
         $signs = self::allCurrencies();
 
@@ -237,7 +237,7 @@ class Currency
      *
      * @return bool
      */
-    static function existCurrency($currency)
+    public static function existCurrency($currency)
     {
         return self::getRate($currency) ? true : false;
     }
@@ -247,7 +247,7 @@ class Currency
      *
      * @return array
      */
-    static function allCurrencies()
+    public static function allCurrencies()
     {
         return array(
             'EUR' => array(
@@ -399,7 +399,7 @@ class Currency
      *
      * @param String $xmlfile - Path to XML File
      */
-    static function import(
+    public static function import(
         $xmlfile = 'http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml'
     ) {
         $Dom = new DOMDocument();
@@ -420,7 +420,7 @@ class Currency
             $Cube = $list->item($c);
 
             $currency = $Cube->getAttribute('currency');
-            $rate = $Cube->getAttribute('rate');
+            $rate     = $Cube->getAttribute('rate');
 
             if (empty($currency)) {
                 continue;
@@ -433,7 +433,7 @@ class Currency
 
         foreach ($values as $currency => $rate) {
             $result = $DataBase->fetch(array(
-                'from'  => self::Table(),
+                'from' => self::Table(),
                 'where' => array(
                     'currency' => $currency
                 )
@@ -450,7 +450,7 @@ class Currency
                 $DataBase->insert(
                     self::Table(),
                     array(
-                        'rate'     => $rate,
+                        'rate' => $rate,
                         'currency' => $currency
                     )
                 );
