@@ -108,5 +108,8 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     public function testConvertFormat()
     {
         $EUR = new QUI\ERP\Currency\Currency('EUR');
+        $usd = $EUR->convertFormat(1, 'USD');
+
+        $this->assertTrue(is_string($usd));
     }
 }
