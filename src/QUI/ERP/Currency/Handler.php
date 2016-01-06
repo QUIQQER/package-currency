@@ -25,6 +25,11 @@ class Handler
     protected static $currencies = array();
 
     /**
+     * @var null
+     */
+    protected static $Default = null;
+
+    /**
      * Return the real table name
      *
      * @return string
@@ -41,7 +46,39 @@ class Handler
      */
     public static function getDefaultCurrency()
     {
-        return self::getCurrency('EUR');
+        if (is_null(self::$Default)) {
+            $Config = QUI::getPackage('quiqqer/currency')->getConfig();
+
+            self::$Default = self::getCurrency(
+                $Config->getValue('currency', 'defaultCurrency')
+            );
+        }
+
+        return self::$Default;
+    }
+
+    /**
+     * Return all allowed currencies
+     *
+     * @return array - [Currency, Currency, Currency]
+     * @throws QUI\Exception
+     */
+    public static function getAllowedCurrencies()
+    {
+        $Config  = QUI::getPackage('quiqqer/currency')->getConfig();
+        $allowed = $Config->getValue('currency', 'allowedCurrencies');
+
+        $allowed = explode(',', trim($allowed));
+        $list    = array();
+
+        foreach ($allowed as $currency) {
+            try {
+                $list[] = self::getCurrency($currency);
+            } catch (QUI\Exception $Exception) {
+            }
+        }
+
+        return $list;
     }
 
     /**
