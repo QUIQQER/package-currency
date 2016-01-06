@@ -62,8 +62,8 @@ class Currency
 
         $data = Handler::getData();
 
-        if (isset($data[$this->getSign()])) {
-            $this->exchangeRate = $this->getSign();
+        if (isset($data[$this->getCode()])) {
+            $this->exchangeRate = $this->getCode();
         }
     }
 
@@ -136,23 +136,25 @@ class Currency
     {
         $Currency = Handler::getCurrency($Currency);
 
-        if ($this->getSign() == $Currency->getSign()) {
+        if ($this->getCode() == $Currency->getCode()) {
             return $amount;
         }
 
+        $from = $this->getCode();
+        $to   = $Currency->getCode();
 
-        // exchange rates are based from EUR
-        if ($Currency->getSign() === 'EUR') {
-            return $amount * (1 / $Currency->getExchangeRate());
+        // exchange rates are based at EUR
+        if ($from == 'EUR' && $to != 'EUR') {
+            return $amount * $Currency->getExchangeRate();
         }
 
-        if ($this->getSign() === 'EUR') {
-            return $amount * $this->getExchangeRate();
+        if ($from != 'EUR' && $to == 'EUR') {
+            return $amount * (1 / $this->getExchangeRate());
         }
 
-        $eur = $this->convert($amount, new Currency('EUR'));
+        $eur = $this->convert($amount, 'EUR');
 
-        return $eur * $this->getExchangeRate();
+        return $eur * $Currency->getExchangeRate();
     }
 
     /**
@@ -173,17 +175,30 @@ class Currency
     /**
      * Return the exchange rate to the EUR
      *
-     * @param string|Currency $Currency - optional, default = EUR
+     * @param boolean|string|Currency $Currency - optional, default = false -> return own exchange rate
      * @return float|boolean
      */
-    public function getExchangeRate($Currency)
+    public function getExchangeRate($Currency = false)
     {
         $data = Handler::getData();
 
-        if (isset($data[$this->getSign()])) {
-            return $data[$this->getSign()];
+        if (!isset($data[$this->getCode()])) {
+            return false;
         }
 
-        return false;
+        $ownRate = $data[$this->getCode()]['rate'];
+
+        if ($Currency === false) {
+            return (float)$ownRate;
+        }
+
+        $Currency = Handler::getCurrency($Currency);
+        $to       = $Currency->getExchangeRate();
+
+        if (!$to) {
+            return false;
+        }
+
+        return round($ownRate / $to, 8);
     }
 }
