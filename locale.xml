@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locales>
+    <groups name="quiqqer/currency" datatype="php,js">
+        <locale name="currency.EUR.text">
+            <de><![CDATA[Euro]]></de>
+            <en><![CDATA[Euro]]></en>
+        </locale>
+        <locale name="currency.EUR.sign">
+            <de><![CDATA[€]]></de>
+            <en><![CDATA[€]]></en>
+        </locale>
+
+        <locale name="currency.USD.text">
+            <de><![CDATA[US Dollar]]></de>
+            <en><![CDATA[US dollar]]></en>
+        </locale>
+        <locale name="currency.USD.sign">
+            <de><![CDATA[$]]></de>
+            <en><![CDATA[$]]></en>
+        </locale>
+
+        <locale name="currency.JPY.text">
+            <de><![CDATA[Japanische YEN]]></de>
+            <en><![CDATA[Japanese yen]]></en>
+        </locale>
+        <locale name="currency.JPY.sign">
+            <de><![CDATA[&yen;]]></de>
+            <en><![CDATA[&yen;]]></en>
+        </locale>
+
+        <locale name="currency.BGN.text">
+            <de><![CDATA[Bulgarischen Lew]]></de>
+            <en><![CDATA[Bulgarian lev]]></en>
+        </locale>
+        <locale name="currency.BGN.sign">
+            <de><![CDATA[лв]]></de>
+            <en><![CDATA[лв]]></en>
+        </locale>
+
+        <locale name="currency.CZK.text">
+            <de><![CDATA[Tschechische Krone]]></de>
+            <en><![CDATA[Czech koruna]]></en>
+        </locale>
+        <locale name="currency.CZK.sign">
+            <de><![CDATA[Kč]]></de>
+            <en><![CDATA[Kč]]></en>
+        </locale>
+
+        <locale name="currency.DKK.text">
+            <de><![CDATA[Dänische Krone]]></de>
+            <en><![CDATA[Danish krone]]></en>
+        </locale>
+        <locale name="currency.DKK.sign">
+            <de><![CDATA[kr]]></de>
+            <en><![CDATA[kr]]></en>
+        </locale>
+
+        <locale name="currency.GBP.text">
+            <de><![CDATA[Pfund Sterling]]></de>
+            <en><![CDATA[Pound sterling]]></en>
+        </locale>
+        <locale name="currency.GBP.sign">
+            <de><![CDATA[&pound;]]></de>
+            <en><![CDATA[&pound;]]></en>
+        </locale>
+
+        <locale name="currency.HUF.text">
+            <de><![CDATA[Ungarischer Forint]]></de>
+            <en><![CDATA[Hungarian forint]]></en>
+        </locale>
+        <locale name="currency.HUF.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.LTL.text">
+            <de><![CDATA[Litauische Litas]]></de>
+            <en><![CDATA[Lithuanian litas]]></en>
+        </locale>
+        <locale name="currency.LTL.sign">
+            <de><![CDATA[Lt]]></de>
+            <en><![CDATA[Lt]]></en>
+        </locale>
+
+        <locale name="currency.LVL.text">
+            <de><![CDATA[Lettische Lats]]></de>
+            <en><![CDATA[Latvian lats]]></en>
+        </locale>
+        <locale name="currency.LVL.sign">
+            <de><![CDATA[Ls]]></de>
+            <en><![CDATA[Ls]]></en>
+        </locale>
+
+        <locale name="currency.PLN.text">
+            <de><![CDATA[Polnischer Zloty]]></de>
+            <en><![CDATA[Polish zloty]]></en>
+        </locale>
+        <locale name="currency.PLN.sign">
+            <de><![CDATA[zł]]></de>
+            <en><![CDATA[zł]]></en>
+        </locale>
+
+        <locale name="currency.RON.text">
+            <de><![CDATA[New rumänischen]]></de>
+            <en><![CDATA[New Romanian]]></en>
+        </locale>
+        <locale name="currency.RON.sign">
+            <de><![CDATA[RON]]></de>
+            <en><![CDATA[RON]]></en>
+        </locale>
+
+        <locale name="currency.SEK.text">
+            <de><![CDATA[schwedische Krone]]></de>
+            <en><![CDATA[Swedish krona]]></en>
+        </locale>
+        <locale name="currency.SEK.sign">
+            <de><![CDATA[kr]]></de>
+            <en><![CDATA[kr]]></en>
+        </locale>
+
+        <locale name="currency.CHF.text">
+            <de><![CDATA[Schweizerfranken]]></de>
+            <en><![CDATA[Swiss franc]]></en>
+        </locale>
+        <locale name="currency.CHF.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.NOK.text">
+            <de><![CDATA[Norwegische Krone]]></de>
+            <en><![CDATA[Norwegian krone]]></en>
+        </locale>
+        <locale name="currency.NOK.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.HRK.text">
+            <de><![CDATA[Kroatische Kuna]]></de>
+            <en><![CDATA[Croatian kuna]]></en>
+        </locale>
+        <locale name="currency.HRK.sign">
+            <de><![CDATA[kn]]></de>
+            <en><![CDATA[kn]]></en>
+        </locale>
+
+        <locale name="currency.RUB.text">
+            <de><![CDATA[Russischer Rubel]]></de>
+            <en><![CDATA[Russian rouble]]></en>
+        </locale>
+        <locale name="currency.RUB.sign">
+            <de><![CDATA[руб]]></de>
+            <en><![CDATA[руб]]></en>
+        </locale>
+
+        <locale name="currency.TRY.text">
+            <de><![CDATA[Türkische Lira]]></de>
+            <en><![CDATA[Turkish lira]]></en>
+        </locale>
+        <locale name="currency.TRY.sign">
+            <de><![CDATA[₤]]></de>
+            <en><![CDATA[₤]]></en>
+        </locale>
+
+        <locale name="currency.AUD.text">
+            <de><![CDATA[Australischer Dollar]]></de>
+            <en><![CDATA[Australian dollar]]></en>
+        </locale>
+        <locale name="currency.AUD.sign">
+            <de><![CDATA[A$]]></de>
+            <en><![CDATA[A$]]></en>
+        </locale>
+
+        <locale name="currency.BRL.text">
+            <de><![CDATA[Brasilianischer Real]]></de>
+            <en><![CDATA[Brasilian real]]></en>
+        </locale>
+        <locale name="currency.BRL.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.CAD.text">
+            <de><![CDATA[Kanadischer Dollar]]></de>
+            <en><![CDATA[Canadian dollar]]></en>
+        </locale>
+        <locale name="currency.CAD.sign">
+            <de><![CDATA[C$]]></de>
+            <en><![CDATA[C$]]></en>
+        </locale>
+
+        <locale name="currency.CNY.text">
+            <de><![CDATA[Chinesischer Renminbi Yuan]]></de>
+            <en><![CDATA[Chinese yuan renminbi]]></en>
+        </locale>
+        <locale name="currency.CNY.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.HKD.text">
+            <de><![CDATA[Hongkong Dollar]]></de>
+            <en><![CDATA[Hong Kong dollar]]></en>
+        </locale>
+        <locale name="currency.HKD.sign">
+            <de><![CDATA[HK$]]></de>
+            <en><![CDATA[HK$]]></en>
+        </locale>
+
+        <locale name="currency.IDR.text">
+            <de><![CDATA[Indonesische Rupiah]]></de>
+            <en><![CDATA[Indonesian rupiah]]></en>
+        </locale>
+        <locale name="currency.IDR.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.ILS.text">
+            <de><![CDATA[Israelische Schekel]]></de>
+            <en><![CDATA[Israeli shekel]]></en>
+        </locale>
+        <locale name="currency.ILS.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.INR.text">
+            <de><![CDATA[Indische Rupie]]></de>
+            <en><![CDATA[Indian rupee]]></en>
+        </locale>
+        <locale name="currency.INR.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.KRW.text">
+            <de><![CDATA[Südkoreanischer Won]]></de>
+            <en><![CDATA[South Korean won]]></en>
+        </locale>
+        <locale name="currency.KRW.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.MXN.text">
+            <de><![CDATA[Mexikanischer Peso]]></de>
+            <en><![CDATA[Mexican peso]]></en>
+        </locale>
+        <locale name="currency.MXN.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.MYR.text">
+            <de><![CDATA[Malaysischer Ringgit]]></de>
+            <en><![CDATA[Malaysian ringgit]]></en>
+        </locale>
+        <locale name="currency.MYR.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.NZD.text">
+            <de><![CDATA[Neuseeland-Dollar]]></de>
+            <en><![CDATA[New Zealand dollar]]></en>
+        </locale>
+        <locale name="currency.NZD.sign">
+            <de><![CDATA[NZ$]]></de>
+            <en><![CDATA[NZ$]]></en>
+        </locale>
+
+        <locale name="currency.PHP.text">
+            <de><![CDATA[Philippinischer Peso]]></de>
+            <en><![CDATA[Philippine peso]]></en>
+        </locale>
+        <locale name="currency.PHP.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.SGD.text">
+            <de><![CDATA[Singapur-Dollar]]></de>
+            <en><![CDATA[Singapore dollar]]></en>
+        </locale>
+        <locale name="currency.SGD.sign">
+            <de><![CDATA[S$]]></de>
+            <en><![CDATA[S$]]></en>
+        </locale>
+
+        <locale name="currency.THB.text">
+            <de><![CDATA[Thailändischer Baht]]></de>
+            <en><![CDATA[Thai baht]]></en>
+        </locale>
+        <locale name="currency.THB.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.ZAR.text">
+            <de><![CDATA[Südafrikanischer Rand]]></de>
+            <en><![CDATA[South African rand]]></en>
+        </locale>
+        <locale name="currency.ZAR.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+
+        <locale name="currency.ISK.sign">
+            <de><![CDATA[Isländische Krone]]></de>
+            <en><![CDATA[Icelandic krona]]></en>
+        </locale>
+        <locale name="currency.ISK.sign">
+            <de><![CDATA[]]></de>
+            <en><![CDATA[]]></en>
+        </locale>
+    </groups>
+</locales>

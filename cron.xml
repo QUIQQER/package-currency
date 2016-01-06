@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crons>
+    <cron exec="\QUI\ERP\Currency\Cron::import">
+        <title>
+            <locale group="quiqqer/curreny" var="cron.import.title" />
+        </title>
+        <description>
+            <locale group="quiqqer/curreny" var="cron.import.description" />
+        </description>
+    </cron>
+</crons>
