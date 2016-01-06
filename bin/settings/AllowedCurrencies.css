@@ -1,0 +1,30 @@
+.quiqqer-currency-allowed {
+    float: left;
+    margin-top: 20px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.quiqqer-currency-allowed-currency {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    clear: both;
+    float: left;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+.quiqqer-currency-allowed-currency:last-child {
+    border-bottom: none;
+}
+
+.quiqqer-currency-allowed-currency-text {
+    cursor: pointer;
+    float: left;
+    padding-left: 10px;
+    width: calc(100% - 60px);
+}
+
+.quiqqer-currency-allowed-currency-text:hover {
+
+}

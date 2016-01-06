@@ -10,9 +10,18 @@
             <de><![CDATA[Währungen]]></de>
             <en><![CDATA[Currencies]]></en>
         </locale>
-        <locale name="window.erp.title">
-            <de><![CDATA[Enterprise-Resource-Planning]]></de>
-            <en><![CDATA[Enterprise-Resource-Planning]]></en>
+        <locale name="currency.settings.title">
+            <de><![CDATA[Währungs-Einstellungen]]></de>
+            <en><![CDATA[Currency settings]]></en>
+        </locale>
+
+        <locale name="currency.settings.defaultCurrency.text">
+            <de><![CDATA[Standard Währung]]></de>
+            <en><![CDATA[Default currency]]></en>
+        </locale>
+        <locale name="currency.settings.allowedCurrency.text">
+            <de><![CDATA[Erlaubte Währungen]]></de>
+            <en><![CDATA[Allowed currencies]]></en>
         </locale>
 
 
@@ -85,8 +94,8 @@
             <en><![CDATA[Hungarian forint]]></en>
         </locale>
         <locale name="currency.HUF.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.LTL.text">
@@ -139,8 +148,8 @@
             <en><![CDATA[Swiss franc]]></en>
         </locale>
         <locale name="currency.CHF.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.NOK.text">
@@ -148,8 +157,8 @@
             <en><![CDATA[Norwegian krone]]></en>
         </locale>
         <locale name="currency.NOK.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.HRK.text">
@@ -193,8 +202,8 @@
             <en><![CDATA[Brasilian real]]></en>
         </locale>
         <locale name="currency.BRL.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.CAD.text">
@@ -211,8 +220,8 @@
             <en><![CDATA[Chinese yuan renminbi]]></en>
         </locale>
         <locale name="currency.CNY.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.HKD.text">
@@ -229,8 +238,8 @@
             <en><![CDATA[Indonesian rupiah]]></en>
         </locale>
         <locale name="currency.IDR.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.ILS.text">
@@ -238,8 +247,8 @@
             <en><![CDATA[Israeli shekel]]></en>
         </locale>
         <locale name="currency.ILS.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.INR.text">
@@ -247,8 +256,8 @@
             <en><![CDATA[Indian rupee]]></en>
         </locale>
         <locale name="currency.INR.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.KRW.text">
@@ -256,8 +265,8 @@
             <en><![CDATA[South Korean won]]></en>
         </locale>
         <locale name="currency.KRW.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.MXN.text">
@@ -265,8 +274,8 @@
             <en><![CDATA[Mexican peso]]></en>
         </locale>
         <locale name="currency.MXN.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.MYR.text">
@@ -274,8 +283,8 @@
             <en><![CDATA[Malaysian ringgit]]></en>
         </locale>
         <locale name="currency.MYR.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.NZD.text">
@@ -292,8 +301,8 @@
             <en><![CDATA[Philippine peso]]></en>
         </locale>
         <locale name="currency.PHP.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.SGD.text">
@@ -310,8 +319,8 @@
             <en><![CDATA[Thai baht]]></en>
         </locale>
         <locale name="currency.THB.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.ZAR.text">
@@ -319,8 +328,8 @@
             <en><![CDATA[South African rand]]></en>
         </locale>
         <locale name="currency.ZAR.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
 
         <locale name="currency.ISK.sign">
@@ -328,8 +337,8 @@
             <en><![CDATA[Icelandic krona]]></en>
         </locale>
         <locale name="currency.ISK.sign">
-            <de><![CDATA[]]></de>
-            <en><![CDATA[]]></en>
+            <de><![CDATA[&nbsp;]]></de>
+            <en><![CDATA[&nbsp;]]></en>
         </locale>
     </groups>
 </locales>

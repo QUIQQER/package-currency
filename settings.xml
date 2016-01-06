@@ -11,6 +11,7 @@
                 </conf>
                 <conf name="allowedCurrencies">
                     <type><![CDATA[string]]></type>
+                    <defaultvalue>EUR,USD,GBP,CHF</defaultvalue>
                 </conf>
             </section>
         </config>
@@ -26,12 +27,36 @@
 
             <categories>
                 <category name="currencies">
+
                     <text>
                         <locale group="quiqqer/currency" var="currency.title"/>
                     </text>
                     <icon>icon-money</icon>
-                    
+
+                    <settings title="currencies" name="currencies">
+                        <title>
+                            <locale group="quiqqer/currency" var="currency.settings.title"/>
+                        </title>
+
+                        <input conf="currency.defaultCurrency"
+                               data-qui="package/quiqqer/currency/bin/settings/CurrencyList"
+                        >
+                            <text>
+                                <locale group="quiqqer/currency" var="currency.settings.defaultCurrency.text"/>
+                            </text>
+                        </input>
+
+
+                        <input conf="currency.allowedCurrencies"
+                               data-qui="package/quiqqer/currency/bin/settings/AllowedCurrencies"
+                        >
+                            <text>
+                                <locale group="quiqqer/currency" var="currency.settings.allowedCurrency.text"/>
+                            </text>
+                        </input>
+                    </settings>
                 </category>
+
             </categories>
         </window>
 
