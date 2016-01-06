@@ -12,7 +12,7 @@ Paketname:
 Features (Funktionen)
 --------
 
-- Aktualisierung der Wechselkurse
+- Automatische Aktualisierung der Wechselkurse
 - Währungsumrechnung zwischen verschiedenen Währungen
 
 
