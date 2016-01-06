@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<quiqqer>
+
+    <settings name="ERP">
+        <config>
+            <section name="currency">
+                <conf name="defaultCurrency">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue>EUR</defaultvalue>
+                </conf>
+                <conf name="allowedCurrencies">
+                    <type><![CDATA[string]]></type>
+                </conf>
+            </section>
+        </config>
+
+
+        <window name="ERP">
+            <title>
+                <locale group="quiqqer/currency" var="window.erp.title"/>
+            </title>
+            <params>
+                <icon>icon-sun</icon>
+            </params>
+
+            <categories>
+                <category name="currencies">
+                    <text>
+                        <locale group="quiqqer/currency" var="currency.title"/>
+                    </text>
+                    <icon>icon-money</icon>
+                    
+                </category>
+            </categories>
+        </window>
+
+    </settings>
+
+</quiqqer>

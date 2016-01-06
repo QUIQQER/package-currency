@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
     <groups name="quiqqer/currency" datatype="php,js">
+
+        <locale name="window.erp.title">
+            <de><![CDATA[Enterprise-Resource-Planning]]></de>
+            <en><![CDATA[Enterprise-Resource-Planning]]></en>
+        </locale>
+        <locale name="currency.title">
+            <de><![CDATA[Währungen]]></de>
+            <en><![CDATA[Currencies]]></en>
+        </locale>
+        <locale name="window.erp.title">
+            <de><![CDATA[Enterprise-Resource-Planning]]></de>
+            <en><![CDATA[Enterprise-Resource-Planning]]></en>
+        </locale>
+
+
+        <!-- currencies -->
         <locale name="currency.EUR.text">
             <de><![CDATA[Euro]]></de>
             <en><![CDATA[Euro]]></en>
