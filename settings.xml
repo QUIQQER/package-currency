@@ -22,7 +22,7 @@
                 <locale group="quiqqer/currency" var="window.erp.title"/>
             </title>
             <params>
-                <icon>icon-sun</icon>
+                <icon>fa fa-sun-o</icon>
             </params>
 
             <categories>
@@ -31,7 +31,7 @@
                     <text>
                         <locale group="quiqqer/currency" var="currency.title"/>
                     </text>
-                    <icon>icon-money</icon>
+                    <icon>fa fa-money</icon>
 
                     <settings title="currencies" name="currencies">
                         <title>
