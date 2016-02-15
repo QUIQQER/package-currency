@@ -71,7 +71,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-allowed',
                 html   : '<div class="quiqqer-currency-allowed-container">' +
-                         '<span class="icon-spinner icon-spin fa fa-spinner fa-spin"></span>' +
+                         '<span class="fa fa-spinner fa-spin"></span>' +
                          '</div>'
             }).wraps(this.$Input);
 
