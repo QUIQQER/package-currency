@@ -3,8 +3,8 @@
     <groups name="quiqqer/currency" datatype="php,js">
 
         <locale name="window.erp.title">
-            <de><![CDATA[ERP]]></de>
-            <en><![CDATA[ERP]]></en>
+            <de><![CDATA[Shop]]></de>
+            <en><![CDATA[Shop]]></en>
         </locale>
         <locale name="currency.title">
             <de><![CDATA[Währungen]]></de>
