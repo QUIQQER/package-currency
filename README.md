@@ -43,3 +43,5 @@ Lizenz
 
 Entwickler
 --------
+
+- Damit Währungen vorhanden sind muss ein Cron eingerichtet werden welche Währungen importiert.
