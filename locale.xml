@@ -32,7 +32,7 @@
             <de><![CDATA[Währungen automatisch von der ECP importieren]]></de>
             <en><![CDATA[Import currencies automatic from the ECP]]></en>
         </locale>
-        
+
         <!-- currencies -->
         <locale name="currency.EUR.text">
             <de><![CDATA[Euro]]></de>

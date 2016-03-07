@@ -120,7 +120,7 @@ class Currency
             \NumberFormatter::CURRENCY
         );
 
-        return $Formatter->format($amount);
+        return $Formatter->formatCurrency($amount, $this->getCode());
     }
 
     /**
