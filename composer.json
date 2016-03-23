@@ -21,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "QUI\\ERP\\Currency": "src/QUI/Currency"
+      "QUI\\ERP\\Currency\\": "src/QUI/Currency"
     }
   }
 }
