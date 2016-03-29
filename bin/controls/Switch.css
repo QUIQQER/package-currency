@@ -1,0 +1,53 @@
+.quiqqer-currency-switch {
+    float: left;
+    padding: 0 10px;
+    position: relative;
+    text-align: left;
+    width: 70px;
+    z-index: 10;
+}
+
+.quiqqer-currency-switch__withArrow {
+    cursor: pointer;
+    padding: 0 30px 0 10px;
+}
+
+.quiqqer-currency-switch-arrow {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+}
+
+.quiqqer-currency-switch-dd {
+    background: #fff;
+    border: 1px solid #DDDDDD;
+    top: 100%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.quiqqer-currency-switch-dd:after {
+    background-color: transparent;
+    background-image: -moz-linear-gradient(center top, rgba(0, 0, 0, 0.2), transparent);
+    background-image: -webkit-gradient(linear, center top, left bottom, from(rgba(0, 0, 0, 0.2)), to(transparent));
+    background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
+    background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
+    background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
+    background-image: linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
+    bottom: -8px;
+    content: "";
+    height: 8px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.quiqqer-currency-switch-dd-entry {
+    clear: both;
+    float: left;
+    line-height: 24px;
+    padding: 10px;
+    text-align: left;
+    width: 100%;
+}

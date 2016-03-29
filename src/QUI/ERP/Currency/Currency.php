@@ -167,7 +167,7 @@ class Currency
      */
     public function convertFormat($amount, $Currency)
     {
-        return $this->format(
+        return $Currency->format(
             $this->convert($amount, $Currency)
         );
     }

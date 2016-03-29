@@ -185,7 +185,8 @@ class Handler
                 'sign' => $Locale->get(
                     'quiqqer/currency',
                     'currency.' . $currency . '.sign'
-                )
+                ),
+                'code' => $currency
             );
         }
 
