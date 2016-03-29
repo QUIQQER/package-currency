@@ -24,4 +24,16 @@ class EventHandler
             '<script>var DEFAULT_CURRENCY = "' . $Currency->getCode() . '"</script>'
         );
     }
+
+    /**
+     * @param QUI\Package\Package $Package
+     */
+    public static function onPackageInstall(QUI\Package\Package $Package)
+    {
+        if ($Package->getName() !== 'quiqqer/currency') {
+            return;
+        }
+
+        Import::import();
+    }
 }

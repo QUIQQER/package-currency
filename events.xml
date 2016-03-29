@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
     <event on="onTemplateGetHeader" fire="\QUI\ERP\Currency\EventHandler::onTemplateGetHeader"/>
+    <event on="onPackageInstall" fire="\QUI\ERP\Currency\EventHandler::onPackageInstall"/>
 </events>
