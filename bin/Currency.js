@@ -143,8 +143,6 @@ define('package/quiqqer/currency/bin/Currency', [
                 amount = 0;
             }
 
-            console.log(amount, currencyFrom, currencyTo);
-
             return new Promise(function (resolve) {
                 Ajax.get('package_quiqqer_currency_ajax_convertWithSign', resolve, {
                     'package'   : 'quiqqer/currency',

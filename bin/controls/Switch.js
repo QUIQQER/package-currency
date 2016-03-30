@@ -94,7 +94,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                         display: 'none'
                     });
 
-                    var entryClick = function () {
+                    var entryClick = function (event) {
                         Currencies.setCurrency(event.target.get('data-code'));
                     };
 
@@ -102,7 +102,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                         event.target.addClass('hover');
                     };
 
-                    var entryOut = function () {
+                    var entryOut = function (event) {
                         event.target.removeClass('hover');
                     };
 
