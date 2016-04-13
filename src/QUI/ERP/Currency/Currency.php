@@ -23,9 +23,14 @@ class Currency
     protected $code;
 
     /**
-     * @var int
+     * @var float|bool
      */
     protected $exchangeRate = false;
+
+    /**
+     * @var int
+     */
+    protected $autoupdate = 1;
 
     /**
      * @var QUI\Locale
@@ -62,8 +67,9 @@ class Currency
 
         $data = Handler::getData();
 
-        if (isset($data[$this->getCode()])) {
-            $this->exchangeRate = $this->getCode();
+        if (isset($data[$currencyCode])) {
+            $this->exchangeRate = (float)$data[$currencyCode]['rate'];
+            $this->autoupdate   = $data[$currencyCode]['autoupdate'];
         }
     }
 
@@ -124,6 +130,16 @@ class Currency
     }
 
     /**
+     * updates the currency itself?
+     *
+     * @return boolean
+     */
+    public function autoupdate()
+    {
+        return $this->autoupdate ? true : false;
+    }
+
+    /**
      * Convert the amount to the wanted currency
      *
      * @param float $amount
@@ -180,16 +196,8 @@ class Currency
      */
     public function getExchangeRate($Currency = false)
     {
-        $data = Handler::getData();
-
-        if (!isset($data[$this->getCode()])) {
-            return false;
-        }
-
-        $ownRate = $data[$this->getCode()]['rate'];
-
         if ($Currency === false) {
-            return (float)$ownRate;
+            return $this->exchangeRate;
         }
 
         $Currency = Handler::getCurrency($Currency);
@@ -199,6 +207,61 @@ class Currency
             return false;
         }
 
-        return round($ownRate / $to, 8);
+        return round($this->exchangeRate / $to, 8);
+    }
+
+    /**
+     * Set the exchange rate
+     * if you want to save it to the currency, use ->update()
+     *
+     * @param float|integer $rate
+     * @throws QUI\Exception
+     */
+    public function setExchangeRate($rate)
+    {
+        QUI\Rights\Permission::checkPermission('currency.edit');
+
+        if (!is_numeric($rate)) {
+            throw new QUI\Exception(array());
+        }
+
+        $this->exchangeRate = (float)$rate;
+    }
+
+    /**
+     * Set the autoupdate status
+     *
+     * @param bool $status
+     */
+    public function setAutoupdate($status)
+    {
+        QUI\Rights\Permission::checkPermission('currency.edit');
+
+        $this->autoupdate = (bool)$status ? 1 : 0;
+    }
+
+    /**
+     * alias for update()
+     */
+    public function save()
+    {
+        $this->update();
+    }
+
+    /**
+     * Saves the currency
+     */
+    public function update()
+    {
+        QUI\Rights\Permission::checkPermission('currency.edit');
+
+        QUI::getDataBase()->update(
+            Handler::table(),
+            array(
+                'autoupdate' => $this->autoupdate() ? 1 : 0,
+                'rate' => $this->getExchangeRate()
+            ),
+            array('currency' => $this->getCode())
+        );
     }
 }

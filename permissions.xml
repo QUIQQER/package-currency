@@ -1,0 +1,11 @@
+<permissions>
+    <permission name="currency.create" type="bool">
+        <defaultvalue>1</defaultvalue>
+    </permission>
+    <permission name="currency.delete" type="bool">
+        <defaultvalue>1</defaultvalue>
+    </permission>
+    <permission name="currency.edit" type="bool">
+        <defaultvalue>1</defaultvalue>
+    </permission>
+</permissions>

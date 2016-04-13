@@ -40,6 +40,16 @@ class Handler
     }
 
     /**
+     * @throws QUI\Exception
+     */
+    public static function createCurrency($currencyCode, $rate)
+    {
+        QUI\Rights\Permission::checkPermission('currency.create');
+
+
+    }
+
+    /**
      * Return the default currency
      *
      * @return Currency
@@ -177,6 +187,12 @@ class Handler
         $result = array();
 
         foreach ($currencies as $currency) {
+            try {
+                $Currency = self::getCurrency($currency);
+            } catch (QUI\Exception $Exception) {
+                continue;
+            }
+
             $result[$currency] = array(
                 'text' => $Locale->get(
                     'quiqqer/currency',
@@ -186,7 +202,9 @@ class Handler
                     'quiqqer/currency',
                     'currency.' . $currency . '.sign'
                 ),
-                'code' => $currency
+                'code' => $currency,
+                'rate' => $Currency->getExchangeRate(),
+                'autoupdate' => $Currency->autoupdate()
             );
         }
 

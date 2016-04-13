@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
-    <groups name="quiqqer/currency" datatype="php,js">
+    <groups name="quiqqer/currency" datatype="php">
+        <locale name="exception.exchangesrate.no.number">
+            <de><![CDATA[Shop]]></de>
+            <en><![CDATA[Shop]]></en>
+        </locale>
+    </groups>
 
+    <groups name="quiqqer/currency" datatype="php,js">
         <locale name="window.erp.title">
             <de><![CDATA[Shop]]></de>
             <en><![CDATA[Shop]]></en>
@@ -19,9 +25,30 @@
             <de><![CDATA[Standard Währung]]></de>
             <en><![CDATA[Default currency]]></en>
         </locale>
-        <locale name="currency.settings.allowedCurrency.text">
-            <de><![CDATA[Erlaubte Währungen]]></de>
-            <en><![CDATA[Allowed currencies]]></en>
+        <locale name="currency.settings.currencyManager.text">
+            <de><![CDATA[Währungsveraltung]]></de>
+            <en><![CDATA[Currency manager]]></en>
+        </locale>
+
+        <locale name="grid.setting.currency">
+            <de><![CDATA[Währung]]></de>
+            <en><![CDATA[Currency]]></en>
+        </locale>
+        <locale name="grid.setting.sign">
+            <de><![CDATA[Zeichen]]></de>
+            <en><![CDATA[Sign]]></en>
+        </locale>
+        <locale name="grid.setting.rate">
+            <de><![CDATA[Währungskurs]]></de>
+            <en><![CDATA[Currency rate]]></en>
+        </locale>
+        <locale name="grid.setting.allowed">
+            <de><![CDATA[Erlaubt]]></de>
+            <en><![CDATA[Allowed]]></en>
+        </locale>
+        <locale name="grid.setting.update">
+            <de><![CDATA[Auto-Update]]></de>
+            <en><![CDATA[Auto update]]></en>
         </locale>
 
         <locale name="cron.import.title">

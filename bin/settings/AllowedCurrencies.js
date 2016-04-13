@@ -9,6 +9,8 @@
  * @require qui/controls/Control
  * @require qui/controls/buttons/Switch
  * @require Ajax
+ * @require Locale
+ * @require controls/grid/Grid
  * @require css!package/quiqqer/currency/bin/settings/AllowedCurrencies.css
  */
 define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
@@ -17,11 +19,15 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
     'qui/controls/Control',
     'qui/controls/buttons/Switch',
     'Ajax',
+    'Locale',
+    'controls/grid/Grid',
 
     'css!package/quiqqer/currency/bin/settings/AllowedCurrencies.css'
 
-], function (QUI, QUIControl, QUISwitch, QUIAjax) {
+], function (QUI, QUIControl, QUISwitch, QUIAjax, QUILocale, Grid) {
     "use strict";
+
+    var lg = 'quiqqer/currency';
 
     return new Class({
 
@@ -31,7 +37,9 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         Binds: [
             '$onImport',
             '$onCurrencyStatusChange',
-            '$switchCurrencyStatus'
+            '$switchCurrencyStatus',
+            '$changeAutoUpdate',
+            '$importFromECB'
         ],
 
         options: {
@@ -44,6 +52,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             this.$Input     = null;
             this.$Elm       = null;
             this.$Container = null;
+            this.$Grid      = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -54,6 +63,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * event : on import
          */
         $onImport: function () {
+            var i, len;
+
             this.$Input      = this.getElm();
             this.$Input.type = 'hidden';
 
@@ -61,7 +72,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 var values = {};
                 var value  = this.$Input.value.split(',');
 
-                for (var i = 0, len = value.length; i < len; i++) {
+                for (i = 0, len = value.length; i < len; i++) {
                     values[value[i]] = 1;
                 }
 
@@ -70,63 +81,115 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-allowed',
-                html   : '<div class="quiqqer-currency-allowed-container">' +
-                         '<span class="fa fa-spinner fa-spin"></span>' +
-                         '</div>'
+                html   : '<div class="quiqqer-currency-allowed-container"></div>'
             }).wraps(this.$Input);
+
+            var Settings = this.$Elm.getParent('.qui-xml-panel-row-item');
+
+            if (Settings) {
+                Settings.setStyles({
+                    height  : 300,
+                    overflow: 'hidden',
+                    width   : '100%'
+                });
+            }
 
             this.$Container = this.$Elm.getElement(
                 '.quiqqer-currency-allowed-container'
             );
 
-            this.getCurrencies().then(function (list) {
+            var width = this.$Container.getSize().x;
 
-                var i, Container, CurrencySwitch;
+            this.$Grid = new Grid(this.$Container, {
+                pagination : true,
+                height     : 300,
+                width      : width,
+                columnModel: [{
+                    header   : QUILocale.get(lg, 'grid.setting.currency'),
+                    dataIndex: 'code',
+                    dataType : 'string',
+                    width    : 60,
+                    editable : true
+                }, {
+                    header   : QUILocale.get(lg, 'grid.setting.sign'),
+                    dataIndex: 'sign',
+                    dataType : 'string',
+                    width    : 60,
+                    editable : true
+                }, {
+                    header   : QUILocale.get(lg, 'grid.setting.rate'),
+                    dataIndex: 'rate',
+                    dataType : 'string',
+                    width    : 100
+                }, {
+                    header   : QUILocale.get(lg, 'grid.setting.allowed'),
+                    dataIndex: 'allowed',
+                    dataType : 'QUI',
+                    width    : 100
+                }, {
+                    header   : QUILocale.get(lg, 'grid.setting.update'),
+                    dataIndex: 'autoupdate',
+                    dataType : 'QUI',
+                    width    : 100
+                }],
+                buttons    : [{
+                    name     : 'add',
+                    text     : 'Währung hinzufügen',
+                    textimage: 'fa fa-plus'
+                }, {
+                    name     : 'edit',
+                    text     : 'Währung editieren',
+                    textimage: 'fa fa-edit',
+                    disabled : true
+                }, {
+                    type: 'seperator'
+                }, {
+                    name     : 'delete',
+                    text     : 'Währung löschen',
+                    textimage: 'fa fa-trash',
+                    disabled : true
+                }]
+            });
 
-                var values = this.getAttribute('values');
+            this.$Grid.setWidth(width);
 
-                this.$Container.set('html', '');
+            this.$Grid.addEvents({
+                click  : function () {
 
+                },
+                refresh: function () {
+                    this.getCurrencies().then(function (list) {
+                        var data   = [],
+                            values = this.getAttribute('values');
 
-                for (i in list) {
-                    if (!list.hasOwnProperty(i)) {
-                        continue;
-                    }
+                        for (var i in list) {
+                            if (!list.hasOwnProperty(i)) {
+                                continue;
+                            }
 
-                    Container = new Element('div', {
-                        'class': 'quiqqer-currency-allowed-currency'
-                    }).inject(this.$Container);
+                            list[i].allowed = new QUISwitch({
+                                status: (typeof values[i] !== 'undefined')
+                            });
 
-                    CurrencySwitch = new QUISwitch({
-                        title   : list[i].text,
-                        currency: i,
-                        events  : {
-                            onChange: this.$onCurrencyStatusChange
+                            list[i].autoupdate = new QUISwitch({
+                                status  : list[i].autoupdate,
+                                currency: list[i].code,
+                                events  : {
+                                    onChange: this.$changeAutoUpdate
+                                }
+                            });
+
+                            data.push(list[i]);
                         }
-                    }).inject(Container);
 
-                    new Element('span', {
-                        'class': 'quiqqer-currency-allowed-currency-text',
-                        html   : list[i].text + ' ' + list[i].sign,
-                        events : {
-                            click: this.$switchCurrencyStatus
-                        }
-                    }).inject(Container);
+                        this.$Grid.setData({
+                            data: data
+                        });
+                    }.bind(this));
+                }.bind(this)
+            });
 
-                    if (!values.hasOwnProperty(i)) {
-                        values[i] = 0;
-                    }
-
-                    if (values[i] === 1) {
-                        CurrencySwitch.on();
-                    } else {
-                        CurrencySwitch.off();
-                    }
-                }
-
-                this.setAttribute('values', values);
-
-            }.bind(this));
+            this.$Grid.refresh();
         },
 
         /**
@@ -192,6 +255,37 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             );
 
             Switch.toggle();
+        },
+
+        /**
+         * Set the currency autoupdate status
+         *
+         * @param {Object} Switch
+         * @return {Promise}
+         */
+        $changeAutoUpdate: function (Switch) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.post('package_quiqqer_currency_ajax_setAutoupdate', resolve, {
+                    'package' : 'quiqqer/currency',
+                    currency  : Switch.getAttribute('currency'),
+                    autoupdate: Switch.getStatus() ? 1 : 0,
+                    onError   : reject
+                });
+            });
+        },
+
+        /**
+         * Import the currencies from the ECB
+         *
+         * @returns {Promise}
+         */
+        $importFromECB: function () {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.post('package_quiqqer_currency_ajax_importFromECB', resolve, {
+                    'package': 'quiqqer/currency',
+                    onError  : reject
+                });
+            });
         }
     });
 });
