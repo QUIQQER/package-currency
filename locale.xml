@@ -94,8 +94,8 @@
             <en><![CDATA[Currency rate]]></en>
         </locale>
         <locale name="grid.setting.allowed">
-            <de><![CDATA[Erlaubt]]></de>
-            <en><![CDATA[Allowed]]></en>
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
         </locale>
         <locale name="grid.setting.update">
             <de><![CDATA[Auto-Update]]></de>
