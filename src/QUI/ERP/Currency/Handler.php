@@ -43,10 +43,10 @@ class Handler
      * Create a new currency
      *
      * @param string $currency - currency code
-     * @param integer|float $rate - currency exchange rate
+     * @param integer|float $rate - currency exchange rate, default = 1
      * @throws QUI\Exception
      */
-    public static function createCurrency($currency, $rate)
+    public static function createCurrency($currency, $rate = 1)
     {
         QUI\Rights\Permission::checkPermission('currency.create');
 
@@ -76,6 +76,23 @@ class Handler
             'currency' => $currency,
             'rate' => (float)$rate
         ));
+
+        // create translations
+        $languageData = array(
+            'datatype' => 'js,php'
+        );
+
+        QUI\Translator::addUserVar(
+            'quiqqer/currency',
+            'currency.' . $currency . '.text',
+            $languageData
+        );
+
+        QUI\Translator::addUserVar(
+            'quiqqer/currency',
+            'currency.' . $currency . '.sign',
+            $languageData
+        );
     }
 
     /**

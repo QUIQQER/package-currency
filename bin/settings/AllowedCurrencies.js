@@ -19,6 +19,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
     'qui/controls/Control',
     'qui/controls/buttons/Switch',
     'qui/controls/windows/Confirm',
+    'qui/controls/windows/Prompt',
     'Ajax',
     'Locale',
     'controls/grid/Grid',
@@ -26,7 +27,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
     'css!package/quiqqer/currency/bin/settings/AllowedCurrencies.css'
 
-], function (QUI, QUIControl, QUISwitch, QUIConfirm, QUIAjax, QUILocale, Grid, CurrencyWindow) {
+], function (QUI, QUIControl, QUISwitch, QUIConfirm, QUIPrompt, QUIAjax, QUILocale, Grid, CurrencyWindow) {
     "use strict";
 
     var lg = 'quiqqer/currency';
@@ -38,6 +39,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
         Binds: [
             'refresh',
+            'openCreateDialog',
             '$onImport',
             '$onCurrencyStatusChange',
             '$switchCurrencyStatus',
@@ -139,7 +141,10 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 buttons    : [{
                     name     : 'add',
                     text     : 'Währung hinzufügen',
-                    textimage: 'fa fa-plus'
+                    textimage: 'fa fa-plus',
+                    events   : {
+                        onClick: this.openCreateDialog
+                    }
                 }, {
                     name     : 'edit',
                     text     : 'Währung editieren',
@@ -147,7 +152,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     disabled : true,
                     events   : {
                         onClick: function () {
-                            self.openEditDialog(self.$Grid.getSelectedData()[0].code);
+                            self.openUpdateDialog(self.$Grid.getSelectedData()[0].code);
                         }
                     }
                 }, {
@@ -187,7 +192,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 },
 
                 onDblClick: function () {
-                    self.openEditDialog(self.$Grid.getSelectedData()[0].code);
+                    self.openUpdateDialog(self.$Grid.getSelectedData()[0].code);
                 },
 
                 onRefresh: this.refresh
@@ -228,7 +233,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     page    = this.$Grid.options.page,
                     start   = (page - 1) * perPage,
                     total   = data.length;
-    
+
                 data = data.splice(start, perPage);
 
                 this.$Grid.setData({
@@ -297,6 +302,22 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         deleteCurrency: function (currency) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_delete', resolve, {
+                    'package': 'quiqqer/currency',
+                    currency : currency,
+                    onError  : reject
+                });
+            });
+        },
+
+        /**
+         * Create a new currency
+         *
+         * @param {String} currency
+         * @returns {Promise}
+         */
+        createCurrency: function (currency) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.post('package_quiqqer_currency_ajax_create', resolve, {
                     'package': 'quiqqer/currency',
                     currency : currency,
                     onError  : reject
@@ -374,9 +395,12 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          *
          * @param {String} currency
          */
-        openEditDialog: function (currency) {
+        openUpdateDialog: function (currency) {
             new CurrencyWindow({
-                currency: currency
+                currency: currency,
+                events  : {
+                    onClose: this.refresh
+                }
             }).open();
         },
 
@@ -412,6 +436,34 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                                 Win.close();
                             });
 
+                        }, function () {
+                            Win.Loader.hide();
+                        });
+                    }
+                }
+            }).open();
+        },
+
+        /**
+         * Opens the create dialog
+         */
+        openCreateDialog: function () {
+            var self = this;
+
+            new QUIPrompt({
+                icon       : 'fa fa-money',
+                titleicon  : 'fa fa-money',
+                title      : QUILocale.get(lg, 'window.create.title'),
+                information: QUILocale.get(lg, 'window.create.information'),
+                maxHeight  : 300,
+                maxWidth   : 450,
+                events     : {
+                    onSubmit: function (value, Win) {
+                        Win.Loader.show();
+
+                        self.createCurrency(value).then(function () {
+                            Win.close();
+                            self.openUpdateDialog(value);
                         }, function () {
                             Win.Loader.hide();
                         });

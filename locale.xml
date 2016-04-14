@@ -55,6 +55,16 @@
             The restoring of the currency is only possible with the new creation of it.
             ]]></en>
         </locale>
+
+        <locale name="window.create.title">
+            <de><![CDATA[Neue Währung hinzufügen]]></de>
+            <en><![CDATA[Add a new currency]]></en>
+        </locale>
+        <locale name="window.create.information" html="true">
+            <de><![CDATA[Bitte geben Sie ein neuen Währungscode an. <br />zB: EUR, USD oder BTC]]></de>
+            <en><![CDATA[Please enter a new currency code. <br />eq: EUR, USD oder BTC]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/currency" datatype="php,js">
