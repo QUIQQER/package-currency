@@ -199,6 +199,8 @@ class Currency
      */
     public function convertFormat($amount, $Currency)
     {
+        $Currency = Handler::getCurrency($Currency);
+
         return $Currency->format(
             $this->convert($amount, $Currency)
         );
@@ -238,7 +240,10 @@ class Currency
         QUI\Rights\Permission::checkPermission('currency.edit');
 
         if (!is_numeric($rate)) {
-            throw new QUI\Exception(array());
+            throw new QUI\Exception(array(
+                'quiqqer/currency',
+                'exception.currency.rate.wrong.format'
+            ));
         }
 
         $this->exchangeRate = (float)$rate;

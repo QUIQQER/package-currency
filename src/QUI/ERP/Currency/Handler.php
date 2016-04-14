@@ -40,14 +40,42 @@ class Handler
     }
 
     /**
+     * Create a new currency
+     *
      * @param string $currency - currency code
+     * @param integer|float $rate - currency exchange rate
      * @throws QUI\Exception
      */
     public static function createCurrency($currency, $rate)
     {
         QUI\Rights\Permission::checkPermission('currency.create');
 
+        $Currency = null;
 
+        try {
+            $Currency = self::getCurrency($currency);
+        } catch (QUI\Exception $Exception) {
+        }
+
+        if (!is_null($Currency)) {
+            throw new QUI\Exception(array(
+                'quiqqer/currency',
+                'exception.already.exists',
+                array('currency' => $currency)
+            ));
+        }
+
+        if (!is_numeric($rate)) {
+            throw new QUI\Exception(array(
+                'quiqqer/currency',
+                'exception.currency.rate.wrong.format'
+            ));
+        }
+
+        QUI::getDataBase()->insert(self::table(), array(
+            'currency' => $currency,
+            'rate' => (float)$rate
+        ));
     }
 
     /**

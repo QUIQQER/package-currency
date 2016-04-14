@@ -14,6 +14,8 @@ Features (Funktionen)
 
 - Automatische Aktualisierung der Wechselkurse
 - Währungsumrechnung zwischen verschiedenen Währungen
+- Hinzufügen von neuen Währungen möglich
+- Wechselkurse können auch händisch angepasst werden
 
 
 Installation
@@ -44,4 +46,4 @@ Lizenz
 Entwickler
 --------
 
-- Damit Währungen vorhanden sind muss ein Cron eingerichtet werden welche Währungen importiert.
+---

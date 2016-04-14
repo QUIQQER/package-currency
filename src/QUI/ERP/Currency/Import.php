@@ -55,31 +55,6 @@ class Import
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
             }
-
-            continue;
-            $result = $DataBase->fetch(array(
-                'from' => Handler::table(),
-                'where' => array(
-                    'currency' => $currency
-                )
-            ));
-
-            // Update
-            if (isset($result[0])) {
-                $DataBase->update(
-                    Handler::table(),
-                    array('rate' => $rate),
-                    array('currency' => $currency)
-                );
-            } else {
-                $DataBase->insert(
-                    Handler::table(),
-                    array(
-                        'rate' => $rate,
-                        'currency' => $currency
-                    )
-                );
-            }
         }
     }
 

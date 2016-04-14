@@ -5,6 +5,14 @@
             <de><![CDATA[Shop]]></de>
             <en><![CDATA[Shop]]></en>
         </locale>
+        <locale name="exception.already.exists">
+            <de><![CDATA[Die Währung [currency] existiert bereits.]]></de>
+            <en><![CDATA[The currency [currency] already exists.]]></en>
+        </locale>
+        <locale name="exception.currency.rate.wrong.format">
+            <de><![CDATA[Der Wechselkurs besitzt ein falsches Format.]]></de>
+            <en><![CDATA[The exchange rate has an incorrect format.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/currency" datatype="js">
