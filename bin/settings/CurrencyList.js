@@ -1,8 +1,11 @@
 /**
- *
- *
  * @module package/quiqqer/currency/bin/CurrencyList
  * @author www.pcsg.de (Henning Leutz)
+ *
+ * @require qui/QUI
+ * @require qui/controls/Control
+ * @require qui/controls/buttons/Select
+ * @require Ajax
  */
 define('package/quiqqer/currency/bin/settings/CurrencyList', [
 
@@ -48,8 +51,8 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
 
             this.$Select = new QUISelect({
                 showIcons: false,
-                events : {
-                    onChange : this.$onSelectChange
+                events   : {
+                    onChange: this.$onSelectChange
                 }
             }).inject(this.$Elm);
 
@@ -70,9 +73,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
                     this.$Select.setValue(this.$Input.value);
                 }
 
-
             }.bind(this));
-
         },
 
         /**
@@ -94,7 +95,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
          * @param {String} value
          * @param {Object} Select - qui/controls/buttons/Select
          */
-        $onSelectChange : function(value, Select) {
+        $onSelectChange: function (value, Select) {
             this.$Input.value = value;
         }
     });

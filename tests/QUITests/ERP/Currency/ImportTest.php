@@ -15,11 +15,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testImport()
     {
-        QUI::getDataBase()->table()->truncate(
-            QUI\ERP\Currency\Handler::table()
-        );
-
-        QUI\ERP\Currency\Import::import();
+        QUI\ERP\Currency\Import::importCurrenciesFromECB();
 
         $result = QUI::getDataBase()->fetch(array(
             'from' => QUI\ERP\Currency\Handler::table()

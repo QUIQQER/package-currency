@@ -40,6 +40,88 @@ class Handler
     }
 
     /**
+     * Create a new currency
+     *
+     * @param string $currency - currency code
+     * @param integer|float $rate - currency exchange rate, default = 1
+     * @throws QUI\Exception
+     */
+    public static function createCurrency($currency, $rate = 1)
+    {
+        QUI\Rights\Permission::checkPermission('currency.create');
+
+        $Currency = null;
+
+        try {
+            $Currency = self::getCurrency($currency);
+        } catch (QUI\Exception $Exception) {
+        }
+
+        if (!is_null($Currency)) {
+            throw new QUI\Exception(array(
+                'quiqqer/currency',
+                'exception.already.exists',
+                array('currency' => $currency)
+            ));
+        }
+
+        if (!is_numeric($rate)) {
+            throw new QUI\Exception(array(
+                'quiqqer/currency',
+                'exception.currency.rate.wrong.format'
+            ));
+        }
+
+        QUI::getDataBase()->insert(self::table(), array(
+            'currency' => $currency,
+            'rate' => (float)$rate
+        ));
+
+        // create translations
+        $languageData = array(
+            'datatype' => 'js,php'
+        );
+
+        $localeGroup = 'quiqqer/currency';
+        $localeText  = 'currency.' . $currency . '.text';
+        $localeSign  = 'currency.' . $currency . '.sign';
+
+        $textData = QUI\Translator::getVarData($localeGroup, $localeText);
+        $signData = QUI\Translator::getVarData($localeGroup, $localeSign);
+
+        if (empty($textData)) {
+            QUI\Translator::addUserVar(
+                'quiqqer/currency',
+                'currency.' . $currency . '.text',
+                $languageData
+            );
+        }
+
+        if (empty($signData)) {
+            QUI\Translator::addUserVar(
+                'quiqqer/currency',
+                'currency.' . $currency . '.sign',
+                $languageData
+            );
+        }
+    }
+
+    /**
+     * Delete a currency
+     *
+     * @param string $currency - currency code
+     * @throws QUI\Exception
+     */
+    public static function deleteCurrency($currency)
+    {
+        QUI\Rights\Permission::checkPermission('currency.delete');
+
+        QUI::getDataBase()->delete(self::table(), array(
+            'currency' => $currency
+        ));
+    }
+
+    /**
      * Return the default currency
      *
      * @return Currency
@@ -177,6 +259,12 @@ class Handler
         $result = array();
 
         foreach ($currencies as $currency) {
+            try {
+                $Currency = self::getCurrency($currency);
+            } catch (QUI\Exception $Exception) {
+                continue;
+            }
+
             $result[$currency] = array(
                 'text' => $Locale->get(
                     'quiqqer/currency',
@@ -185,7 +273,10 @@ class Handler
                 'sign' => $Locale->get(
                     'quiqqer/currency',
                     'currency.' . $currency . '.sign'
-                )
+                ),
+                'code' => $currency,
+                'rate' => $Currency->getExchangeRate(),
+                'autoupdate' => $Currency->autoupdate()
             );
         }
 

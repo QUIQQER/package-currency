@@ -1,7 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
-    <groups name="quiqqer/currency" datatype="php,js">
+    <groups name="quiqqer/currency" datatype="php">
+        <locale name="exception.exchangesrate.no.number">
+            <de><![CDATA[Shop]]></de>
+            <en><![CDATA[Shop]]></en>
+        </locale>
+        <locale name="exception.already.exists">
+            <de><![CDATA[Die Währung [currency] existiert bereits.]]></de>
+            <en><![CDATA[The currency [currency] already exists.]]></en>
+        </locale>
+        <locale name="exception.currency.rate.wrong.format">
+            <de><![CDATA[Der Wechselkurs besitzt ein falsches Format.]]></de>
+            <en><![CDATA[The exchange rate has an incorrect format.]]></en>
+        </locale>
+    </groups>
 
+    <groups name="quiqqer/currency" datatype="js">
+        <locale name="control.currency.title">
+            <de><![CDATA[Währungs-Einstellungen: [currency]]]></de>
+            <en><![CDATA[Currency settings [currency]]]></en>
+        </locale>
+        <locale name="control.currency.code">
+            <de><![CDATA[Währungscode]]></de>
+            <en><![CDATA[Currency code]]></en>
+        </locale>
+        <locale name="control.currency.code.decription">
+            <de><![CDATA[zB: EUR, USD oder BTC]]></de>
+            <en><![CDATA[eq.: EUR, USD oder BTC]]></en>
+        </locale>
+        <locale name="control.currency.sign">
+            <de><![CDATA[Währungsszeichen]]></de>
+            <en><![CDATA[Currency code]]></en>
+        </locale>
+        <locale name="control.currency.rate">
+            <de><![CDATA[Umrechnungskurs]]></de>
+            <en><![CDATA[Exchange rate]]></en>
+        </locale>
+
+        <locale name="window.delete.title">
+            <de><![CDATA[Währung löschen]]></de>
+            <en><![CDATA[Delete currency]]></en>
+        </locale>
+        <locale name="window.delete.text">
+            <de><![CDATA[Möchten Sie die Währung [currency] wirklich löschen?]]></de>
+            <en><![CDATA[Do you really want to delete the currency [currency]?]]></en>
+        </locale>
+        <locale name="window.delete.plural.text">
+            <de><![CDATA[Möchten Sie die Währungen wirklich löschen?]]></de>
+            <en><![CDATA[Do you really want to delete the currencies?]]></en>
+        </locale>
+        <locale name="window.delete.information">
+            <de><![CDATA[
+            Die Währung wird unwiderruflich gelöscht.
+            Ein Wiederherstellen ist nur mit dem neu Anlegen der Währung möglich.
+            ]]></de>
+            <en><![CDATA[
+            The currency is permanently deleted.
+            The restoring of the currency is only possible with the new creation of it.
+            ]]></en>
+        </locale>
+        <locale name="window.delete.plural.information">
+            <de><![CDATA[
+            Folgende Währungen werden unwiderruflich gelöscht: <b>[currencies]</b>.
+            <br /><br />
+            Ein Wiederherstellen ist nur mit dem neu Anlegen der Währungen möglich.
+            ]]></de>
+            <en><![CDATA[
+            The following currencies would be permanently deleted: <b>[currencies]</b>.
+            <br /><br />
+            The restoring of the currencies are only possible with the new creation of them.
+            ]]></en>
+        </locale>
+
+        <locale name="window.create.title">
+            <de><![CDATA[Neue Währung hinzufügen]]></de>
+            <en><![CDATA[Add a new currency]]></en>
+        </locale>
+        <locale name="window.create.information" html="true">
+            <de><![CDATA[Bitte geben Sie ein neuen Währungscode an. <br />zB: EUR, USD oder BTC]]></de>
+            <en><![CDATA[Please enter a new currency code. <br />eq: EUR, USD oder BTC]]></en>
+        </locale>
+
+        <locale name="grid.setting.currency">
+            <de><![CDATA[Währung]]></de>
+            <en><![CDATA[Currency]]></en>
+        </locale>
+        <locale name="grid.setting.sign">
+            <de><![CDATA[Zeichen]]></de>
+            <en><![CDATA[Sign]]></en>
+        </locale>
+        <locale name="grid.setting.rate">
+            <de><![CDATA[Währungskurs]]></de>
+            <en><![CDATA[Currency rate]]></en>
+        </locale>
+        <locale name="grid.setting.allowed">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="grid.setting.update">
+            <de><![CDATA[Auto-Update]]></de>
+            <en><![CDATA[Auto update]]></en>
+        </locale>
+        <locale name="grid.setting.button.add">
+            <de><![CDATA[Währung hinzufügen]]></de>
+            <en><![CDATA[Add currency]]></en>
+        </locale>
+        <locale name="grid.setting.button.edit">
+            <de><![CDATA[Währung editieren]]></de>
+            <en><![CDATA[Edit currency]]></en>
+        </locale>
+        <locale name="grid.setting.button.delete">
+            <de><![CDATA[Währung löschen]]></de>
+            <en><![CDATA[Delete currency]]></en>
+        </locale>
+
+        <locale name="ecb.import.button.text">
+            <de><![CDATA[EZB Import]]></de>
+            <en><![CDATA[ECB Import]]></en>
+        </locale>
+        <locale name="window.ecb.import.title">
+            <de><![CDATA[Währung von der EZB importieren]]></de>
+            <en><![CDATA[Import currencies from the ECB]]></en>
+        </locale>
+        <locale name="window.ecb.import.text">
+            <de><![CDATA[Währung von der EZB importieren?]]></de>
+            <en><![CDATA[Import currencies from the ECB?]]></en>
+        </locale>
+        <locale name="window.ecb.import.information" html="true">
+            <de><![CDATA[
+                Importieren Sie Währungen über die EZB. <br />
+                Alle Währungen und ihre Wechselkurse, welche die EZB zur Verfügung stellt werden importiert.
+                ]]></de>
+            <en><![CDATA[
+                Import currencies through the ECB. <br />
+                All currencies and their exchange rates, which provides from the ECB would be imported.
+            ]]></en>
+        </locale>
+
+    </groups>
+
+    <groups name="quiqqer/currency" datatype="php,js">
         <locale name="window.erp.title">
             <de><![CDATA[Shop]]></de>
             <en><![CDATA[Shop]]></en>
@@ -19,9 +157,13 @@
             <de><![CDATA[Standard Währung]]></de>
             <en><![CDATA[Default currency]]></en>
         </locale>
-        <locale name="currency.settings.allowedCurrency.text">
-            <de><![CDATA[Erlaubte Währungen]]></de>
-            <en><![CDATA[Allowed currencies]]></en>
+        <locale name="currency.settings.currencyManager.text">
+            <de><![CDATA[Währungsveraltung]]></de>
+            <en><![CDATA[Currency manager]]></en>
+        </locale>
+        <locale name="currency.settings.currencyImport.text">
+            <de><![CDATA[Währungsimport]]></de>
+            <en><![CDATA[Currency import]]></en>
         </locale>
 
         <locale name="cron.import.title">

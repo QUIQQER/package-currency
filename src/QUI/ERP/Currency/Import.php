@@ -15,10 +15,55 @@ use QUI;
 class Import
 {
     /**
+     * Import all available currencies from the ECB
+     */
+    public static function importCurrenciesFromECB()
+    {
+        $values = self::getECBData();
+
+        foreach ($values as $currency => $rate) {
+            try {
+                Handler::getCurrency($currency);
+            } catch (QUI\Exception $Exception) {
+                // currency not exists, we must create it
+                Handler::createCurrency($currency, $rate);
+            }
+        }
+    }
+
+    /**
      * Start import from
-     * eg: http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml
+     * updates the exchange rate
+     *
+     * from: http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml
      */
     public static function import()
+    {
+        $values = self::getECBData();
+
+        foreach ($values as $currency => $rate) {
+            try {
+                $Currency = Handler::getCurrency($currency);
+
+                if ($Currency->autoupdate() === false) {
+                    continue;
+                }
+
+                $Currency->setExchangeRate($rate);
+                $Currency->save();
+
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
+            }
+        }
+    }
+
+    /**
+     * Fetch the daily currencie rates from the ECB
+     *
+     * @return array|void
+     */
+    protected static function getECBData()
     {
         $xmlfile = 'http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml';
         $Dom     = new \DOMDocument();
@@ -27,7 +72,7 @@ class Import
         $list = $Dom->getElementsByTagName('Cube');
 
         if (!$list->length) {
-            return;
+            return array();
         }
 
         $values = array(
@@ -48,32 +93,6 @@ class Import
             $values[$currency] = $rate;
         }
 
-        $DataBase = QUI::getDataBase();
-
-        foreach ($values as $currency => $rate) {
-            $result = $DataBase->fetch(array(
-                'from' => Handler::table(),
-                'where' => array(
-                    'currency' => $currency
-                )
-            ));
-
-            // Update
-            if (isset($result[0])) {
-                $DataBase->update(
-                    Handler::table(),
-                    array('rate' => $rate),
-                    array('currency' => $currency)
-                );
-            } else {
-                $DataBase->insert(
-                    Handler::table(),
-                    array(
-                        'rate' => $rate,
-                        'currency' => $currency
-                    )
-                );
-            }
-        }
+        return $values;
     }
 }
