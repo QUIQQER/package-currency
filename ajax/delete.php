@@ -11,9 +11,13 @@
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_currency_ajax_delete',
-    function ($currency) {
-        QUI\ERP\Currency\Handler::deleteCurrency($currency);
+    function ($currencies) {
+        $currencies = json_decode($currencies, true);
+
+        foreach ($currencies as $currency) {
+            QUI\ERP\Currency\Handler::deleteCurrency($currency);
+        }
     },
-    array('currency'),
+    array('currencies'),
     'Permission::checkAdminUser'
 );

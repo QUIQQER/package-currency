@@ -4,6 +4,12 @@
  *
  * @require qui/QUI
  * @require qui/controls/Control
+ * @require Locale
+ * @require Ajax
+ * @require Mustache
+ * @require package/quiqqer/translator/bin/controls/Update
+ * @require text!package/quiqqer/currency/bin/settings/Currency.html
+ * @require css!package/quiqqer/currency/bin/settings/Currency.css
  */
 define('package/quiqqer/currency/bin/settings/Currency', [
 

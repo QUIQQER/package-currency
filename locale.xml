@@ -45,6 +45,10 @@
             <de><![CDATA[Möchten Sie die Währung [currency] wirklich löschen?]]></de>
             <en><![CDATA[Do you really want to delete the currency [currency]?]]></en>
         </locale>
+        <locale name="window.delete.plural.text">
+            <de><![CDATA[Möchten Sie die Währungen wirklich löschen?]]></de>
+            <en><![CDATA[Do you really want to delete the currencies?]]></en>
+        </locale>
         <locale name="window.delete.information">
             <de><![CDATA[
             Die Währung wird unwiderruflich gelöscht.
@@ -55,6 +59,18 @@
             The restoring of the currency is only possible with the new creation of it.
             ]]></en>
         </locale>
+        <locale name="window.delete.plural.information">
+            <de><![CDATA[
+            Folgende Währungen werden unwiderruflich gelöscht: <b>[currencies]</b>.
+            <br /><br />
+            Ein Wiederherstellen ist nur mit dem neu Anlegen der Währungen möglich.
+            ]]></de>
+            <en><![CDATA[
+            The following currencies would be permanently deleted: <b>[currencies]</b>.
+            <br /><br />
+            The restoring of the currencies are only possible with the new creation of them.
+            ]]></en>
+        </locale>
 
         <locale name="window.create.title">
             <de><![CDATA[Neue Währung hinzufügen]]></de>
@@ -63,6 +79,62 @@
         <locale name="window.create.information" html="true">
             <de><![CDATA[Bitte geben Sie ein neuen Währungscode an. <br />zB: EUR, USD oder BTC]]></de>
             <en><![CDATA[Please enter a new currency code. <br />eq: EUR, USD oder BTC]]></en>
+        </locale>
+
+        <locale name="grid.setting.currency">
+            <de><![CDATA[Währung]]></de>
+            <en><![CDATA[Currency]]></en>
+        </locale>
+        <locale name="grid.setting.sign">
+            <de><![CDATA[Zeichen]]></de>
+            <en><![CDATA[Sign]]></en>
+        </locale>
+        <locale name="grid.setting.rate">
+            <de><![CDATA[Währungskurs]]></de>
+            <en><![CDATA[Currency rate]]></en>
+        </locale>
+        <locale name="grid.setting.allowed">
+            <de><![CDATA[Erlaubt]]></de>
+            <en><![CDATA[Allowed]]></en>
+        </locale>
+        <locale name="grid.setting.update">
+            <de><![CDATA[Auto-Update]]></de>
+            <en><![CDATA[Auto update]]></en>
+        </locale>
+        <locale name="grid.setting.button.add">
+            <de><![CDATA[Währung hinzufügen]]></de>
+            <en><![CDATA[Add currency]]></en>
+        </locale>
+        <locale name="grid.setting.button.edit">
+            <de><![CDATA[Währung editieren]]></de>
+            <en><![CDATA[Edit currency]]></en>
+        </locale>
+        <locale name="grid.setting.button.delete">
+            <de><![CDATA[Währung löschen]]></de>
+            <en><![CDATA[Delete currency]]></en>
+        </locale>
+
+        <locale name="ecb.import.button.text">
+            <de><![CDATA[EZB Import]]></de>
+            <en><![CDATA[ECB Import]]></en>
+        </locale>
+        <locale name="window.ecb.import.title">
+            <de><![CDATA[Währung von der EZB importieren]]></de>
+            <en><![CDATA[Import currencies from the ECB]]></en>
+        </locale>
+        <locale name="window.ecb.import.text">
+            <de><![CDATA[Währung von der EZB importieren?]]></de>
+            <en><![CDATA[Import currencies from the ECB?]]></en>
+        </locale>
+        <locale name="window.ecb.import.information" html="true">
+            <de><![CDATA[
+                Importieren Sie Währungen über die EZB. <br />
+                Alle Währungen und ihre Wechselkurse, welche die EZB zur Verfügung stellt werden importiert.
+                ]]></de>
+            <en><![CDATA[
+                Import currencies through the ECB. <br />
+                All currencies and their exchange rates, which provides from the ECB would be imported.
+            ]]></en>
         </locale>
 
     </groups>
@@ -89,26 +161,9 @@
             <de><![CDATA[Währungsveraltung]]></de>
             <en><![CDATA[Currency manager]]></en>
         </locale>
-
-        <locale name="grid.setting.currency">
-            <de><![CDATA[Währung]]></de>
-            <en><![CDATA[Currency]]></en>
-        </locale>
-        <locale name="grid.setting.sign">
-            <de><![CDATA[Zeichen]]></de>
-            <en><![CDATA[Sign]]></en>
-        </locale>
-        <locale name="grid.setting.rate">
-            <de><![CDATA[Währungskurs]]></de>
-            <en><![CDATA[Currency rate]]></en>
-        </locale>
-        <locale name="grid.setting.allowed">
-            <de><![CDATA[Erlaubt]]></de>
-            <en><![CDATA[Allowed]]></en>
-        </locale>
-        <locale name="grid.setting.update">
-            <de><![CDATA[Auto-Update]]></de>
-            <en><![CDATA[Auto update]]></en>
+        <locale name="currency.settings.currencyImport.text">
+            <de><![CDATA[Währungsimport]]></de>
+            <en><![CDATA[Currency import]]></en>
         </locale>
 
         <locale name="cron.import.title">

@@ -8,9 +8,12 @@
  * @require qui/QUI
  * @require qui/controls/Control
  * @require qui/controls/buttons/Switch
+ * @require qui/controls/windows/Confirm
+ * @require qui/controls/windows/Prompt
  * @require Ajax
  * @require Locale
  * @require controls/grid/Grid
+ * @require package/quiqqer/currency/bin/settings/CurrencyWindow
  * @require css!package/quiqqer/currency/bin/settings/AllowedCurrencies.css
  */
 define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
@@ -34,8 +37,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
     return new Class({
 
-        Type   : 'package/quiqqer/currency/bin/settings/AllowedCurrencies',
         Extends: QUIControl,
+        Type   : 'package/quiqqer/currency/bin/settings/AllowedCurrencies',
 
         Binds: [
             'refresh',
@@ -107,10 +110,11 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             var width = this.$Container.getSize().x;
 
             this.$Grid = new Grid(this.$Container, {
-                pagination : true,
-                height     : 300,
-                width      : width,
-                columnModel: [{
+                pagination       : true,
+                multipleSelection: true,
+                height           : 300,
+                width            : width,
+                columnModel      : [{
                     header   : QUILocale.get(lg, 'grid.setting.currency'),
                     dataIndex: 'code',
                     dataType : 'string',
@@ -138,16 +142,16 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     dataType : 'QUI',
                     width    : 100
                 }],
-                buttons    : [{
+                buttons          : [{
                     name     : 'add',
-                    text     : 'Währung hinzufügen',
+                    text     : QUILocale.get(lg, 'grid.setting.button.add'),
                     textimage: 'fa fa-plus',
                     events   : {
                         onClick: this.openCreateDialog
                     }
                 }, {
                     name     : 'edit',
-                    text     : 'Währung editieren',
+                    text     : QUILocale.get(lg, 'grid.setting.button.edit'),
                     textimage: 'fa fa-edit',
                     disabled : true,
                     events   : {
@@ -159,12 +163,16 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     type: 'seperator'
                 }, {
                     name     : 'delete',
-                    text     : 'Währung löschen',
+                    text     : QUILocale.get(lg, 'grid.setting.button.delete'),
                     textimage: 'fa fa-trash',
                     disabled : true,
                     events   : {
                         onClick: function () {
-                            self.openDeleteDialog(self.$Grid.getSelectedData()[0].code);
+                            var currencies = self.$Grid.getSelectedData().map(function (C) {
+                                return C.code;
+                            });
+
+                            self.openDeleteDialog(currencies);
                         }
                     }
                 }]
@@ -185,8 +193,11 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         return Btn.getAttribute('name') == 'delete';
                     })[0];
 
-                    if (selected.length) {
+                    if (selected.length == 1) {
                         Edit.enable();
+                        Delete.enable();
+                    } else if (selected.length > 1) {
+                        Edit.disable();
                         Delete.enable();
                     }
                 },
@@ -296,15 +307,19 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         /**
          * Delete a currency
          *
-         * @param {String} currency
+         * @param {Array|String} currencies
          * @returns {Promise}
          */
-        deleteCurrency: function (currency) {
+        deleteCurrency: function (currencies) {
+            if (typeOf(currencies) === 'string') {
+                currencies = [currencies];
+            }
+
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_delete', resolve, {
-                    'package': 'quiqqer/currency',
-                    currency : currency,
-                    onError  : reject
+                    'package' : 'quiqqer/currency',
+                    currencies: JSON.encode(currencies),
+                    onError   : reject
                 });
             });
         },
@@ -407,28 +422,49 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         /**
          * Opens the delete dialog
          *
-         * @param {String} currency
+         * @param {Array} currencies
          */
-        openDeleteDialog: function (currency) {
-            var self = this;
+        openDeleteDialog: function (currencies) {
+            if (!currencies.length) {
+                return;
+            }
+
+            var self = this,
+                text, information;
+
+            if (currencies.length === 1) {
+                text = QUILocale.get(lg, 'window.delete.text', {
+                    currency: currencies[0]
+                });
+
+                information = QUILocale.get(lg, 'window.delete.information', {
+                    currency: currencies[0]
+                });
+            } else {
+                text = QUILocale.get(lg, 'window.delete.plural.text');
+
+                information = QUILocale.get(lg, 'window.delete.plural.information', {
+                    currencies: currencies.join(', ')
+                });
+            }
 
             new QUIConfirm({
                 icon       : 'fa fa-trash',
                 texticon   : 'fa fa-trash',
                 title      : QUILocale.get(lg, 'window.delete.title'),
-                text       : QUILocale.get(lg, 'window.delete.text', {
-                    currency: currency
-                }),
-                information: QUILocale.get(lg, 'window.delete.information', {
-                    currency: currency
-                }),
+                text       : text,
+                information: information,
+                ok_button  : {
+                    text     : QUILocale.get('quiqqer/system', 'delete'),
+                    textimage: 'icon-ok fa fa-check'
+                },
                 maxHeight  : 400,
                 maxWidth   : 600,
                 autoclose  : false,
                 events     : {
                     onSubmit: function (Win) {
                         Win.Loader.show();
-                        self.deleteCurrency(currency).then(function () {
+                        self.deleteCurrency(currencies).then(function () {
 
                             self.refresh().then(function () {
                                 self.update();

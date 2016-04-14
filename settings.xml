@@ -49,6 +49,14 @@
 
                     <settings>
                         <title>
+                            <locale group="quiqqer/currency" var="currency.settings.currencyImport.text"/>
+                        </title>
+
+                        <input data-qui="package/quiqqer/currency/bin/settings/Import"/>
+                    </settings>
+
+                    <settings>
+                        <title>
                             <locale group="quiqqer/currency" var="currency.settings.currencyManager.text"/>
                         </title>
 

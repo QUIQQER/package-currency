@@ -4,6 +4,7 @@
  *
  * @require qui/QUI
  * @require qui/controls/Control
+ * @require Locale
  * @require package/quiqqer/currency/bin/settings/Currency
  */
 define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
@@ -28,7 +29,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
         options: {
             currency : false,
             icon     : 'fa fa-money',
-            title    : 'Währung bearbeiten',
+            title    : false,
             texticon : false,
             autoclose: false,
             maxHeight: 400,
@@ -73,6 +74,5 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
                 this.close();
             }.bind(this));
         }
-
     });
 });

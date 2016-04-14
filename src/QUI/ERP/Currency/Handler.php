@@ -82,17 +82,28 @@ class Handler
             'datatype' => 'js,php'
         );
 
-        QUI\Translator::addUserVar(
-            'quiqqer/currency',
-            'currency.' . $currency . '.text',
-            $languageData
-        );
+        $localeGroup = 'quiqqer/currency';
+        $localeText  = 'currency.' . $currency . '.text';
+        $localeSign  = 'currency.' . $currency . '.sign';
 
-        QUI\Translator::addUserVar(
-            'quiqqer/currency',
-            'currency.' . $currency . '.sign',
-            $languageData
-        );
+        $textData = QUI\Translator::getVarData($localeGroup, $localeText);
+        $signData = QUI\Translator::getVarData($localeGroup, $localeSign);
+
+        if (empty($textData)) {
+            QUI\Translator::addUserVar(
+                'quiqqer/currency',
+                'currency.' . $currency . '.text',
+                $languageData
+            );
+        }
+
+        if (empty($signData)) {
+            QUI\Translator::addUserVar(
+                'quiqqer/currency',
+                'currency.' . $currency . '.sign',
+                $languageData
+            );
+        }
     }
 
     /**
