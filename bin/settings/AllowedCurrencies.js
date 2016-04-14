@@ -225,18 +225,6 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         continue;
                     }
 
-                    list[i].allowed = new QUISwitch({
-                        status: (typeof values[i] !== 'undefined')
-                    });
-
-                    list[i].autoupdate = new QUISwitch({
-                        status  : list[i].autoupdate,
-                        currency: list[i].code,
-                        events  : {
-                            onChange: this.$changeAutoUpdate
-                        }
-                    });
-
                     data.push(list[i]);
                 }
 
@@ -246,6 +234,25 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     total   = data.length;
 
                 data = data.splice(start, perPage);
+
+                data.each(function (entry, i) {
+                    data[i].allowed = new QUISwitch({
+                        status  : (typeof values[entry.code] !== 'undefined'),
+                        currency: entry.code,
+                        events  : {
+                            onChange: this.$onCurrencyStatusChange
+                        }
+                    });
+
+                    data[i].autoupdate = new QUISwitch({
+                        status  : entry.autoupdate,
+                        currency: entry.code,
+                        events  : {
+                            onChange: this.$changeAutoUpdate
+                        }
+                    });
+                }.bind(this));
+
 
                 this.$Grid.setData({
                     data : data,
@@ -342,16 +349,37 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
         /**
          * event : on currency status change
-         * @param Switch
+         *
+         * @param {Object} Switch
          */
         $onCurrencyStatusChange: function (Switch) {
             var currency = Switch.getAttribute('currency');
             var values   = this.getAttribute('values');
 
-            values[currency] = Switch.getStatus() ? 1 : 0;
+
+            if (Switch.getStatus()) {
+                values[currency] = 1;
+            } else {
+                if (currency in values) {
+                    delete values[currency];
+                }
+            }
 
             this.setAttribute('values', values);
             this.update();
+
+            var PanelNode = this.getElm().getParent('.qui-panel'),
+                Panel     = QUI.Controls.getById(PanelNode.get('data-quiid'));
+
+            if (!Panel) {
+                return;
+            }
+
+            if (Panel.getType() != 'controls/desktop/panels/XML') {
+                return;
+            }
+
+            Panel.save();
         },
 
         /**
