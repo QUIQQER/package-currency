@@ -7,6 +7,48 @@
         </locale>
     </groups>
 
+    <groups name="quiqqer/currency" datatype="js">
+        <locale name="control.currency.title">
+            <de><![CDATA[Währungs-Einstellungen: [currency]]]></de>
+            <en><![CDATA[Currency settings [currency]]]></en>
+        </locale>
+        <locale name="control.currency.code">
+            <de><![CDATA[Währungscode]]></de>
+            <en><![CDATA[Currency code]]></en>
+        </locale>
+        <locale name="control.currency.code.decription">
+            <de><![CDATA[zB: EUR, USD oder BTC]]></de>
+            <en><![CDATA[eq.: EUR, USD oder BTC]]></en>
+        </locale>
+        <locale name="control.currency.sign">
+            <de><![CDATA[Währungsszeichen]]></de>
+            <en><![CDATA[Currency code]]></en>
+        </locale>
+        <locale name="control.currency.rate">
+            <de><![CDATA[Umrechnungskurs]]></de>
+            <en><![CDATA[Exchange rate]]></en>
+        </locale>
+
+        <locale name="window.delete.title">
+            <de><![CDATA[Währung löschen]]></de>
+            <en><![CDATA[Delete currency]]></en>
+        </locale>
+        <locale name="window.delete.text">
+            <de><![CDATA[Möchten Sie die Währung [currency] wirklich löschen?]]></de>
+            <en><![CDATA[Do you really want to delete the currency [currency]?]]></en>
+        </locale>
+        <locale name="window.delete.information">
+            <de><![CDATA[
+            Die Währung wird unwiderruflich gelöscht.
+            Ein Wiederherstellen ist nur mit dem neu Anlegen der Währung möglich.
+            ]]></de>
+            <en><![CDATA[
+            The currency is permanently deleted.
+            The restoring of the currency is only possible with the new creation of it.
+            ]]></en>
+        </locale>
+    </groups>
+
     <groups name="quiqqer/currency" datatype="php,js">
         <locale name="window.erp.title">
             <de><![CDATA[Shop]]></de>

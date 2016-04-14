@@ -40,13 +40,29 @@ class Handler
     }
 
     /**
+     * @param string $currency - currency code
      * @throws QUI\Exception
      */
-    public static function createCurrency($currencyCode, $rate)
+    public static function createCurrency($currency, $rate)
     {
         QUI\Rights\Permission::checkPermission('currency.create');
 
 
+    }
+
+    /**
+     * Delete a currency
+     *
+     * @param string $currency - currency code
+     * @throws QUI\Exception
+     */
+    public static function deleteCurrency($currency)
+    {
+        QUI\Rights\Permission::checkPermission('currency.delete');
+
+        QUI::getDataBase()->delete(self::table(), array(
+            'currency' => $currency
+        ));
     }
 
     /**

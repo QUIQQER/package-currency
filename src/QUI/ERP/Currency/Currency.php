@@ -110,6 +110,22 @@ class Currency
     }
 
     /**
+     * Return the currency data
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'text' => $this->getText(),
+            'sign' => $this->getSign(),
+            'code' => $this->getCode(),
+            'rate' => $this->getExchangeRate(),
+            'autoupdate' => $this->autoupdate()
+        );
+    }
+
+    /**
      * Format an amount
      *
      * @param float $amount
@@ -226,6 +242,17 @@ class Currency
         }
 
         $this->exchangeRate = (float)$rate;
+    }
+
+    /**
+     * @param string $code
+     * @throws QUI\Exception
+     */
+    public function setCode($code)
+    {
+        QUI\Rights\Permission::checkPermission('currency.edit');
+
+        $this->code = $code;
     }
 
     /**

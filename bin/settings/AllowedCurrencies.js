@@ -18,13 +18,15 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
     'qui/QUI',
     'qui/controls/Control',
     'qui/controls/buttons/Switch',
+    'qui/controls/windows/Confirm',
     'Ajax',
     'Locale',
     'controls/grid/Grid',
+    'package/quiqqer/currency/bin/settings/CurrencyWindow',
 
     'css!package/quiqqer/currency/bin/settings/AllowedCurrencies.css'
 
-], function (QUI, QUIControl, QUISwitch, QUIAjax, QUILocale, Grid) {
+], function (QUI, QUIControl, QUISwitch, QUIConfirm, QUIAjax, QUILocale, Grid, CurrencyWindow) {
     "use strict";
 
     var lg = 'quiqqer/currency';
@@ -35,6 +37,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         Extends: QUIControl,
 
         Binds: [
+            'refresh',
             '$onImport',
             '$onCurrencyStatusChange',
             '$switchCurrencyStatus',
@@ -84,7 +87,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 html   : '<div class="quiqqer-currency-allowed-container"></div>'
             }).wraps(this.$Input);
 
-            var Settings = this.$Elm.getParent('.qui-xml-panel-row-item');
+            var self     = this,
+                Settings = this.$Elm.getParent('.qui-xml-panel-row-item');
 
             if (Settings) {
                 Settings.setStyles({
@@ -140,56 +144,113 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     name     : 'edit',
                     text     : 'Währung editieren',
                     textimage: 'fa fa-edit',
-                    disabled : true
+                    disabled : true,
+                    events   : {
+                        onClick: function () {
+                            self.openEditDialog(self.$Grid.getSelectedData()[0].code);
+                        }
+                    }
                 }, {
                     type: 'seperator'
                 }, {
                     name     : 'delete',
                     text     : 'Währung löschen',
                     textimage: 'fa fa-trash',
-                    disabled : true
+                    disabled : true,
+                    events   : {
+                        onClick: function () {
+                            self.openDeleteDialog(self.$Grid.getSelectedData()[0].code);
+                        }
+                    }
                 }]
             });
 
             this.$Grid.setWidth(width);
 
             this.$Grid.addEvents({
-                click  : function () {
+                onClick: function () {
+                    var selected = self.$Grid.getSelectedIndices(),
+                        buttons  = self.$Grid.getButtons();
 
+                    var Edit = buttons.filter(function (Btn) {
+                        return Btn.getAttribute('name') == 'edit';
+                    })[0];
+
+                    var Delete = buttons.filter(function (Btn) {
+                        return Btn.getAttribute('name') == 'delete';
+                    })[0];
+
+                    if (selected.length) {
+                        Edit.enable();
+                        Delete.enable();
+                    }
                 },
-                refresh: function () {
-                    this.getCurrencies().then(function (list) {
-                        var data   = [],
-                            values = this.getAttribute('values');
 
-                        for (var i in list) {
-                            if (!list.hasOwnProperty(i)) {
-                                continue;
-                            }
+                onDblClick: function () {
+                    self.openEditDialog(self.$Grid.getSelectedData()[0].code);
+                },
 
-                            list[i].allowed = new QUISwitch({
-                                status: (typeof values[i] !== 'undefined')
-                            });
-
-                            list[i].autoupdate = new QUISwitch({
-                                status  : list[i].autoupdate,
-                                currency: list[i].code,
-                                events  : {
-                                    onChange: this.$changeAutoUpdate
-                                }
-                            });
-
-                            data.push(list[i]);
-                        }
-
-                        this.$Grid.setData({
-                            data: data
-                        });
-                    }.bind(this));
-                }.bind(this)
+                onRefresh: this.refresh
             });
 
             this.$Grid.refresh();
+        },
+
+        /**
+         * refresh the currency list
+         */
+        refresh: function () {
+            return this.getCurrencies().then(function (list) {
+                var data   = [],
+                    values = this.getAttribute('values');
+
+                for (var i in list) {
+                    if (!list.hasOwnProperty(i)) {
+                        continue;
+                    }
+
+                    list[i].allowed = new QUISwitch({
+                        status: (typeof values[i] !== 'undefined')
+                    });
+
+                    list[i].autoupdate = new QUISwitch({
+                        status  : list[i].autoupdate,
+                        currency: list[i].code,
+                        events  : {
+                            onChange: this.$changeAutoUpdate
+                        }
+                    });
+
+                    data.push(list[i]);
+                }
+
+                var perPage = this.$Grid.options.perPage,
+                    page    = this.$Grid.options.page,
+                    start   = (page - 1) * perPage,
+                    total   = data.length;
+    
+                data = data.splice(start, perPage);
+
+                this.$Grid.setData({
+                    data : data,
+                    total: total,
+                    page : page
+                });
+
+                var buttons = this.$Grid.getButtons();
+
+                var Edit = buttons.filter(function (Btn) {
+                    return Btn.getAttribute('name') == 'edit';
+                })[0];
+
+                var Delete = buttons.filter(function (Btn) {
+                    return Btn.getAttribute('name') == 'delete';
+                })[0];
+
+                Edit.disable();
+                Delete.disable();
+
+            }.bind(this));
         },
 
         /**
@@ -222,6 +283,22 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_currency_ajax_getCurrencies', resolve, {
                     'package': 'quiqqer/currency',
+                    onError  : reject
+                });
+            });
+        },
+
+        /**
+         * Delete a currency
+         *
+         * @param {String} currency
+         * @returns {Promise}
+         */
+        deleteCurrency: function (currency) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.post('package_quiqqer_currency_ajax_delete', resolve, {
+                    'package': 'quiqqer/currency',
+                    currency : currency,
                     onError  : reject
                 });
             });
@@ -286,6 +363,61 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     onError  : reject
                 });
             });
+        },
+
+        /**
+         * dialogs
+         */
+
+        /**
+         * Opens the edit dialog
+         *
+         * @param {String} currency
+         */
+        openEditDialog: function (currency) {
+            new CurrencyWindow({
+                currency: currency
+            }).open();
+        },
+
+        /**
+         * Opens the delete dialog
+         *
+         * @param {String} currency
+         */
+        openDeleteDialog: function (currency) {
+            var self = this;
+
+            new QUIConfirm({
+                icon       : 'fa fa-trash',
+                texticon   : 'fa fa-trash',
+                title      : QUILocale.get(lg, 'window.delete.title'),
+                text       : QUILocale.get(lg, 'window.delete.text', {
+                    currency: currency
+                }),
+                information: QUILocale.get(lg, 'window.delete.information', {
+                    currency: currency
+                }),
+                maxHeight  : 400,
+                maxWidth   : 600,
+                autoclose  : false,
+                events     : {
+                    onSubmit: function (Win) {
+                        Win.Loader.show();
+                        self.deleteCurrency(currency).then(function () {
+
+                            self.refresh().then(function () {
+                                self.update();
+                                Win.Loader.hide();
+                                Win.close();
+                            });
+
+                        }, function () {
+                            Win.Loader.hide();
+                        });
+                    }
+                }
+            }).open();
         }
     });
 });

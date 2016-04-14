@@ -16,13 +16,7 @@ QUI::$Ajax->registerFunction('package_quiqqer_currency_ajax_getAllowedCurrencies
 
     /* @var $Currency \QUI\ERP\Currency\Currency */
     foreach ($allowed as $Currency) {
-        $result[] = array(
-            'text' => $Currency->getText(),
-            'sign' => $Currency->getSign(),
-            'code' => $Currency->getCode(),
-            'rate' => $Currency->getExchangeRate(),
-            'autoupdate' => $Currency->autoupdate(),
-        );
+        $result[] = $Currency->toArray();
     }
 
     return $result;
