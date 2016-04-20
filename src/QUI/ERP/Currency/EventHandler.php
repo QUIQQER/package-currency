@@ -18,22 +18,14 @@ class EventHandler
      */
     public static function onTemplateGetHeader(QUI\Template $TemplateManager)
     {
-        $Currency = Handler::getDefaultCurrency();
+        try {
+            $Currency = Handler::getDefaultCurrency();
 
-        $TemplateManager->extendHeader(
-            '<script>var DEFAULT_CURRENCY = "' . $Currency->getCode() . '"</script>'
-        );
+            $TemplateManager->extendHeader(
+                '<script>var DEFAULT_CURRENCY = "' . $Currency->getCode() . '"</script>'
+            );
+
+        } catch (QUI\Exception $Exception) {
+        }
     }
-//
-//    /**
-//     * @param QUI\Package\Package $Package
-//     */
-//    public static function onPackageInstall(QUI\Package\Package $Package)
-//    {
-//        if ($Package->getName() !== 'quiqqer/currency') {
-//            return;
-//        }
-//
-//        Import::importCurrenciesFromECB();
-//    }
 }
