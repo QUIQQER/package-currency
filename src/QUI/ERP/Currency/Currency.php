@@ -117,10 +117,10 @@ class Currency
     public function toArray()
     {
         return array(
-            'text' => $this->getText(),
-            'sign' => $this->getSign(),
-            'code' => $this->getCode(),
-            'rate' => $this->getExchangeRate(),
+            'text'       => $this->getText(),
+            'sign'       => $this->getSign(),
+            'code'       => $this->getCode(),
+            'rate'       => $this->getExchangeRate(),
             'autoupdate' => $this->autoupdate()
         );
     }
@@ -141,6 +141,10 @@ class Currency
             $localeCode[0],
             \NumberFormatter::CURRENCY
         );
+
+        if (is_string($amount)) {
+            $amount = floatval($amount);
+        }
 
         return $Formatter->formatCurrency($amount, $this->getCode());
     }
@@ -237,7 +241,7 @@ class Currency
      */
     public function setExchangeRate($rate)
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         if (!is_numeric($rate)) {
             throw new QUI\Exception(array(
@@ -255,7 +259,7 @@ class Currency
      */
     public function setCode($code)
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         $this->code = $code;
     }
@@ -267,7 +271,7 @@ class Currency
      */
     public function setAutoupdate($status)
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         $this->autoupdate = (bool)$status ? 1 : 0;
     }
@@ -285,13 +289,13 @@ class Currency
      */
     public function update()
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         QUI::getDataBase()->update(
             Handler::table(),
             array(
                 'autoupdate' => $this->autoupdate() ? 1 : 0,
-                'rate' => $this->getExchangeRate()
+                'rate'       => $this->getExchangeRate()
             ),
             array('currency' => $this->getCode())
         );
