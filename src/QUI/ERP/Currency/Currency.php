@@ -139,7 +139,8 @@ class Currency
 
         $Formatter = new \NumberFormatter(
             $localeCode[0],
-            \NumberFormatter::CURRENCY
+            \NumberFormatter::CURRENCY,
+            $this->Locale->getAccountingCurrencyPattern()
         );
 
         if (is_string($amount)) {

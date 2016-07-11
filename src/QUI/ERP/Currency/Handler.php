@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains \QUI\ERP\handler
+ * This file contains \QUI\ERP\Currency\Handler
  */
 
 namespace QUI\ERP\Currency;
