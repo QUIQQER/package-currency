@@ -74,6 +74,16 @@ class Currency
     }
 
     /**
+     * Set the locale for the currency
+     *
+     * @param QUI\Locale $Locale
+     */
+    public function setLocale(QUI\Locale $Locale)
+    {
+        $this->Locale = $Locale;
+    }
+
+    /**
      * Return the currency code
      *
      * @return string
@@ -129,18 +139,21 @@ class Currency
      * Format an amount
      *
      * @param float $amount
+     * @param null|QUI\Locale $Locale - optional, locale object
      * @return string
      */
-    public function format($amount)
+    public function format($amount, $Locale = null)
     {
-        $localeCode = $this->Locale->getLocalesByLang(
-            $this->Locale->getCurrent()
-        );
+        if (!$Locale) {
+            $Locale = $this->Locale;
+        }
+
+        $localeCode = $Locale->getLocalesByLang($Locale->getCurrent());
 
         $Formatter = new \NumberFormatter(
             $localeCode[0],
             \NumberFormatter::CURRENCY,
-            $this->Locale->getAccountingCurrencyPattern()
+            $Locale->getAccountingCurrencyPattern()
         );
 
         if (is_string($amount)) {
