@@ -2,6 +2,9 @@
  * @module package/quiqqer/currency/bin/controls/Switch
  * @author www.pcsg.de (Henning Leutz)
  *
+ * @require qui/QUI
+ * @require qui/controls/Control
+ * @require css!package/quiqqer/currency/bin/controls/Switch.css'
  */
 define('package/quiqqer/currency/bin/controls/Switch', [
 

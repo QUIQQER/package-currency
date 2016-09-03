@@ -74,6 +74,16 @@ class Currency
     }
 
     /**
+     * Set the locale for the currency
+     *
+     * @param QUI\Locale $Locale
+     */
+    public function setLocale(QUI\Locale $Locale)
+    {
+        $this->Locale = $Locale;
+    }
+
+    /**
      * Return the currency code
      *
      * @return string
@@ -117,10 +127,10 @@ class Currency
     public function toArray()
     {
         return array(
-            'text' => $this->getText(),
-            'sign' => $this->getSign(),
-            'code' => $this->getCode(),
-            'rate' => $this->getExchangeRate(),
+            'text'       => $this->getText(),
+            'sign'       => $this->getSign(),
+            'code'       => $this->getCode(),
+            'rate'       => $this->getExchangeRate(),
             'autoupdate' => $this->autoupdate()
         );
     }
@@ -129,18 +139,26 @@ class Currency
      * Format an amount
      *
      * @param float $amount
+     * @param null|QUI\Locale $Locale - optional, locale object
      * @return string
      */
-    public function format($amount)
+    public function format($amount, $Locale = null)
     {
-        $localeCode = $this->Locale->getLocalesByLang(
-            $this->Locale->getCurrent()
-        );
+        if (!$Locale) {
+            $Locale = $this->Locale;
+        }
+
+        $localeCode = $Locale->getLocalesByLang($Locale->getCurrent());
 
         $Formatter = new \NumberFormatter(
             $localeCode[0],
-            \NumberFormatter::CURRENCY
+            \NumberFormatter::CURRENCY,
+            $Locale->getAccountingCurrencyPattern()
         );
+
+        if (is_string($amount)) {
+            $amount = floatval($amount);
+        }
 
         return $Formatter->formatCurrency($amount, $this->getCode());
     }
@@ -237,7 +255,7 @@ class Currency
      */
     public function setExchangeRate($rate)
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         if (!is_numeric($rate)) {
             throw new QUI\Exception(array(
@@ -255,7 +273,7 @@ class Currency
      */
     public function setCode($code)
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         $this->code = $code;
     }
@@ -267,7 +285,7 @@ class Currency
      */
     public function setAutoupdate($status)
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         $this->autoupdate = (bool)$status ? 1 : 0;
     }
@@ -285,13 +303,13 @@ class Currency
      */
     public function update()
     {
-        QUI\Rights\Permission::checkPermission('currency.edit');
+        QUI\Permissions\Permission::checkPermission('currency.edit');
 
         QUI::getDataBase()->update(
             Handler::table(),
             array(
                 'autoupdate' => $this->autoupdate() ? 1 : 0,
-                'rate' => $this->getExchangeRate()
+                'rate'       => $this->getExchangeRate()
             ),
             array('currency' => $this->getCode())
         );

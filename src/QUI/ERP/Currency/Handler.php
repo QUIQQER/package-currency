@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains \QUI\ERP\handler
+ * This file contains \QUI\ERP\Currency\Handler
  */
 
 namespace QUI\ERP\Currency;
@@ -48,7 +48,7 @@ class Handler
      */
     public static function createCurrency($currency, $rate = 1)
     {
-        QUI\Rights\Permission::checkPermission('currency.create');
+        QUI\Permissions\Permission::checkPermission('currency.create');
 
         $Currency = null;
 
@@ -74,7 +74,7 @@ class Handler
 
         QUI::getDataBase()->insert(self::table(), array(
             'currency' => $currency,
-            'rate' => (float)$rate
+            'rate'     => (float)$rate
         ));
 
         // create translations
@@ -114,7 +114,7 @@ class Handler
      */
     public static function deleteCurrency($currency)
     {
-        QUI\Rights\Permission::checkPermission('currency.delete');
+        QUI\Permissions\Permission::checkPermission('currency.delete');
 
         QUI::getDataBase()->delete(self::table(), array(
             'currency' => $currency
@@ -266,16 +266,16 @@ class Handler
             }
 
             $result[$currency] = array(
-                'text' => $Locale->get(
+                'text'       => $Locale->get(
                     'quiqqer/currency',
                     'currency.' . $currency . '.text'
                 ),
-                'sign' => $Locale->get(
+                'sign'       => $Locale->get(
                     'quiqqer/currency',
                     'currency.' . $currency . '.sign'
                 ),
-                'code' => $currency,
-                'rate' => $Currency->getExchangeRate(),
+                'code'       => $currency,
+                'rate'       => $Currency->getExchangeRate(),
                 'autoupdate' => $Currency->autoupdate()
             );
         }
