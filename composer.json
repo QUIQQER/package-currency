@@ -2,7 +2,7 @@
   "name": "quiqqer/currency",
   "type": "quiqqer-library",
   "description": "Provided currency calculation and a automtatic cron to get the Euro foreign exchange reference rates.",
-  "version": "dev-master",
+  "version": "1.0.0",
   "license": "GPL-2.0+",
   "authors": [
     {
