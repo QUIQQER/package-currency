@@ -196,7 +196,8 @@ class Handler
             return new Currency($currency);
         }
 
-        if (get_class($currency) == 'QUI\ERP\Currency\Currency') {
+        if (get_class($currency) == Currency::class) {
+            /* @var $currency Currency */
             return $currency;
         }
 
@@ -243,10 +244,8 @@ class Handler
         } catch (QUI\Exception $Exception) {
         }
 
-
         try {
             $currencies = QUI\Cache\Manager::get($cacheName);
-
         } catch (QUI\Exception $Exception) {
             $currencies = array();
             $data       = self::getData();

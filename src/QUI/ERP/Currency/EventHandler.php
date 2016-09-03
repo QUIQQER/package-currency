@@ -24,7 +24,6 @@ class EventHandler
             $TemplateManager->extendHeader(
                 '<script>var DEFAULT_CURRENCY = "' . $Currency->getCode() . '"</script>'
             );
-
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
         }

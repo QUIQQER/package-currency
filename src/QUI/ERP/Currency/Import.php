@@ -51,7 +51,6 @@ class Import
 
                 $Currency->setExchangeRate($rate);
                 $Currency->save();
-
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
             }
