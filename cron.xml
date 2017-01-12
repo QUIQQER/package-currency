@@ -2,10 +2,10 @@
 <crons>
     <cron exec="\QUI\ERP\Currency\Cron::import">
         <title>
-            <locale group="quiqqer/curreny" var="cron.import.title" />
+            <locale group="quiqqer/currency" var="cron.import.title"/>
         </title>
         <description>
-            <locale group="quiqqer/curreny" var="cron.import.description" />
+            <locale group="quiqqer/currency" var="cron.import.description"/>
         </description>
     </cron>
 </crons>
