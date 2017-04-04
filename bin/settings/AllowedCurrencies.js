@@ -160,7 +160,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         }
                     }
                 }, {
-                    type: 'seperator'
+                    type: 'separator'
                 }, {
                     name     : 'delete',
                     text     : QUILocale.get(lg, 'grid.setting.button.delete'),

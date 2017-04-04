@@ -92,13 +92,15 @@ define('package/quiqqer/currency/bin/settings/Currency', [
                 currency       = this.getAttribute('currency');
 
             this.$TranslationTitle = new Translation({
-                'group': 'quiqqer/currency',
-                'var'  : 'currency.' + currency + '.text'
+                'group'  : 'quiqqer/currency',
+                'var'    : 'currency.' + currency + '.text',
+                'package': 'quiqqer/currency'
             }).inject(TitleContainer);
 
             this.$TranslationSign = new Translation({
-                'group': 'quiqqer/currency',
-                'var'  : 'currency.' + currency + '.sign'
+                'group'  : 'quiqqer/currency',
+                'var'    : 'currency.' + currency + '.sign',
+                'package': 'quiqqer/currency'
             }).inject(SignContainer);
 
 
