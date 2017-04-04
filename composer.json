@@ -18,7 +18,7 @@
   "require": {
     "ext-intl": "*",
     "quiqqer/quiqqer": "*",
-    "quiqqer\/qui": ">=1.*|dev-master|dev-dev"
+    "quiqqer\/qui": ">=1|dev-master|dev-dev"
   },
   "autoload": {
     "psr-4": {
