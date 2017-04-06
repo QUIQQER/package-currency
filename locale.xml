@@ -140,6 +140,15 @@
     </groups>
 
     <groups name="quiqqer/currency" datatype="php,js">
+        <locale name="package.title">
+            <de><![CDATA[QUIQQER - Währungen]]></de>
+            <en><![CDATA[QUIQQER - Currency]]></en>
+        </locale>
+        <locale name="package.description" html="true">
+            <de><![CDATA[Integriert verschiedenen Währung in QUIQQER]]></de>
+            <en><![CDATA[Integrates various currency into QUIQQER]]></en>
+        </locale>
+
         <locale name="window.erp.title">
             <de><![CDATA[Shop]]></de>
             <en><![CDATA[Shop]]></en>
