@@ -149,6 +149,26 @@
             <en><![CDATA[Integrates various currency into QUIQQER]]></en>
         </locale>
 
+        <!-- permissions -->
+        <locale name="permission.currency._header">
+            <de><![CDATA[Währungen]]></de>
+            <en><![CDATA[Currency]]></en>
+        </locale>
+        <locale name="permission.currency.edit">
+            <de><![CDATA[Darf Währungen editieren]]></de>
+            <en><![CDATA[Is allowed to edit currencies]]></en>
+        </locale>
+        <locale name="permission.currency.delete">
+            <de><![CDATA[Darf Währungen löschen]]></de>
+            <en><![CDATA[Is allowed to delete currencies]]></en>
+        </locale>
+        <locale name="permission.currency.create">
+            <de><![CDATA[Darf Währungen erstellen]]></de>
+            <en><![CDATA[Is allowed to create currencies]]></en>
+        </locale>
+
+
+        <!-- general -->
         <locale name="window.erp.title">
             <de><![CDATA[Shop]]></de>
             <en><![CDATA[Shop]]></en>
