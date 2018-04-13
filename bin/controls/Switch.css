@@ -25,6 +25,7 @@
     left: 0;
     position: absolute;
     width: 100%;
+    z-index: 1000;
 }
 
 .quiqqer-currency-switch-dd:after {
@@ -50,4 +51,8 @@
     padding: 10px;
     text-align: left;
     width: 100%;
+}
+
+.quiqqer-currency-switch-dd-entry:hover {
+    background: rgba(0, 0, 0, 0.1);
 }

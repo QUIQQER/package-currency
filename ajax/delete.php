@@ -18,6 +18,6 @@ QUI::$Ajax->registerFunction(
             QUI\ERP\Currency\Handler::deleteCurrency($currency);
         }
     },
-    array('currencies'),
+    ['currencies'],
     'Permission::checkAdminUser'
 );

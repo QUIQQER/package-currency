@@ -16,6 +16,8 @@ class Import
 {
     /**
      * Import all available currencies from the ECB
+     *
+     * @throws QUI\Exception
      */
     public static function importCurrenciesFromECB()
     {
@@ -58,9 +60,9 @@ class Import
     }
 
     /**
-     * Fetch the daily currencie rates from the ECB
+     * Fetch the daily currencies rates from the ECB
      *
-     * @return array|void
+     * @return array
      */
     protected static function getECBData()
     {
@@ -71,12 +73,12 @@ class Import
         $list = $Dom->getElementsByTagName('Cube');
 
         if (!$list->length) {
-            return array();
+            return [];
         }
 
-        $values = array(
+        $values = [
             'EUR' => '1.0'
-        );
+        ];
 
         for ($c = 0; $c < $list->length; $c++) {
             /* @var $Cube \DOMElement */

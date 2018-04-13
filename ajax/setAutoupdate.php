@@ -16,6 +16,6 @@ QUI::$Ajax->registerFunction(
         $Currency->setAutoupdate($autoupdate);
         $Currency->save();
     },
-    array('currency', 'autoupdate'),
+    ['currency', 'autoupdate'],
     'Permission::checkAdminUser'
 );

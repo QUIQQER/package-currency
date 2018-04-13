@@ -18,6 +18,6 @@ QUI::$Ajax->registerFunction(
         $Currency->setCode($code);
         $Currency->save();
     },
-    array('currency', 'code', 'rate'),
+    ['currency', 'code', 'rate'],
     'Permission::checkAdminUser'
 );

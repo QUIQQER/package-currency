@@ -15,6 +15,6 @@ QUI::$Ajax->registerFunction(
     function ($currency) {
         QUI\ERP\Currency\Handler::createCurrency($currency);
     },
-    array('currency'),
+    ['currency'],
     'Permission::checkAdminUser'
 );

@@ -1,30 +1,29 @@
-QUIQQER Währungen
+QUIQQER Currencies
 ========
 
-Integriert verschiedenen Währung in QUIQQER
+Integrates different currencies in QUIQQER
 
-
-Paketname:
+package name:
 
     quiqqer/currency
 
 
-Features (Funktionen)
+Features
 --------
 
-- Automatische Aktualisierung der Wechselkurse
-- Währungsumrechnung zwischen verschiedenen Währungen
-- Hinzufügen von neuen Währungen möglich
-- Wechselkurse können auch händisch angepasst werden
+- Automatic update of exchange rates
+- Currency calculation between different currencies
+- Adding of new currencies possible
+- Exchange rates can also be adjusted manually
 
 
 Installation
 ------------
 
-Der Paketname ist: quiqqer/currency
+The package name: quiqqer/currency
 
 
-Mitwirken
+Contribution
 ----------
 
 - Issue Tracker: https://dev.quiqqer.com/quiqqer/package-currency/issues
@@ -34,16 +33,11 @@ Mitwirken
 Support
 -------
 
-Falls Sie ein Fehler gefunden haben, oder Verbesserungen wünschen,
-dann können Sie gerne an support@pcsg.de eine E-Mail schreiben.
+If you have found a bug, or want improvements,
+then you are welcome to send an e-mail to support@pcsg.de
 
 
-Lizenz
+Licence
 -------
 
-- GPL-2.0+
-
-Entwickler
---------
-
----
+- GPL-3.0+

@@ -22,7 +22,7 @@ class Handler
      *
      * @var array
      */
-    protected static $currencies = array();
+    protected static $currencies = [];
 
     /**
      * @var null
@@ -58,33 +58,33 @@ class Handler
         }
 
         if (!is_null($Currency)) {
-            throw new QUI\Exception(array(
+            throw new QUI\Exception([
                 'quiqqer/currency',
                 'exception.already.exists',
-                array('currency' => $currency)
-            ));
+                ['currency' => $currency]
+            ]);
         }
 
         if (!is_numeric($rate)) {
-            throw new QUI\Exception(array(
+            throw new QUI\Exception([
                 'quiqqer/currency',
                 'exception.currency.rate.wrong.format'
-            ));
+            ]);
         }
 
-        QUI::getDataBase()->insert(self::table(), array(
+        QUI::getDataBase()->insert(self::table(), [
             'currency' => $currency,
             'rate'     => (float)$rate
-        ));
+        ]);
 
         // create translations
-        $languageData = array(
+        $languageData = [
             'datatype' => 'js,php'
-        );
+        ];
 
         $localeGroup = 'quiqqer/currency';
-        $localeText  = 'currency.' . $currency . '.text';
-        $localeSign  = 'currency.' . $currency . '.sign';
+        $localeText  = 'currency.'.$currency.'.text';
+        $localeSign  = 'currency.'.$currency.'.sign';
 
         $textData = QUI\Translator::getVarData($localeGroup, $localeText);
         $signData = QUI\Translator::getVarData($localeGroup, $localeSign);
@@ -92,7 +92,7 @@ class Handler
         if (empty($textData)) {
             QUI\Translator::addUserVar(
                 'quiqqer/currency',
-                'currency.' . $currency . '.text',
+                'currency.'.$currency.'.text',
                 $languageData
             );
         }
@@ -100,7 +100,7 @@ class Handler
         if (empty($signData)) {
             QUI\Translator::addUserVar(
                 'quiqqer/currency',
-                'currency.' . $currency . '.sign',
+                'currency.'.$currency.'.sign',
                 $languageData
             );
         }
@@ -116,9 +116,9 @@ class Handler
     {
         QUI\Permissions\Permission::checkPermission('currency.delete');
 
-        QUI::getDataBase()->delete(self::table(), array(
+        QUI::getDataBase()->delete(self::table(), [
             'currency' => $currency
-        ));
+        ]);
     }
 
     /**
@@ -129,11 +129,17 @@ class Handler
     public static function getDefaultCurrency()
     {
         if (is_null(self::$Default)) {
-            $Config = QUI::getPackage('quiqqer/currency')->getConfig();
+            try {
+                $Config = QUI::getPackage('quiqqer/currency')->getConfig();
 
-            self::$Default = self::getCurrency(
-                $Config->getValue('currency', 'defaultCurrency')
-            );
+                self::$Default = self::getCurrency(
+                    $Config->getValue('currency', 'defaultCurrency')
+                );
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+
+                return new Currency('EUR');
+            }
         }
 
         return self::$Default;
@@ -151,7 +157,7 @@ class Handler
         $allowed = $Config->getValue('currency', 'allowedCurrencies');
 
         $allowed = explode(',', trim($allowed));
-        $list    = array();
+        $list    = [];
 
         foreach ($allowed as $currency) {
             try {
@@ -171,9 +177,9 @@ class Handler
     public static function getData()
     {
         if (!self::$currencies) {
-            $data = QUI::getDataBase()->fetch(array(
+            $data = QUI::getDataBase()->fetch([
                 'from' => self::table()
-            ));
+            ]);
 
             foreach ($data as $entry) {
                 self::$currencies[$entry['currency']] = $entry;
@@ -202,10 +208,7 @@ class Handler
         }
 
         throw new QUI\Exception(
-            array(
-                'quiqqer/currency',
-                'currency.not.found'
-            ),
+            ['quiqqer/currency', 'currency.not.found'],
             404
         );
     }
@@ -237,7 +240,7 @@ class Handler
         }
 
         $cacheName     = 'quiqqer/currency/list';
-        $cacheNameLang = 'quiqqer/currency/list/' . $Locale->getCurrent();
+        $cacheNameLang = 'quiqqer/currency/list/'.$Locale->getCurrent();
 
         try {
             return QUI\Cache\Manager::get($cacheNameLang);
@@ -247,7 +250,7 @@ class Handler
         try {
             $currencies = QUI\Cache\Manager::get($cacheName);
         } catch (QUI\Exception $Exception) {
-            $currencies = array();
+            $currencies = [];
             $data       = self::getData();
 
             foreach ($data as $entry) {
@@ -255,7 +258,7 @@ class Handler
             }
         }
 
-        $result = array();
+        $result = [];
 
         foreach ($currencies as $currency) {
             try {
@@ -264,19 +267,19 @@ class Handler
                 continue;
             }
 
-            $result[$currency] = array(
+            $result[$currency] = [
                 'text'       => $Locale->get(
                     'quiqqer/currency',
-                    'currency.' . $currency . '.text'
+                    'currency.'.$currency.'.text'
                 ),
                 'sign'       => $Locale->get(
                     'quiqqer/currency',
-                    'currency.' . $currency . '.sign'
+                    'currency.'.$currency.'.sign'
                 ),
                 'code'       => $currency,
                 'rate'       => $Currency->getExchangeRate(),
                 'autoupdate' => $Currency->autoupdate()
-            );
+            ];
         }
 
         return $result;
