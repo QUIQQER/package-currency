@@ -16,5 +16,5 @@ QUI::$Ajax->registerFunction(
 
         return $Currency->toArray();
     },
-    array('currency')
+    ['currency']
 );

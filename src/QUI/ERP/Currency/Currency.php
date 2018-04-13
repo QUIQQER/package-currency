@@ -49,10 +49,7 @@ class Currency
     {
         if (!Handler::existCurrency($currencyCode)) {
             throw new QUI\Exception(
-                array(
-                    'quiqqer/currency',
-                    'currency.not.found'
-                ),
+                ['quiqqer/currency', 'currency.not.found'],
                 404
             );
         }
@@ -102,7 +99,7 @@ class Currency
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
-            'currency.' . $this->getCode() . '.text'
+            'currency.'.$this->getCode().'.text'
         );
     }
 
@@ -115,7 +112,7 @@ class Currency
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
-            'currency.' . $this->getCode() . '.sign'
+            'currency.'.$this->getCode().'.sign'
         );
     }
 
@@ -126,13 +123,13 @@ class Currency
      */
     public function toArray()
     {
-        return array(
+        return [
             'text'       => $this->getText(),
             'sign'       => $this->getSign(),
             'code'       => $this->getCode(),
             'rate'       => $this->getExchangeRate(),
             'autoupdate' => $this->autoupdate()
-        );
+        ];
     }
 
     /**
@@ -236,8 +233,15 @@ class Currency
             return $this->exchangeRate;
         }
 
-        $Currency = Handler::getCurrency($Currency);
-        $to       = $Currency->getExchangeRate();
+        try {
+            $Currency = Handler::getCurrency($Currency);
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+
+            return false;
+        }
+
+        $to = $Currency->getExchangeRate();
 
         if (!$to) {
             return false;
@@ -251,17 +255,19 @@ class Currency
      * if you want to save it to the currency, use ->update()
      *
      * @param float|integer $rate
+     *
      * @throws QUI\Exception
+     * @throws QUI\Permissions\Exception
      */
     public function setExchangeRate($rate)
     {
         QUI\Permissions\Permission::checkPermission('currency.edit');
 
         if (!is_numeric($rate)) {
-            throw new QUI\Exception(array(
+            throw new QUI\Exception([
                 'quiqqer/currency',
                 'exception.currency.rate.wrong.format'
-            ));
+            ]);
         }
 
         $this->exchangeRate = (float)$rate;
@@ -269,7 +275,8 @@ class Currency
 
     /**
      * @param string $code
-     * @throws QUI\Exception
+     *
+     * @throws QUI\Permissions\Exception
      */
     public function setCode($code)
     {
@@ -279,9 +286,11 @@ class Currency
     }
 
     /**
-     * Set the autoupdate status
+     * Set the auto update status
      *
      * @param bool $status
+     *
+     * @throws QUI\Permissions\Exception
      */
     public function setAutoupdate($status)
     {
@@ -292,6 +301,9 @@ class Currency
 
     /**
      * alias for update()
+     *
+     * @throws QUI\Permissions\Exception
+     * @throws QUI\Exception
      */
     public function save()
     {
@@ -300,6 +312,9 @@ class Currency
 
     /**
      * Saves the currency
+     *
+     * @throws QUI\Permissions\Exception
+     * @throws QUI\Exception
      */
     public function update()
     {
@@ -307,11 +322,11 @@ class Currency
 
         QUI::getDataBase()->update(
             Handler::table(),
-            array(
+            [
                 'autoupdate' => $this->autoupdate() ? 1 : 0,
                 'rate'       => $this->getExchangeRate()
-            ),
-            array('currency' => $this->getCode())
+            ],
+            ['currency' => $this->getCode()]
         );
     }
 }

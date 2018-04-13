@@ -21,6 +21,8 @@ class Calc
      * @param string|Currency $currencyFrom - based currency
      * @param string|Currency $currencyTo - optional, wanted currency, default = EUR
      * @return float
+     *
+     * @throws QUI\Exception
      */
     public static function convert($amount, $currencyFrom, $currencyTo = 'EUR')
     {
@@ -38,6 +40,8 @@ class Calc
      * @param string|Currency $currencyTo - optional, wanted currency, default = EUR
      *
      * @return string
+     *
+     * @throws QUI\Exception
      */
     public static function convertWithSign($amount, $currencyFrom, $currencyTo = 'EUR')
     {
@@ -54,6 +58,8 @@ class Calc
      * @param string|Currency $currencyTo
      *
      * @return float|boolean
+     *
+     * @throws QUI\Exception
      */
     public static function getExchangeRateBetween($currencyFrom, $currencyTo)
     {

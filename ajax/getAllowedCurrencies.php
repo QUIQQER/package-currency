@@ -12,7 +12,7 @@
 
 QUI::$Ajax->registerFunction('package_quiqqer_currency_ajax_getAllowedCurrencies', function () {
     $allowed = QUI\ERP\Currency\Handler::getAllowedCurrencies();
-    $result  = array();
+    $result  = [];
 
     /* @var $Currency \QUI\ERP\Currency\Currency */
     foreach ($allowed as $Currency) {
