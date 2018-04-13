@@ -1,9 +1,9 @@
 {
   "name": "quiqqer/currency",
-  "type": "quiqqer-library",
-  "description": "Provided currency calculation and a automtatic cron to get the Euro foreign exchange reference rates.",
+  "type": "quiqqer-module",
+  "description": "Integrates different currencies in QUIQQER",
   "version": "dev-dev",
-  "license": "GPL-2.0+",
+  "license": "GPL-3.0+",
   "authors": [
     {
       "name": "Henning Leutz",
