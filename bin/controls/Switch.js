@@ -1,10 +1,6 @@
 /**
  * @module package/quiqqer/currency/bin/controls/Switch
  * @author www.pcsg.de (Henning Leutz)
- *
- * @require qui/QUI
- * @require qui/controls/Control
- * @require css!package/quiqqer/currency/bin/controls/Switch.css'
  */
 define('package/quiqqer/currency/bin/controls/Switch', [
 
@@ -50,9 +46,9 @@ define('package/quiqqer/currency/bin/controls/Switch', [
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-switch',
                 html   : '<div class="quiqqer-currency-switch-display">' +
-                         '<span class="fa fa-spinner fa-spin"></span>' +
-                         '</div>' +
-                         '<div class="quiqqer-currency-switch-dd"></div>'
+                '<span class="fa fa-spinner fa-spin"></span>' +
+                '</div>' +
+                '<div class="quiqqer-currency-switch-dd"></div>'
             });
 
             this.$Display  = this.$Elm.getElement('.quiqqer-currency-switch-display');
@@ -84,7 +80,6 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     }
 
                     Currencies.addEvent('onChange', function (Currencies, currencyCode) {
-
                         Currencies.getCurrency(currencyCode).then(function (Curr) {
                             self.$Display.set({
                                 html : Curr.code,
