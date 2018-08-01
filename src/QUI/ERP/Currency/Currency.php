@@ -182,6 +182,8 @@ class Currency
     public function convert($amount, $Currency)
     {
         $Currency = Handler::getCurrency($Currency);
+        $Default  = Handler::getDefaultCurrency();
+        $default  = $Default->getCode();
 
         if ($this->getCode() == $Currency->getCode()) {
             return $amount;
@@ -190,18 +192,20 @@ class Currency
         $from = $this->getCode();
         $to   = $Currency->getCode();
 
-        // exchange rates are based at EUR
-        if ($from == 'EUR' && $to != 'EUR') {
+        // exchange rates are based on the default currency (eq EUR)
+        // $from == 'EUR' && $to != 'EUR'
+        if ($from == $default && $to != $default) {
             return $amount * $Currency->getExchangeRate();
         }
 
-        if ($from != 'EUR' && $to == 'EUR') {
+        // $from != 'EUR' && $to == 'EUR'
+        if ($from != $default && $to == $default) {
             return $amount * (1 / $this->getExchangeRate());
         }
 
-        $eur = $this->convert($amount, 'EUR');
+        $currency = $this->convert($amount, $default);
 
-        return $eur * $Currency->getExchangeRate();
+        return $currency * $Currency->getExchangeRate();
     }
 
     /**

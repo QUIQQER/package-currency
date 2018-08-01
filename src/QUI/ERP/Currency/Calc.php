@@ -10,6 +10,7 @@ use QUI;
 
 /**
  * Class Calc
+ *
  * @package QUI\ERP\Currency
  */
 class Calc
@@ -36,7 +37,7 @@ class Calc
      * Convert with currency sign
      *
      * @param float $amount
-     * @param string|Currency $currencyFrom - baed currency
+     * @param string|Currency $currencyFrom - based currency
      * @param string|Currency $currencyTo - optional, wanted currency, default = EUR
      *
      * @return string

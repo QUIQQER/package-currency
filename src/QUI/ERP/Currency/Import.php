@@ -31,6 +31,8 @@ class Import
                 Handler::createCurrency($currency, $rate);
             }
         }
+
+        self::import();
     }
 
     /**
@@ -38,10 +40,26 @@ class Import
      * updates the exchange rate
      *
      * from: http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml
+     *
+     * @throws QUI\Exception
      */
     public static function import()
     {
         $values = self::getECBData();
+
+        // look if EUR is not the default currency
+        $Default = Handler::getDefaultCurrency();
+
+        if (isset($values[$Default->getCode()])) {
+            throw new QUI\Exception([
+                'quiqqer/currency',
+                'exception.could.not.import.currencies',
+                ['currency' => $Default->getCode()]
+            ]);
+        }
+
+        // is only used if EUR is not the default currency
+        $baseRate = 1 / $values[$Default->getCode()]; // eq: 1EUR / 1$
 
         foreach ($values as $currency => $rate) {
             try {
@@ -49,6 +67,18 @@ class Import
 
                 if ($Currency->autoupdate() === false) {
                     continue;
+                }
+
+                // is only used if EUR is not the default currency
+                if ($Default->getCode() !== 'EUR') {
+                    if ($Currency->getCode() === 'EUR') {
+                        $rate = $baseRate;
+                    } elseif ($Default->getCode() === $Currency->getCode()) {
+                        $rate = 1;
+                    } else {
+                        // calc the rate
+                        $rate = $rate * $baseRate;
+                    }
                 }
 
                 $Currency->setExchangeRate($rate);
