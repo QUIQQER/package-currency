@@ -1,6 +1,8 @@
 QUIQQER Currencies
 ========
 
+![QUIQQER Currencies](bin/images/Readme.png)
+
 Integrates different currencies in QUIQQER
 
 package name:
