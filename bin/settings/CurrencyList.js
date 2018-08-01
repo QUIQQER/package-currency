@@ -1,11 +1,6 @@
 /**
  * @module package/quiqqer/currency/bin/CurrencyList
  * @author www.pcsg.de (Henning Leutz)
- *
- * @require qui/QUI
- * @require qui/controls/Control
- * @require qui/controls/buttons/Select
- * @require Ajax
  */
 define('package/quiqqer/currency/bin/settings/CurrencyList', [
 
@@ -53,11 +48,13 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
                 showIcons: false,
                 events   : {
                     onChange: this.$onSelectChange
+                },
+                styles   : {
+                    width: '100%'
                 }
             }).inject(this.$Elm);
 
             this.getCurrencies().then(function (result) {
-
                 for (var i in result) {
                     if (!result.hasOwnProperty(i)) {
                         continue;
@@ -72,8 +69,11 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
                 if (this.$Input.value !== '') {
                     this.$Select.setValue(this.$Input.value);
                 }
-
             }.bind(this));
+
+            if (this.getElm().getParent().hasClass('field-container')) {
+                this.$Elm.setStyle('width', '100%');
+            }
         },
 
         /**

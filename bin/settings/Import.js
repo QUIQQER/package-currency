@@ -1,13 +1,6 @@
 /**
  * @module package/quiqqer/currency/bin/settings/Import
  * @author www.pcsg.de (Henning Leutz)
- *
- * @require qui/QUI
- * @require qui/controls/Control
- * @require qui/controls/buttons/Button
- * @require qui/controls/windows/Confirm
- * @require Locale
- * @require Ajax
  */
 define('package/quiqqer/currency/bin/settings/Import', [
 
@@ -24,6 +17,7 @@ define('package/quiqqer/currency/bin/settings/Import', [
     var lg = 'quiqqer/currency';
 
     return new Class({
+
         Extends: QUIControl,
         Type   : 'package/quiqqer/currency/bin/settings/Import',
 
@@ -48,15 +42,25 @@ define('package/quiqqer/currency/bin/settings/Import', [
 
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-allowed',
-                html   : '<div class="quiqqer-currency-import-container"></div>'
+                html   : '<div class="quiqqer-currency-import-container"></div>',
+                styles : {
+                    width: '100%'
+                }
             }).wraps(this.$Input);
 
             new QUIButton({
                 text  : QUILocale.get(lg, 'ecb.import.button.text'),
                 events: {
                     onClick: this.openDialog
+                },
+                styles: {
+                    width: '100%'
                 }
             }).inject(this.$Elm);
+
+            if (this.$Elm.getParent().hasClass('field-container')) {
+                this.$Elm.getParent().getElement('.field-container-item').setStyle('display', 'none');
+            }
         },
 
         /**

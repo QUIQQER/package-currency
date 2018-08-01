@@ -1,11 +1,6 @@
 /**
  * @module package/quiqqer/currency/bin/settings/CurrencyWindow
  * @author www.pcsg.de (Henning Leutz)
- *
- * @require qui/QUI
- * @require qui/controls/Control
- * @require Locale
- * @require package/quiqqer/currency/bin/settings/Currency
  */
 define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
 
