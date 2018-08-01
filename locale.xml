@@ -13,6 +13,16 @@
             <de><![CDATA[Der Wechselkurs besitzt ein falsches Format.]]></de>
             <en><![CDATA[The exchange rate has an incorrect format.]]></en>
         </locale>
+        <locale name="exception.could.not.import.currencies">
+            <de><![CDATA[
+                Der Währungsimport konnte nicht durchgeführt.
+                Die Währung [currency konnte im EZB import nicht gefunden werden.
+            ]]]></de>
+            <en><![CDATA[
+                The currency import could not be executed.
+                The currency [currency] could not be found in the ECB import.
+            ]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/currency" datatype="js">
