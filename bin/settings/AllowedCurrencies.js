@@ -4,17 +4,6 @@
  *
  * @module package/quiqqer/currency/bin/settings/AllowedCurrencies
  * @author www.pcsg.de (Henning Leutz)
- *
- * @require qui/QUI
- * @require qui/controls/Control
- * @require qui/controls/buttons/Switch
- * @require qui/controls/windows/Confirm
- * @require qui/controls/windows/Prompt
- * @require Ajax
- * @require Locale
- * @require controls/grid/Grid
- * @require package/quiqqer/currency/bin/settings/CurrencyWindow
- * @require css!package/quiqqer/currency/bin/settings/AllowedCurrencies.css
  */
 define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
@@ -186,14 +175,14 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         buttons  = self.$Grid.getButtons();
 
                     var Edit = buttons.filter(function (Btn) {
-                        return Btn.getAttribute('name') == 'edit';
+                        return Btn.getAttribute('name') === 'edit';
                     })[0];
 
                     var Delete = buttons.filter(function (Btn) {
-                        return Btn.getAttribute('name') == 'delete';
+                        return Btn.getAttribute('name') === 'delete';
                     })[0];
 
-                    if (selected.length == 1) {
+                    if (selected.length === 1) {
                         Edit.enable();
                         Delete.enable();
                     } else if (selected.length > 1) {
@@ -263,11 +252,11 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 var buttons = this.$Grid.getButtons();
 
                 var Edit = buttons.filter(function (Btn) {
-                    return Btn.getAttribute('name') == 'edit';
+                    return Btn.getAttribute('name') === 'edit';
                 })[0];
 
                 var Delete = buttons.filter(function (Btn) {
-                    return Btn.getAttribute('name') == 'delete';
+                    return Btn.getAttribute('name') === 'delete';
                 })[0];
 
                 Edit.disable();
@@ -375,7 +364,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 return;
             }
 
-            if (Panel.getType() != 'controls/desktop/panels/XML') {
+            if (Panel.getType() !== 'controls/desktop/panels/XML') {
                 return;
             }
 

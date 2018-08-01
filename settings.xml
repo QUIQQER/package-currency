@@ -52,7 +52,7 @@
                             <locale group="quiqqer/currency" var="currency.settings.currencyImport.text"/>
                         </title>
 
-                        <input data-qui="package/quiqqer/currency/bin/settings/Import"/>
+                        <input data-qui="package/quiqqer/currency/bin/settings/Import" label="false"/>
                     </settings>
 
                     <settings>
