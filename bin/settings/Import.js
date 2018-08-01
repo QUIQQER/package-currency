@@ -58,7 +58,8 @@ define('package/quiqqer/currency/bin/settings/Import', [
                 }
             }).inject(this.$Elm);
 
-            if (this.$Elm.getParent().hasClass('field-container')) {
+            if (this.$Elm.getParent().hasClass('field-container') &&
+                this.$Elm.getParent().getElement('.field-container-item')) {
                 this.$Elm.getParent().getElement('.field-container-item').setStyle('display', 'none');
             }
         },
