@@ -50,7 +50,7 @@ class Import
         // look if EUR is not the default currency
         $Default = Handler::getDefaultCurrency();
 
-        if (isset($values[$Default->getCode()])) {
+        if (!isset($values[$Default->getCode()])) {
             throw new QUI\Exception([
                 'quiqqer/currency',
                 'exception.could.not.import.currencies',
