@@ -1,6 +1,8 @@
 /**
  * @module package/quiqqer/currency/bin/controls/Switch
  * @author www.pcsg.de (Henning Leutz)
+ *
+ * @event onChangeCurrency [this, CurrencyData]
  */
 define('package/quiqqer/currency/bin/controls/Switch', [
 
@@ -86,6 +88,8 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                                 title: Curr.text
                             });
                         });
+
+                        self.fireEvent('changeCurrency', [self, Curr]);
                     });
 
                     this.$DropDown.setStyles({
