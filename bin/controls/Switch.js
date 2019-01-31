@@ -87,9 +87,9 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                                 html : Curr.code,
                                 title: Curr.text
                             });
-                        });
 
-                        self.fireEvent('changeCurrency', [self, Curr]);
+                            self.fireEvent('changeCurrency', [self, Curr]);
+                        });
                     });
 
                     this.$DropDown.setStyles({
