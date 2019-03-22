@@ -3,15 +3,17 @@
  * @author www.pcsg.de (Henning Leutz)
  *
  * @event onChangeCurrency [this, CurrencyData]
+ * @event QUI:: onQuiqqerCurrencyChange [this, CurrencyData]
  */
 define('package/quiqqer/currency/bin/controls/Switch', [
 
     'qui/QUI',
     'qui/controls/Control',
+    'Ajax',
 
     'css!package/quiqqer/currency/bin/controls/Switch.css'
 
-], function (QUI, QUIControl) {
+], function (QUI, QUIControl, QUIAjax) {
     "use strict";
 
     return new Class({
@@ -48,9 +50,9 @@ define('package/quiqqer/currency/bin/controls/Switch', [
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-switch',
                 html   : '<div class="quiqqer-currency-switch-display">' +
-                '<span class="fa fa-spinner fa-spin"></span>' +
-                '</div>' +
-                '<div class="quiqqer-currency-switch-dd"></div>'
+                    '<span class="fa fa-spinner fa-spin"></span>' +
+                    '</div>' +
+                    '<div class="quiqqer-currency-switch-dd"></div>'
             });
 
             this.$Display  = this.$Elm.getElement('.quiqqer-currency-switch-display');
@@ -88,7 +90,13 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                                 title: Curr.text
                             });
 
-                            self.fireEvent('changeCurrency', [self, Curr]);
+                            QUIAjax.post('package_quiqqer_currency_ajax_setUserCurrency', function () {
+                                self.fireEvent('changeCurrency', [self, Curr]);
+                                QUI.fireEvent('quiqqerCurrencyChange', [self, Curr]);
+                            }, {
+                                'package': 'quiqqer/currency',
+                                currency : Curr.code
+                            });
                         });
                     });
 

@@ -146,6 +146,35 @@ class Handler
     }
 
     /**
+     * Return the currency of the user
+     * - This currency can be switched, so the user can get the prices in its currency
+     *
+     * @param null|QUI\Interfaces\Users\User $User - optional
+     * @return Currency|null
+     */
+    public static function getUserCurrency($User = null)
+    {
+        if ($User === null) {
+            $User = QUI::getUserBySession();
+        }
+
+        if (!$User->getAttribute('quiqqer.erp.currency')) {
+            return null;
+        }
+
+        try {
+            $currency = $User->getAttribute('quiqqer.erp.currency');
+            $Currency = self::getCurrency($currency);
+
+            return $Currency;
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+        }
+
+        return null;
+    }
+
+    /**
      * Return all allowed currencies
      *
      * @return array - [Currency, Currency, Currency]
@@ -177,9 +206,15 @@ class Handler
     public static function getData()
     {
         if (!self::$currencies) {
-            $data = QUI::getDataBase()->fetch([
-                'from' => self::table()
-            ]);
+            try {
+                $data = QUI::getDataBase()->fetch([
+                    'from' => self::table()
+                ]);
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::addError($Exception->getMessage());
+
+                return [];
+            }
 
             foreach ($data as $entry) {
                 self::$currencies[$entry['currency']] = $entry;
@@ -202,7 +237,11 @@ class Handler
             return new Currency($currency);
         }
 
-        if (get_class($currency) == Currency::class) {
+        if (is_array($currency) && isset($currency['code'])) {
+            return new Currency($currency['code']);
+        }
+
+        if ($currency && get_class($currency) == Currency::class) {
             /* @var $currency Currency */
             return $currency;
         }

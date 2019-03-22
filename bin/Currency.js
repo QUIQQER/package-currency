@@ -21,6 +21,10 @@ define('package/quiqqer/currency/bin/Currency', [
         def = window.DEFAULT_CURRENCY;
     }
 
+    if (typeof window.DEFAULT_USER_CURRENCY !== 'undefined') {
+        def = window.DEFAULT_USER_CURRENCY.code;
+    }
+
     var Currencies = new Class({
         Extends: QUIDOM,
         Type   : 'package/quiqqer/currency/bin/Currency',
@@ -60,7 +64,6 @@ define('package/quiqqer/currency/bin/Currency', [
                 var currencyCode = this.$currency;
 
                 this.getCurrencies().then(function (currencies) {
-
                     var found = currencies.find(function (Currency) {
                         return Currency.code === currencyCode;
                     });
@@ -148,6 +151,10 @@ define('package/quiqqer/currency/bin/Currency', [
 
             return new Promise(function (resolve) {
                 Converter.addEvent('onDone', function (Cnv, result) {
+                    if (!result) {
+                        return;
+                    }
+
                     for (var i = 0, len = result.length; i < len; i++) {
                         if (result[i].amount == amount &&
                             result[i].from === currencyFrom &&
