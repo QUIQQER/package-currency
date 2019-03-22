@@ -138,7 +138,7 @@ class Handler
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
 
-                return new Currency('EUR');
+                self::$Default = new Currency('EUR');
             }
         }
 

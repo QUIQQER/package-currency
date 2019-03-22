@@ -96,11 +96,13 @@ class Import
      */
     protected static function getECBData()
     {
-        $xmlfile = 'https://www.ecb.int/stats/eurofxref/eurofxref-daily.xml';
+        $xmlfile = 'http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml';
 
         try {
             $result = QUI\Utils\Request\Url::get($xmlfile, [
-                CURLOPT_FOLLOWLOCATION => true
+                \CURLOPT_FOLLOWLOCATION => true,
+                \CURLOPT_SSL_VERIFYHOST => false,
+                \CURLOPT_SSL_VERIFYPEER => false
             ]);
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
