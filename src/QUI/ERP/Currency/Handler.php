@@ -159,6 +159,12 @@ class Handler
         }
 
         if (!$User->getAttribute('quiqqer.erp.currency')) {
+            $Currency = self::getUserCurrencyByCountry($User);
+
+            if ($Currency) {
+                return $Currency;
+            }
+
             return null;
         }
 
@@ -167,6 +173,43 @@ class Handler
             $Currency = self::getCurrency($currency);
 
             return $Currency;
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+        }
+
+        $Currency = self::getUserCurrencyByCountry($User);
+
+        if ($Currency) {
+            return $Currency;
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the currency of the user by its country
+     *
+     * @param null $User
+     * @return Currency|null
+     */
+    public static function getUserCurrencyByCountry($User = null)
+    {
+        if ($User === null) {
+            $User = QUI::getUserBySession();
+        }
+
+        try {
+            $Config  = QUI::getPackage('quiqqer/currency')->getConfig();
+            $allowed = $Config->getValue('currency', 'allowedCurrencies');
+            $allowed = explode(',', trim($allowed));
+            $allowed = array_flip($allowed);
+
+            $Country  = $User->getCountry();
+            $Currency = $Country->getCurrency();
+
+            if (isset($allowed[$Currency->getCode()])) {
+                return $Currency;
+            }
         } catch (\Exception $Exception) {
             QUI\System\Log::writeDebugException($Exception);
         }
