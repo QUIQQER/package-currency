@@ -204,7 +204,12 @@ class Handler
             $allowed = explode(',', trim($allowed));
             $allowed = array_flip($allowed);
 
-            $Country  = $User->getCountry();
+            $Country = $User->getCountry();
+
+            if (!$Country) {
+                return null;
+            }
+
             $Currency = $Country->getCurrency();
 
             if (isset($allowed[$Currency->getCode()])) {
