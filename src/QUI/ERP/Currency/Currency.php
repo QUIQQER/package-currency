@@ -133,6 +133,37 @@ class Currency
     }
 
     /**
+     * Return the float amount for the currency
+     * example for the most currencies -> 0.11223 = 0.11
+     *
+     * @param float $amount
+     * @param null $Locale -optional
+     * @return float
+     */
+    public function amount($amount, $Locale = null)
+    {
+        if (!$Locale) {
+            $Locale = $this->Locale;
+        }
+
+        $amount = $this->format($amount, $Locale);
+        $amount = \preg_replace('/[^0-9,"."]/', '', $amount);
+        $amount = \trim($amount);
+
+        $decimalSeparator  = $Locale->getDecimalSeparator();
+        $groupingSeparator = $Locale->getGroupingSeparator();
+
+        if (\strpos($amount, $decimalSeparator) && $decimalSeparator != ' . ') {
+            $amount = \str_replace($groupingSeparator, '', $amount);
+        }
+
+        $amount = \str_replace(',', '.', $amount);
+        $amount = \floatval($amount);
+
+        return $amount;
+    }
+
+    /**
      * Format an amount
      *
      * @param float $amount
@@ -153,8 +184,8 @@ class Currency
             $Locale->getAccountingCurrencyPattern()
         );
 
-        if (is_string($amount)) {
-            $amount = floatval($amount);
+        if (\is_string($amount)) {
+            $amount = \floatval($amount);
         }
 
         return $Formatter->formatCurrency($amount, $this->getCode());
@@ -251,7 +282,7 @@ class Currency
             return false;
         }
 
-        return round($this->exchangeRate / $to, 8);
+        return \round($this->exchangeRate / $to, 8);
     }
 
     /**
@@ -267,7 +298,7 @@ class Currency
     {
         QUI\Permissions\Permission::checkPermission('currency.edit');
 
-        if (!is_numeric($rate)) {
+        if (!\is_numeric($rate)) {
             throw new QUI\Exception([
                 'quiqqer/currency',
                 'exception.currency.rate.wrong.format'
