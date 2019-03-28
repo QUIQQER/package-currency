@@ -3,24 +3,26 @@
  *
  * @module package/quiqqer/currency/bin/Currency
  * @author wwww.pcsg.de (Henning Leutz)
- *
- * @require qui/QUI
- * @require qui/classes/DOM
- * @require Ajax
  */
 define('package/quiqqer/currency/bin/Currency', [
 
     'qui/QUI',
     'qui/classes/DOM',
-    'Ajax'
+    'Ajax',
+    'package/quiqqer/currency/bin/classes/BulkConverting'
 
-], function (QUI, QUIDOM, Ajax) {
+], function (QUI, QUIDOM, Ajax, BulkConverting) {
     "use strict";
 
-    var def = 'EUR';
+    var Converter = null;
+    var def       = 'EUR';
 
-    if (typeof DEFAULT_CURRENCY !== 'undefined') {
-        def = DEFAULT_CURRENCY;
+    if (typeof window.DEFAULT_CURRENCY !== 'undefined') {
+        def = window.DEFAULT_CURRENCY;
+    }
+
+    if (typeof window.DEFAULT_USER_CURRENCY !== 'undefined') {
+        def = window.DEFAULT_USER_CURRENCY.code;
     }
 
     var Currencies = new Class({
@@ -40,18 +42,15 @@ define('package/quiqqer/currency/bin/Currency', [
          * @param {String} currencyCode
          */
         setCurrency: function (currencyCode) {
-
             this.getCurrencies().then(function (currencies) {
-
                 var found = currencies.find(function (Currency) {
-                    return Currency.code == currencyCode;
+                    return Currency.code === currencyCode;
                 });
 
                 if (found) {
                     this.$currency = found.code;
                     this.fireEvent('change', [this, found.code]);
                 }
-
             }.bind(this));
         },
 
@@ -62,13 +61,11 @@ define('package/quiqqer/currency/bin/Currency', [
          */
         getCurrency: function () {
             return new Promise(function (resolve, reject) {
-
                 var currencyCode = this.$currency;
 
                 this.getCurrencies().then(function (currencies) {
-
                     var found = currencies.find(function (Currency) {
-                        return Currency.code == currencyCode;
+                        return Currency.code === currencyCode;
                     });
 
                     if (found) {
@@ -77,7 +74,6 @@ define('package/quiqqer/currency/bin/Currency', [
 
                     return reject();
                 });
-
             }.bind(this));
         },
 
@@ -143,12 +139,31 @@ define('package/quiqqer/currency/bin/Currency', [
                 amount = 0;
             }
 
+            if (!Converter) {
+                Converter = new BulkConverting();
+            }
+
+            if (Converter.isRunning() === false) {
+                Converter.removeEvents('onDone');
+            }
+
+            Converter.add(amount, currencyFrom, currencyTo);
+
             return new Promise(function (resolve) {
-                Ajax.get('package_quiqqer_currency_ajax_convertWithSign', resolve, {
-                    'package'   : 'quiqqer/currency',
-                    amount      : amount,
-                    currencyFrom: currencyFrom,
-                    currencyTo  : currencyTo
+                Converter.addEvent('onDone', function (Cnv, result) {
+                    if (!result) {
+                        return;
+                    }
+
+                    for (var i = 0, len = result.length; i < len; i++) {
+                        if (result[i].amount == amount &&
+                            result[i].from === currencyFrom &&
+                            result[i].to === currencyTo) {
+                            break;
+                        }
+                    }
+
+                    resolve(result[i].converted);
                 });
             });
         }

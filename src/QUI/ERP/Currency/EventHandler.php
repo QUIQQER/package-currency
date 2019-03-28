@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file contains \QUI\ERP\Currency\EventHandler
  */
@@ -26,6 +27,16 @@ class EventHandler
             );
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
+        }
+
+        $Currency = Handler::getUserCurrency();
+
+        if ($Currency) {
+            $TemplateManager->extendHeader(
+                '<script>
+                    var DEFAULT_USER_CURRENCY = '.\json_encode($Currency->toArray()).'
+                </script>'
+            );
         }
     }
 }
