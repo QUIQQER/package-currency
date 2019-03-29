@@ -225,7 +225,7 @@ class Handler
     /**
      * Return all allowed currencies
      *
-     * @return array - [Currency, Currency, Currency]
+     * @return Currency[] - [Currency, Currency, Currency]
      * @throws QUI\Exception
      */
     public static function getAllowedCurrencies()
