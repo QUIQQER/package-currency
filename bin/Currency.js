@@ -55,14 +55,15 @@ define('package/quiqqer/currency/bin/Currency', [
         },
 
         /**
-         * Return the current Currency
+         * Return the data of a wanted currency
          *
+         * @param {String} [currencyCode] - optional, default = current currency
          * @return {Promise}
          */
-        getCurrency: function () {
-            return new Promise(function (resolve, reject) {
-                var currencyCode = this.$currency;
+        getCurrency: function (currencyCode) {
+            currencyCode = currencyCode || this.$currency;
 
+            return new Promise(function (resolve, reject) {
                 this.getCurrencies().then(function (currencies) {
                     var found = currencies.find(function (Currency) {
                         return Currency.code === currencyCode;

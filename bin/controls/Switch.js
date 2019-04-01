@@ -10,10 +10,11 @@ define('package/quiqqer/currency/bin/controls/Switch', [
     'qui/QUI',
     'qui/controls/Control',
     'Ajax',
+    'package/quiqqer/currency/bin/Currency',
 
     'css!package/quiqqer/currency/bin/controls/Switch.css'
 
-], function (QUI, QUIControl, QUIAjax) {
+], function (QUI, QUIControl, QUIAjax, Currencies) {
     "use strict";
 
     return new Class({
@@ -25,7 +26,8 @@ define('package/quiqqer/currency/bin/controls/Switch', [
             'open',
             'close',
             '$onInject',
-            '$onReplace'
+            '$onReplace',
+            '$onChange'
         ],
 
         initialize: function (options) {
@@ -37,7 +39,10 @@ define('package/quiqqer/currency/bin/controls/Switch', [
 
             this.addEvents({
                 onInject : this.$onInject,
-                onReplace: this.$onReplace
+                onReplace: this.$onReplace,
+                onDestroy: function () {
+                    Currencies.removeEvent('onChange', this.$onChange);
+                }.bind(this)
             });
         },
 
@@ -65,97 +70,103 @@ define('package/quiqqer/currency/bin/controls/Switch', [
          * event : on inject
          */
         $onInject: function () {
-            require(['package/quiqqer/currency/bin/Currency'], function (Currencies) {
-                Promise.all([
-                    Currencies.getCurrency(),
-                    Currencies.getCurrencies()
-                ]).then(function (result) {
-                    var self       = this,
-                        Currency   = result[0],
-                        currencies = result[1];
+            Promise.all([
+                Currencies.getCurrency(),
+                Currencies.getCurrencies()
+            ]).then(function (result) {
+                var Currency   = result[0],
+                    currencies = result[1];
 
-                    this.$Display.set({
-                        html : Currency.code,
-                        title: Currency.text
-                    });
+                this.$Display.set({
+                    html : Currency.code,
+                    title: Currency.text
+                });
 
-                    if (!Object.getLength(currencies)) {
-                        return;
-                    }
+                if (!Object.getLength(currencies)) {
+                    return;
+                }
 
-                    Currencies.addEvent('onChange', function (Currencies, currencyCode) {
-                        Currencies.getCurrency(currencyCode).then(function (Curr) {
-                            self.$Display.set({
-                                html : Curr.code,
-                                title: Curr.text
-                            });
+                Currencies.addEvent('onChange', this.$onChange);
 
-                            QUIAjax.post('package_quiqqer_currency_ajax_setUserCurrency', function () {
-                                self.fireEvent('changeCurrency', [self, Curr]);
-                                QUI.fireEvent('quiqqerCurrencyChange', [self, Curr]);
-                            }, {
-                                'package': 'quiqqer/currency',
-                                currency : Curr.code
-                            });
-                        });
-                    });
+                this.$DropDown.setStyles({
+                    display: 'none'
+                });
 
-                    this.$DropDown.setStyles({
-                        display: 'none'
-                    });
+                var entryClick = function (event) {
+                    Currencies.setCurrency(event.target.get('data-code'));
+                };
 
-                    var entryClick = function (event) {
-                        Currencies.setCurrency(event.target.get('data-code'));
-                    };
+                var entryHover = function (event) {
+                    event.target.addClass('hover');
+                };
 
-                    var entryHover = function (event) {
-                        event.target.addClass('hover');
-                    };
+                var entryOut = function (event) {
+                    event.target.removeClass('hover');
+                };
 
-                    var entryOut = function (event) {
-                        event.target.removeClass('hover');
-                    };
-
-                    currencies.each(function (Entry) {
-                        new Element('div', {
-                            'class'    : 'quiqqer-currency-switch-dd-entry',
-                            html       : Entry.code,
-                            events     : {
-                                mouseenter: entryHover,
-                                mouseleave: entryOut,
-                                click     : entryClick
-                            },
-                            'data-code': Entry.code
-                        }).inject(this.$DropDown);
-                    }.bind(this));
-
-                    this.$Arrow = new Element('span', {
-                        'class': 'fa fa-angle-down quiqqer-currency-switch-arrow'
-                    }).inject(this.$Elm);
-
-                    this.$Elm.set({
-                        tabindex: -1,
-                        styles  : {
-                            outline       : 'none',
-                            '-moz-outline': 'none'
-                        }
-                    });
-
-                    this.$Elm.addClass('quiqqer-currency-switch__withArrow');
-                    this.$Elm.addClass('button');
-
-                    this.$Elm.addEvents({
-                        click: function (event) {
-                            event.target.focus();
+                currencies.each(function (Entry) {
+                    new Element('div', {
+                        'class'    : 'quiqqer-currency-switch-dd-entry',
+                        html       : Entry.code,
+                        events     : {
+                            mouseenter: entryHover,
+                            mouseleave: entryOut,
+                            click     : entryClick
                         },
-                        focus: this.open,
-                        blur : this.close
-                    });
-
-
-                    //currencies;
+                        'data-code': Entry.code
+                    }).inject(this.$DropDown);
                 }.bind(this));
+
+                this.$Arrow = new Element('span', {
+                    'class': 'fa fa-angle-down quiqqer-currency-switch-arrow'
+                }).inject(this.$Elm);
+
+                this.$Elm.set({
+                    tabindex: -1,
+                    styles  : {
+                        outline       : 'none',
+                        '-moz-outline': 'none'
+                    }
+                });
+
+                this.$Elm.addClass('quiqqer-currency-switch__withArrow');
+                this.$Elm.addClass('button');
+
+                this.$Elm.addEvents({
+                    click: function (event) {
+                        event.target.focus();
+                    },
+                    focus: this.open,
+                    blur : this.close
+                });
+
+                //currencies;
             }.bind(this));
+        },
+
+        /**
+         * event: on change
+         *
+         * @param Currencies
+         * @param currencyCode
+         */
+        $onChange: function (Currencies, currencyCode) {
+            var self = this;
+
+            Currencies.getCurrency(currencyCode).then(function (Curr) {
+                self.$Display.set({
+                    html : Curr.code,
+                    title: Curr.text
+                });
+
+                QUIAjax.post('package_quiqqer_currency_ajax_setUserCurrency', function () {
+                    self.fireEvent('changeCurrency', [self, Curr]);
+                    QUI.fireEvent('quiqqerCurrencyChange', [self, Curr]);
+                }, {
+                    'package': 'quiqqer/currency',
+                    currency : Curr.code
+                });
+            });
         },
 
         /**
