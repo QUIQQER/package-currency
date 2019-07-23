@@ -198,7 +198,7 @@
         </locale>
         <locale name="currency.settings.currencyManager.text">
             <de><![CDATA[Währungsveraltung]]></de>
-            <en><![CDATA[Currency manager]]></en>
+            <en><![CDATA[Currency management]]></en>
         </locale>
         <locale name="currency.settings.currencyImport.text">
             <de><![CDATA[Währungsimport]]></de>
