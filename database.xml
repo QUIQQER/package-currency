@@ -6,6 +6,8 @@
             <field type="varchar(5) COLLATE utf8_unicode_ci NOT NULL">currency</field>
             <field type="varchar(255)">rate</field>
             <field type="int(1) DEFAULT 0">autoupdate</field>
+
+            <primary>currency</primary>
             <index>currency</index>
         </table>
     </global>
