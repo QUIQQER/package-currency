@@ -212,6 +212,18 @@ class Currency
      */
     public function convert($amount, $Currency)
     {
+        if (!is_numeric($amount)) {
+            QUI\System\Log::addError('Only numeric are allowed Currency->convert()');
+
+            $Exception = new QUI\Exception(
+                QUI::getLocale()->get('quiqqer/quiqqer', 'exception.error')
+            );
+
+            QUI\System\Log::writeException($Exception);
+
+            throw $Exception;
+        }
+
         $Currency = Handler::getCurrency($Currency);
         $Default  = Handler::getDefaultCurrency();
         $default  = $Default->getCode();
