@@ -23,6 +23,11 @@ class Currency
     protected $code;
 
     /**
+     * @var integer
+     */
+    protected $precision = 2;
+
+    /**
      * @var float|bool
      */
     protected $exchangeRate = false;
@@ -67,6 +72,10 @@ class Currency
         if (isset($data[$currencyCode])) {
             $this->exchangeRate = (float)$data[$currencyCode]['rate'];
             $this->autoupdate   = $data[$currencyCode]['autoupdate'];
+
+            if (isset($data[$currencyCode]['precision'])) {
+                $this->precision = $data[$currencyCode]['precision'];
+            }
         }
     }
 
@@ -117,6 +126,14 @@ class Currency
     }
 
     /**
+     * @return int
+     */
+    public function getPrecision()
+    {
+        return $this->precision;
+    }
+
+    /**
      * Return the currency data
      *
      * @return array
@@ -128,7 +145,8 @@ class Currency
             'sign'       => $this->getSign(),
             'code'       => $this->getCode(),
             'rate'       => $this->getExchangeRate(),
-            'autoupdate' => $this->autoupdate()
+            'autoupdate' => $this->autoupdate(),
+            'precision'  => $this->getPrecision()
         ];
     }
 
