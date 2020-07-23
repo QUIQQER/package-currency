@@ -138,12 +138,12 @@
         </locale>
         <locale name="window.ecb.import.information" html="true">
             <de><![CDATA[
-                Importieren Sie Währungen über die EZB. <br />
-                Alle Währungen und ihre Wechselkurse, welche die EZB zur Verfügung stellt werden importiert.
+                <p>Importieren Sie Währungen über die EZB.</p>
+                <p>Alle Währungen und ihre Wechselkurse, welche die EZB zur Verfügung stellt werden importiert.</p>
                 ]]></de>
             <en><![CDATA[
-                Import currencies through the ECB. <br />
-                All currencies and their exchange rates, which provides from the ECB would be imported.
+                <p>Import currencies through the ECB.</p>
+                <p>All currencies and their exchange rates, which provides from the ECB would be imported.</p>
             ]]></en>
         </locale>
 
