@@ -23,7 +23,7 @@ class EventHandler
             $Currency = Handler::getDefaultCurrency();
 
             $TemplateManager->extendHeader(
-                '<script>var DEFAULT_CURRENCY = "'.$Currency->getCode().'"</script>'
+                '<script>var DEFAULT_CURRENCY = "'.$Currency->getCode().'";</script>'
             );
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
@@ -34,7 +34,7 @@ class EventHandler
         if ($Currency) {
             $TemplateManager->extendHeader(
                 '<script>
-                    var DEFAULT_USER_CURRENCY = '.\json_encode($Currency->toArray()).'
+                    var DEFAULT_USER_CURRENCY = '.\json_encode($Currency->toArray()).';
                 </script>'
             );
         }
