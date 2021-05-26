@@ -34,7 +34,7 @@ class Handler
      *
      * @return string
      */
-    public static function table()
+    public static function table(): string
     {
         return QUI::getDBTableName('currency');
     }
@@ -46,7 +46,7 @@ class Handler
      * @param integer|float $rate - currency exchange rate, default = 1
      * @throws QUI\Exception
      */
-    public static function createCurrency($currency, $rate = 1)
+    public static function createCurrency(string $currency, $rate = 1)
     {
         QUI\Permissions\Permission::checkPermission('currency.create');
 
@@ -112,7 +112,7 @@ class Handler
      * @param string $currency - currency code
      * @throws QUI\Exception
      */
-    public static function deleteCurrency($currency)
+    public static function deleteCurrency(string $currency)
     {
         QUI\Permissions\Permission::checkPermission('currency.delete');
 
@@ -126,7 +126,7 @@ class Handler
      *
      * @return Currency
      */
-    public static function getDefaultCurrency()
+    public static function getDefaultCurrency(): ?Currency
     {
         if (is_null(self::$Default)) {
             try {
@@ -152,7 +152,7 @@ class Handler
      * @param null|QUI\Interfaces\Users\User $User - optional
      * @return Currency|null
      */
-    public static function getUserCurrency($User = null)
+    public static function getUserCurrency($User = null): ?Currency
     {
         if ($User === null) {
             $User = QUI::getUserBySession();
@@ -192,7 +192,7 @@ class Handler
      * @param null $User
      * @return Currency|null
      */
-    public static function getUserCurrencyByCountry($User = null)
+    public static function getUserCurrencyByCountry($User = null): ?Currency
     {
         if ($User === null) {
             $User = QUI::getUserBySession();
@@ -228,7 +228,7 @@ class Handler
      * @return Currency[] - [Currency, Currency, Currency]
      * @throws QUI\Exception
      */
-    public static function getAllowedCurrencies()
+    public static function getAllowedCurrencies(): array
     {
         $Config  = QUI::getPackage('quiqqer/currency')->getConfig();
         $allowed = $Config->getValue('currency', 'allowedCurrencies');
@@ -251,7 +251,7 @@ class Handler
      *
      * @return array
      */
-    public static function getData()
+    public static function getData(): array
     {
         if (!self::$currencies) {
             try {
@@ -279,7 +279,7 @@ class Handler
      * @return Currency
      * @throws QUI\Exception
      */
-    public static function getCurrency($currency)
+    public static function getCurrency(string $currency): Currency
     {
         if (is_string($currency)) {
             return new Currency($currency);
@@ -307,7 +307,7 @@ class Handler
      *
      * @return bool
      */
-    public static function existCurrency($currency)
+    public static function existCurrency(string $currency): bool
     {
         $data = self::getData();
 
@@ -320,7 +320,7 @@ class Handler
      * @param \QUI\Locale|boolean $Locale - optional, for translation
      * @return array
      */
-    public static function getCurrencies($Locale = false)
+    public static function getCurrencies($Locale = false): array
     {
         if (!$Locale) {
             $Locale = QUI::getLocale();
@@ -355,14 +355,8 @@ class Handler
             }
 
             $result[$currency] = [
-                'text'       => $Locale->get(
-                    'quiqqer/currency',
-                    'currency.'.$currency.'.text'
-                ),
-                'sign'       => $Locale->get(
-                    'quiqqer/currency',
-                    'currency.'.$currency.'.sign'
-                ),
+                'text'       => $Locale->get('quiqqer/currency', 'currency.'.$currency.'.text'),
+                'sign'       => $Locale->get('quiqqer/currency', 'currency.'.$currency.'.sign'),
                 'code'       => $currency,
                 'rate'       => $Currency->getExchangeRate(),
                 'autoupdate' => $Currency->autoupdate()

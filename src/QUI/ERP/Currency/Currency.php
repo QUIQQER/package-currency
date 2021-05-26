@@ -50,7 +50,7 @@ class Currency
      *
      * @throws QUI\Exception
      */
-    public function __construct($currencyCode, $Locale = false)
+    public function __construct(string $currencyCode, $Locale = false)
     {
         if (!Handler::existCurrency($currencyCode)) {
             throw new QUI\Exception(
@@ -94,7 +94,7 @@ class Currency
      *
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -104,7 +104,7 @@ class Currency
      *
      * @return string
      */
-    public function getText()
+    public function getText(): string
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
@@ -117,7 +117,7 @@ class Currency
      *
      * @return string
      */
-    public function getSign()
+    public function getSign(): string
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
@@ -128,7 +128,7 @@ class Currency
     /**
      * @return int
      */
-    public function getPrecision()
+    public function getPrecision(): int
     {
         return $this->precision;
     }
@@ -138,7 +138,7 @@ class Currency
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'text'       => $this->getText(),
@@ -154,18 +154,18 @@ class Currency
      * Return the float amount for the currency
      * example for the most currencies -> 0.11223 = 0.11
      *
-     * @param float $amount
+     * @param float|string $amount
      * @param null $Locale -optional
      * @return float
      */
-    public function amount($amount, $Locale = null)
+    public function amount($amount, $Locale = null): float
     {
         if (!$Locale) {
             $Locale = $this->Locale;
         }
 
         $amount = $this->format($amount, $Locale);
-        $amount = \preg_replace('/[^0-9,"."]/', '', $amount);
+        $amount = \preg_replace('/[^0-9,".]/', '', $amount);
         $amount = \trim($amount);
 
         $decimalSeparator  = $Locale->getDecimalSeparator();
@@ -184,11 +184,11 @@ class Currency
     /**
      * Format an amount
      *
-     * @param float $amount
+     * @param float|string $amount
      * @param null|QUI\Locale $Locale - optional, locale object
      * @return string
      */
-    public function format($amount, $Locale = null)
+    public function format($amount, $Locale = null): string
     {
         if (!$Locale) {
             $Locale = $this->Locale;
@@ -214,15 +214,15 @@ class Currency
      *
      * @return boolean
      */
-    public function autoupdate()
+    public function autoupdate(): bool
     {
-        return $this->autoupdate ? true : false;
+        return (bool)$this->autoupdate;
     }
 
     /**
      * Convert the amount to the wanted currency
      *
-     * @param float $amount
+     * @param float|string $amount
      * @param string|Currency $Currency
      * @return float
      *
@@ -271,13 +271,13 @@ class Currency
 
     /**
      *
-     * @param float $amount
+     * @param float|string $amount
      * @param string|Currency $Currency
      * @return string
      *
      * @throws QUI\Exception
      */
-    public function convertFormat($amount, $Currency)
+    public function convertFormat($amount, $Currency): string
     {
         $Currency = Handler::getCurrency($Currency);
 
@@ -343,7 +343,7 @@ class Currency
      *
      * @throws QUI\Permissions\Exception
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         QUI\Permissions\Permission::checkPermission('currency.edit');
 
