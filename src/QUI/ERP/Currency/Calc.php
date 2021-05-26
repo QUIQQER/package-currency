@@ -18,14 +18,14 @@ class Calc
     /**
      * Convert the amount from one to another currency
      *
-     * @param float $amount
+     * @param float|string $amount
      * @param string|Currency $currencyFrom - based currency
      * @param string|Currency $currencyTo - optional, wanted currency, default = EUR
      * @return float
      *
      * @throws QUI\Exception
      */
-    public static function convert($amount, $currencyFrom, $currencyTo = 'EUR')
+    public static function convert($amount, $currencyFrom, $currencyTo = 'EUR'): float
     {
         $From = Handler::getCurrency($currencyFrom);
         $To   = Handler::getCurrency($currencyTo);
@@ -36,7 +36,7 @@ class Calc
     /**
      * Convert with currency sign
      *
-     * @param float $amount
+     * @param float|string $amount
      * @param string|Currency $currencyFrom - based currency
      * @param string|Currency $currencyTo - optional, wanted currency, default = EUR
      *
@@ -44,7 +44,7 @@ class Calc
      *
      * @throws QUI\Exception
      */
-    public static function convertWithSign($amount, $currencyFrom, $currencyTo = 'EUR')
+    public static function convertWithSign($amount, $currencyFrom, $currencyTo = 'EUR'): string
     {
         $From = Handler::getCurrency($currencyFrom);
         $To   = Handler::getCurrency($currencyTo);
