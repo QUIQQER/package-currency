@@ -21,5 +21,7 @@ class Cron
     public static function import()
     {
         Import::import();
+
+        QUI::getEvents()->fireEvent('quiqqerCurrencyImport');
     }
 }
