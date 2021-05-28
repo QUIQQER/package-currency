@@ -72,7 +72,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
             }.bind(this));
 
             if (this.getElm().getParent().hasClass('field-container')) {
-                this.$Elm.setStyle('width', '100%');
+                this.$Elm.setStyle('flexGrow', 1);
             }
         },
 
