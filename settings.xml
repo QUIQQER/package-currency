@@ -9,6 +9,14 @@
                     <type><![CDATA[string]]></type>
                     <defaultvalue>EUR</defaultvalue>
                 </conf>
+                <conf name="accountingCurrencyDiffers">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
+                <conf name="accountingCurrency">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue>EUR</defaultvalue>
+                </conf>
                 <conf name="allowedCurrencies">
                     <type><![CDATA[string]]></type>
                     <defaultvalue>EUR,USD,GBP,CHF</defaultvalue>
@@ -44,6 +52,27 @@
                             <text>
                                 <locale group="quiqqer/currency" var="currency.settings.defaultCurrency.text"/>
                             </text>
+                        </input>
+
+                        <input conf="currency.accountingCurrencyDiffers"
+                               type="checkbox"
+                               data-qui="package/quiqqer/currency/bin/settings/AccountingCurrencyDiffers"
+                        >
+                            <text>
+                                <locale group="quiqqer/currency" var="currency.settings.exchangeCurrency.checkbox"/>
+                            </text>
+                        </input>
+
+                        <input conf="currency.accountingCurrency"
+                               data-qui="package/quiqqer/currency/bin/settings/CurrencyList"
+                               style="display: none"
+                        >
+                            <text>
+                                <locale group="quiqqer/currency" var="currency.settings.exchangeCurrency.text"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/currency" var="currency.settings.exchangeCurrency.description"/>
+                            </description>
                         </input>
                     </settings>
 

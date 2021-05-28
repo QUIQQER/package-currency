@@ -196,6 +196,30 @@
             <de><![CDATA[Standard Währung]]></de>
             <en><![CDATA[Default currency]]></en>
         </locale>
+        <locale name="currency.settings.exchangeCurrency.different">
+            <de><![CDATA[Buchhaltungswährung weicht ab]]></de>
+            <en><![CDATA[Base currency for exchange rates]]></en>
+        </locale>
+        <locale name="currency.settings.exchangeCurrency.checkbox">
+            <de><![CDATA[Buchhaltungswährung weicht ab]]></de>
+            <en><![CDATA[Accounting currency differs]]></en>
+        </locale>
+        <locale name="currency.settings.exchangeCurrency.text">
+            <de><![CDATA[Buchhaltungswährung]]></de>
+            <en><![CDATA[Accounting currency]]></en>
+        </locale>
+        <locale name="currency.settings.exchangeCurrency.description">
+            <de><![CDATA[
+            Die Buchhaltungswährung für Wechselkurse gibt an was bei Bestellungen und Rechnungen die Grundwährung ist.
+            Ist die Bestellung / Rechnung in einer anderen Währung als die Buchhaltungswährung,
+            wird der Wechselkurs zur Buchhaltungswährung in die Bestellung / Rechnung mit gespeichert.
+            ]]></de>
+            <en><![CDATA[
+            The accounting currency for exchange rates specifies what the base currency is for orders and invoices.
+            If the order/invoice is in a different currency than the accounting currency,
+            the exchange rate to the accounting currency will be stored in the order/invoice.
+            ]]></en>
+        </locale>
         <locale name="currency.settings.currencyManager.text">
             <de><![CDATA[Währungsveraltung]]></de>
             <en><![CDATA[Currency management]]></en>
