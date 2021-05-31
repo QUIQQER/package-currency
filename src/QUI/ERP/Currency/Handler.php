@@ -275,11 +275,11 @@ class Handler
     /**
      * Return a currency
      *
-     * @param string $currency
+     * @param string|Currency $currency
      * @return Currency
      * @throws QUI\Exception
      */
-    public static function getCurrency(string $currency): Currency
+    public static function getCurrency($currency): Currency
     {
         if (is_string($currency)) {
             return new Currency($currency);
