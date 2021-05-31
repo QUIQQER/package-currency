@@ -320,29 +320,4 @@ class Currency
     {
         $this->exchangeRate = (float)$rate;
     }
-
-    /**
-     * alias for update()
-     *
-     * @throws QUI\Permissions\Exception
-     * @throws QUI\Exception
-     *
-     * @deprecated
-     */
-    public function save()
-    {
-        $this->update();
-    }
-
-    /**
-     * Saves the currency
-     *
-     * @throws QUI\Permissions\Exception
-     * @throws QUI\Exception
-     *
-     * @deprecated
-     */
-    public function update()
-    {
-    }
 }
