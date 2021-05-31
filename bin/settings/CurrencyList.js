@@ -62,7 +62,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
 
                     this.$Select.appendChild(
                         result[i].text,
-                        i
+                        result[i].code
                     );
                 }
 
@@ -82,7 +82,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
          */
         getCurrencies: function () {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get('package_quiqqer_currency_ajax_getCurrencies', resolve, {
+                QUIAjax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', resolve, {
                     'package': 'quiqqer/currency',
                     onError  : reject
                 });
@@ -97,6 +97,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
          */
         $onSelectChange: function (value, Select) {
             this.$Input.value = value;
+            this.fireEvent('change', [this, value]);
         }
     });
 });
