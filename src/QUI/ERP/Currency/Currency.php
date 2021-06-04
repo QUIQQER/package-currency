@@ -52,6 +52,10 @@ class Currency
      */
     public function __construct(array $data, $Locale = false)
     {
+        if (!isset($data['currency']) && isset($data['code'])) {
+            $data['currency'] = $data['code'];
+        }
+
         if (!isset($data['currency'])) {
             throw new QUI\Exception(
                 ['quiqqer/currency', 'currency.not.found'],
@@ -196,6 +200,8 @@ class Currency
             \NumberFormatter::CURRENCY,
             $Locale->getAccountingCurrencyPattern()
         );
+
+        $Formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $this->precision);
 
         if (\is_string($amount)) {
             $amount = \floatval($amount);
