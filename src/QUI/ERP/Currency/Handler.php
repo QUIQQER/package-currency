@@ -138,7 +138,7 @@ class Handler
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
 
-                self::$Default = new Currency('EUR');
+                self::$Default = self::getCurrency('EUR');
             }
         }
 
@@ -281,17 +281,19 @@ class Handler
      */
     public static function getCurrency($currency): Currency
     {
-        if (is_string($currency)) {
-            return new Currency($currency);
-        }
+        $data = self::getData();
+        $code = null;
 
-        if (is_array($currency) && isset($currency['code'])) {
-            return new Currency($currency['code']);
-        }
-
-        if ($currency && get_class($currency) == Currency::class) {
-            /* @var $currency Currency */
+        if (\is_string($currency)) {
+            $code = $currency;
+        } elseif (\is_array($currency) && isset($currency['code'])) {
+            $code = $currency['code'];
+        } elseif ($currency && \get_class($currency) == Currency::class) {
             return $currency;
+        }
+
+        if (isset($data[$code])) {
+            return new Currency($data[$code]);
         }
 
         throw new QUI\Exception(
@@ -364,5 +366,39 @@ class Handler
         }
 
         return $result;
+    }
+
+    /**
+     * @param $currency
+     * @param $data
+     *
+     * @throws QUI\Database\Exception
+     * @throws QUI\Exception
+     */
+    public static function updateCurrency($currency, $data)
+    {
+        QUI\Permissions\Permission::checkPermission('currency.edit');
+
+        self::getCurrency($currency);
+
+        $dbData = [];
+
+        if (isset($data['autoupdate'])) {
+            $dbData['autoupdate'] = empty($data['autoupdate']) ? 0 : 1;
+        }
+
+        if (isset($data['code'])) {
+            $dbData['code'] = $data['code'];
+        }
+
+        if (isset($data['rate'])) {
+            $dbData['rate'] = floatval($data['rate']);
+        }
+
+        QUI::getDataBase()->update(
+            Handler::table(),
+            $dbData,
+            ['currency' => $currency]
+        );
     }
 }

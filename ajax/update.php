@@ -12,11 +12,10 @@
 QUI::$Ajax->registerFunction(
     'package_quiqqer_currency_ajax_update',
     function ($currency, $code, $rate) {
-        $Currency = QUI\ERP\Currency\Handler::getCurrency($currency);
-
-        $Currency->setExchangeRate($rate);
-        $Currency->setCode($code);
-        $Currency->save();
+        QUI\ERP\Currency\Handler::updateCurrency($currency, [
+            'rate' => $rate,
+            'code' => $code
+        ]);
     },
     ['currency', 'code', 'rate'],
     'Permission::checkAdminUser'

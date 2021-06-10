@@ -21,6 +21,10 @@
                     <type><![CDATA[string]]></type>
                     <defaultvalue>EUR,USD,GBP,CHF</defaultvalue>
                 </conf>
+                <conf name="differentAccountingCurrencies">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
             </section>
         </config>
 
@@ -52,6 +56,19 @@
                             <text>
                                 <locale group="quiqqer/currency" var="currency.settings.defaultCurrency.text"/>
                             </text>
+                        </input>
+
+                        <input conf="currency.differentAccountingCurrencies" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/currency"
+                                        var="currency.settings.differentAccountingCurrencies.text"
+                                />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/currency"
+                                        var="currency.settings.differentAccountingCurrencies.desc"
+                                />
+                            </description>
                         </input>
 
                         <input conf="currency.accountingCurrencyDiffers"

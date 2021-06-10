@@ -12,9 +12,9 @@
 QUI::$Ajax->registerFunction(
     'package_quiqqer_currency_ajax_setAutoupdate',
     function ($currency, $autoupdate) {
-        $Currency = QUI\ERP\Currency\Handler::getCurrency($currency);
-        $Currency->setAutoupdate($autoupdate);
-        $Currency->save();
+        QUI\ERP\Currency\Handler::updateCurrency($currency, [
+            'autoupdate' => $autoupdate
+        ]);
     },
     ['currency', 'autoupdate'],
     'Permission::checkAdminUser'
