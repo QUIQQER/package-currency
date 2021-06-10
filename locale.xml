@@ -30,7 +30,7 @@
         </locale>
         <locale name="currency.settings.differentAccountingCurrencies.desc">
             <de><![CDATA[
-            Bestellungen, Rechnungen, offers, etc können nicht nur in der Standardwährung angelegt werden.
+            Bestellungen, Rechnungen, Angebote, etc können nicht nur in der Standardwährung angelegt werden.
             ]]></de>
             <en><![CDATA[
             Orders, invoices, offers, etc. can be created not only in the default currency.
