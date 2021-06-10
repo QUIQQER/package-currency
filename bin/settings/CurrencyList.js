@@ -60,6 +60,10 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
                         continue;
                     }
 
+                    if (result[i].text === '') {
+                        result[i].text = result[i].code;
+                    }
+
                     this.$Select.appendChild(
                         result[i].text,
                         result[i].code
