@@ -379,7 +379,7 @@ class Handler
     {
         QUI\Permissions\Permission::checkPermission('currency.edit');
 
-        self::getCurrency($currency);
+        $Currency = self::getCurrency($currency);
 
         $dbData = [];
 
@@ -388,7 +388,15 @@ class Handler
         }
 
         if (isset($data['code'])) {
-            $dbData['code'] = $data['code'];
+            // set locale
+            QUI\Translator::addUserVar(
+                'quiqqer/currency',
+                'currency.'.$Currency->getCode().'.sign',
+                [
+                    'en' => $data['code'],
+                    'de' => $data['code']
+                ]
+            );
         }
 
         if (isset($data['rate'])) {
