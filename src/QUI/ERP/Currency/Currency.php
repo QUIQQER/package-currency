@@ -202,6 +202,7 @@ class Currency
         );
 
         $Formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $this->precision);
+        $Formatter->setPattern($Locale->getAccountingCurrencyPattern());
 
         if (\is_string($amount)) {
             $amount = \floatval($amount);
