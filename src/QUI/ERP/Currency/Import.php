@@ -81,8 +81,9 @@ class Import
                     }
                 }
 
-                $Currency->setExchangeRate($rate);
-                $Currency->save();
+                Handler::updateCurrency($Currency->getCode(), [
+                    'rate' => $rate
+                ]);
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
             }

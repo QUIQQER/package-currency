@@ -32,5 +32,7 @@ class Console extends QUI\System\Console\Tool
     public function execute()
     {
         Import::import();
+
+        QUI::getEvents()->fireEvent('quiqqerCurrencyImport');
     }
 }

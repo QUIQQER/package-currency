@@ -75,7 +75,7 @@ define('package/quiqqer/currency/bin/settings/Import', [
                 text       : QUILocale.get(lg, 'window.ecb.import.text'),
                 information: QUILocale.get(lg, 'window.ecb.import.information'),
                 maxHeight  : 300,
-                maxWidth   : 450,
+                maxWidth   : 600,
                 events     : {
                     onSubmit: function (Win) {
                         Win.Loader.show();
