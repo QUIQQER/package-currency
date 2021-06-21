@@ -4,6 +4,9 @@ namespace QUI\ERP\Currency;
 
 use QUI;
 
+/**
+ * Class Conf
+ */
 class Conf
 {
     /**
@@ -15,10 +18,17 @@ class Conf
     }
 
     /**
+     * Return the accounting currency
+     * - if no accounting currency is set, the default currency will be returned
+     *
      * @return Currency|null
      */
     public static function getAccountingCurrency(): ?Currency
     {
+        if (!self::accountingCurrencyEnabled()) {
+            return Handler::getDefaultCurrency();
+        }
+
         try {
             return Handler::getCurrency(
                 self::conf('currency', 'accountingCurrency')
