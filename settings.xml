@@ -98,7 +98,11 @@
                             <locale group="quiqqer/currency" var="currency.settings.currencyImport.text"/>
                         </title>
 
-                        <input data-qui="package/quiqqer/currency/bin/settings/Import" label="false"/>
+                        <input data-qui="package/quiqqer/currency/bin/settings/Import" label="false">
+                            <description>
+                                <locale group="quiqqer/currency" var="currency.settings.currencyImport.description"/>
+                            </description>
+                        </input>
                     </settings>
 
                     <settings>
