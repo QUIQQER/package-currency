@@ -36,6 +36,15 @@
             Orders, invoices, offers, etc. can also be created in currencies other than the default currency.
             ]]></en>
         </locale>
+
+        <locale name="currency.settings.currencyImport.description">
+            <de><![CDATA[
+            Beachte das Währungen nur importiert werden wenn diese Auto-Update aktiviert haben.
+            ]]></de>
+            <en><![CDATA[
+            Note that currencies are only imported if they have auto-update enabled.
+            ]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/currency" datatype="js">
