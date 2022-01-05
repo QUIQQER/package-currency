@@ -361,7 +361,8 @@ class Handler
                 'sign'       => $Locale->get('quiqqer/currency', 'currency.'.$currency.'.sign'),
                 'code'       => $currency,
                 'rate'       => $Currency->getExchangeRate(),
-                'autoupdate' => $Currency->autoupdate()
+                'autoupdate' => $Currency->autoupdate(),
+                'precision'  => $Currency->getPrecision()
             ];
         }
 
