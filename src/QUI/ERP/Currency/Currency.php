@@ -201,9 +201,9 @@ class Currency
             $Locale->getAccountingCurrencyPattern()
         );
 
-        $Formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $this->precision);
         $Formatter->setPattern($Locale->getAccountingCurrencyPattern());
-
+        $Formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $this->precision);
+        
         if (\is_string($amount)) {
             $amount = \floatval($amount);
         }
