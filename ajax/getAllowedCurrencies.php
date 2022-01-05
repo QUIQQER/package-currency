@@ -21,7 +21,8 @@ QUI::$Ajax->registerFunction('package_quiqqer_currency_ajax_getAllowedCurrencies
             'sign'       => $Currency->getSign(),
             'code'       => $Currency->getCode(),
             'rate'       => $Currency->getExchangeRate(),
-            'autoupdate' => $Currency->autoupdate()
+            'autoupdate' => $Currency->autoupdate(),
+            'precision'  => $Currency->getPrecision()
         ];
     }
 
