@@ -138,7 +138,15 @@ class Handler
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
 
-                self::$Default = self::getCurrency('EUR');
+                try {
+                    self::$Default = self::getCurrency('EUR');
+                } catch (QUI\Exception $Exception) {
+                    if ($Exception->getCode() === 404) {
+                        // add EUR
+                        self::createCurrency('EUR', 1);
+                        self::$Default = self::getCurrency('EUR');
+                    }
+                }
             }
         }
 
