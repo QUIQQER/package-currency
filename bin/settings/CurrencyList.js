@@ -25,7 +25,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$Input  = null;
+            this.$Input = null;
             this.$Select = null;
 
             this.addEvents({
@@ -37,7 +37,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
          * event : on import
          */
         $onImport: function () {
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
             this.$Elm = new Element('div', {
@@ -55,7 +55,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
             }).inject(this.$Elm);
 
             this.getCurrencies().then(function (result) {
-                for (var i in result) {
+                for (let i in result) {
                     if (!result.hasOwnProperty(i)) {
                         continue;
                     }
@@ -101,7 +101,10 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
          */
         $onSelectChange: function (value, Select) {
             this.$Input.value = value;
-            this.fireEvent('change', [this, value]);
+            this.fireEvent('change', [
+                this,
+                value
+            ]);
         }
     });
 });

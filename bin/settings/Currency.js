@@ -17,7 +17,7 @@ define('package/quiqqer/currency/bin/settings/Currency', [
 ], function (QUI, QUIControl, QUILocale, QUIAjax, Mustache, Translation, template) {
     "use strict";
 
-    var lg = 'quiqqer/currency';
+    const lg = 'quiqqer/currency';
 
     return new Class({
 
@@ -38,9 +38,10 @@ define('package/quiqqer/currency/bin/settings/Currency', [
             this.$Form = null;
             this.$Code = null;
             this.$Rate = null;
+            this.$Precision = null;
 
             this.$TranslationTitle = null;
-            this.$TranslationSign  = null;
+            this.$TranslationSign = null;
 
             this.addEvents({
                 onInject: this.$onInject
@@ -60,7 +61,8 @@ define('package/quiqqer/currency/bin/settings/Currency', [
                     currencyCode           : QUILocale.get(lg, 'control.currency.code'),
                     currencySign           : QUILocale.get(lg, 'control.currency.sign'),
                     currencyExchangeRate   : QUILocale.get(lg, 'control.currency.rate'),
-                    currencyCodeDescription: QUILocale.get(lg, 'control.currency.code.decription')
+                    currencyCodeDescription: QUILocale.get(lg, 'control.currency.code.decription'),
+                    currencyPrecision      : QUILocale.get(lg, 'control.currency.precision')
                 })
             });
 
@@ -68,6 +70,7 @@ define('package/quiqqer/currency/bin/settings/Currency', [
 
             this.$Code = this.$Form.elements.code;
             this.$Rate = this.$Form.elements.rate;
+            this.$Precision = this.$Form.elements.precision;
 
             return this.$Elm;
         },
@@ -76,11 +79,9 @@ define('package/quiqqer/currency/bin/settings/Currency', [
          * event: on inject
          */
         $onInject: function () {
-            var self = this;
-
-            var TitleContainer = this.getElm().getElement('.currency-title'),
-                SignContainer  = this.getElm().getElement('.currency-sign'),
-                currency       = this.getAttribute('currency');
+            const TitleContainer = this.getElm().getElement('.currency-title'),
+                  SignContainer  = this.getElm().getElement('.currency-sign'),
+                  currency       = this.getAttribute('currency');
 
             this.$TranslationTitle = new Translation({
                 'group': 'quiqqer/currency',
@@ -93,9 +94,10 @@ define('package/quiqqer/currency/bin/settings/Currency', [
             }).inject(SignContainer);
 
 
-            QUIAjax.get('package_quiqqer_currency_ajax_getCurrency', function (data) {
-                self.$Code.value = data.code;
-                self.$Rate.value = data.rate;
+            QUIAjax.get('package_quiqqer_currency_ajax_getCurrency', (data) => {
+                this.$Code.value = data.code;
+                this.$Rate.value = data.rate;
+                this.$Precision.value = data.precision;
             }, {
                 'package': 'quiqqer/currency',
                 currency : this.getAttribute('currency')
@@ -115,23 +117,20 @@ define('package/quiqqer/currency/bin/settings/Currency', [
          * @return {Promise}
          */
         update: function () {
-            return new Promise(function (resolve) {
-
+            return new Promise((resolve) => {
                 Promise.all([
                     this.$TranslationTitle.save(),
                     this.$TranslationSign.save()
-                ]).then(function () {
-
+                ]).then(() => {
                     QUIAjax.post('package_quiqqer_currency_ajax_update', resolve, {
                         'package': 'quiqqer/currency',
                         currency : this.getAttribute('currency'),
                         code     : this.$Code.value,
-                        rate     : this.$Rate.value
+                        rate     : this.$Rate.value,
+                        precision: this.$Precision.value
                     });
-
-                }.bind(this));
-
-            }.bind(this));
+                });
+            });
         }
     });
 });

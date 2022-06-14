@@ -83,8 +83,8 @@ class Handler
         ];
 
         $localeGroup = 'quiqqer/currency';
-        $localeText  = 'currency.'.$currency.'.text';
-        $localeSign  = 'currency.'.$currency.'.sign';
+        $localeText  = 'currency.' . $currency . '.text';
+        $localeSign  = 'currency.' . $currency . '.sign';
 
         $textData = QUI\Translator::getVarData($localeGroup, $localeText);
         $signData = QUI\Translator::getVarData($localeGroup, $localeSign);
@@ -92,7 +92,7 @@ class Handler
         if (empty($textData)) {
             QUI\Translator::addUserVar(
                 'quiqqer/currency',
-                'currency.'.$currency.'.text',
+                'currency.' . $currency . '.text',
                 $languageData
             );
         }
@@ -100,7 +100,7 @@ class Handler
         if (empty($signData)) {
             QUI\Translator::addUserVar(
                 'quiqqer/currency',
-                'currency.'.$currency.'.sign',
+                'currency.' . $currency . '.sign',
                 $languageData
             );
         }
@@ -337,7 +337,7 @@ class Handler
         }
 
         $cacheName     = 'quiqqer/currency/list';
-        $cacheNameLang = 'quiqqer/currency/list/'.$Locale->getCurrent();
+        $cacheNameLang = 'quiqqer/currency/list/' . $Locale->getCurrent();
 
         try {
             return QUI\Cache\Manager::get($cacheNameLang);
@@ -365,8 +365,8 @@ class Handler
             }
 
             $result[$currency] = [
-                'text'       => $Locale->get('quiqqer/currency', 'currency.'.$currency.'.text'),
-                'sign'       => $Locale->get('quiqqer/currency', 'currency.'.$currency.'.sign'),
+                'text'       => $Locale->get('quiqqer/currency', 'currency.' . $currency . '.text'),
+                'sign'       => $Locale->get('quiqqer/currency', 'currency.' . $currency . '.sign'),
                 'code'       => $currency,
                 'rate'       => $Currency->getExchangeRate(),
                 'autoupdate' => $Currency->autoupdate(),
@@ -400,7 +400,7 @@ class Handler
             // set locale
             QUI\Translator::addUserVar(
                 'quiqqer/currency',
-                'currency.'.$Currency->getCode().'.sign',
+                'currency.' . $Currency->getCode() . '.sign',
                 [
                     'en' => $data['code'],
                     'de' => $data['code']
@@ -410,6 +410,10 @@ class Handler
 
         if (isset($data['rate'])) {
             $dbData['rate'] = floatval($data['rate']);
+        }
+
+        if (isset($data['precision'])) {
+            $dbData['precision'] = (int)$data['precision'];
         }
 
         QUI::getDataBase()->update(
