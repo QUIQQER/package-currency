@@ -68,6 +68,10 @@
             <de><![CDATA[Umrechnungskurs]]></de>
             <en><![CDATA[Exchange rate]]></en>
         </locale>
+        <locale name="control.currency.precision">
+            <de><![CDATA[Währungsgenauigkeit (Nachkommastellen)]]></de>
+            <en><![CDATA[Currency precision (Decimal places)]]></en>
+        </locale>
 
         <locale name="window.delete.title">
             <de><![CDATA[Währung löschen]]></de>
@@ -144,6 +148,10 @@
         <locale name="grid.setting.button.delete">
             <de><![CDATA[Währung löschen]]></de>
             <en><![CDATA[Delete currency]]></en>
+        </locale>
+        <locale name="grid.setting.precision">
+            <de><![CDATA[Genauigkeit]]></de>
+            <en><![CDATA[Precision]]></en>
         </locale>
 
         <locale name="ecb.import.button.text">

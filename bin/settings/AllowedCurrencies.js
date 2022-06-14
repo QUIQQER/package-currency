@@ -22,7 +22,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 ], function (QUI, QUIControl, QUISwitch, QUIConfirm, QUIPrompt, QUIAjax, QUILocale, Grid, CurrencyWindow) {
     "use strict";
 
-    var lg = 'quiqqer/currency';
+    const lg = 'quiqqer/currency';
 
     return new Class({
 
@@ -46,10 +46,10 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$Input     = null;
-            this.$Elm       = null;
+            this.$Input = null;
+            this.$Elm = null;
             this.$Container = null;
-            this.$Grid      = null;
+            this.$Grid = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -60,14 +60,14 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * event : on import
          */
         $onImport: function () {
-            var i, len;
+            let i, len;
 
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
             if (this.$Input.value !== '') {
-                var values = {};
-                var value  = this.$Input.value.split(',');
+                let values = {};
+                let value = this.$Input.value.split(',');
 
                 for (i = 0, len = value.length; i < len; i++) {
                     values[value[i]] = 1;
@@ -81,8 +81,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 html   : '<div class="quiqqer-currency-allowed-container"></div>'
             }).wraps(this.$Input);
 
-            var self     = this,
-                Settings = this.$Elm.getParent('.qui-xml-panel-row-item');
+            const self     = this,
+                  Settings = this.$Elm.getParent('.qui-xml-panel-row-item');
 
             if (Settings) {
                 Settings.setStyles({
@@ -96,75 +96,92 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 '.quiqqer-currency-allowed-container'
             );
 
-            var width = this.$Container.getSize().x;
+            let width = this.$Container.getSize().x;
 
             this.$Grid = new Grid(this.$Container, {
                 pagination       : true,
                 multipleSelection: true,
                 height           : 300,
                 width            : width,
-                columnModel      : [{
-                    header   : QUILocale.get(lg, 'grid.setting.currency'),
-                    dataIndex: 'code',
-                    dataType : 'string',
-                    width    : 60,
-                    editable : true
-                }, {
-                    header   : QUILocale.get(lg, 'grid.setting.sign'),
-                    dataIndex: 'sign',
-                    dataType : 'string',
-                    width    : 60,
-                    editable : true
-                }, {
-                    header   : QUILocale.get(lg, 'grid.setting.rate'),
-                    dataIndex: 'rate',
-                    dataType : 'string',
-                    width    : 100
-                }, {
-                    header   : QUILocale.get(lg, 'grid.setting.allowed'),
-                    dataIndex: 'allowed',
-                    dataType : 'QUI',
-                    width    : 100
-                }, {
-                    header   : QUILocale.get(lg, 'grid.setting.update'),
-                    dataIndex: 'autoupdate',
-                    dataType : 'QUI',
-                    width    : 100
-                }],
-                buttons          : [{
-                    name     : 'add',
-                    text     : QUILocale.get(lg, 'grid.setting.button.add'),
-                    textimage: 'fa fa-plus',
-                    events   : {
-                        onClick: this.openCreateDialog
+                columnModel      : [
+                    {
+                        header   : QUILocale.get(lg, 'grid.setting.currency'),
+                        dataIndex: 'code',
+                        dataType : 'string',
+                        width    : 60,
+                        editable : true
+                    },
+                    {
+                        header   : QUILocale.get(lg, 'grid.setting.sign'),
+                        dataIndex: 'sign',
+                        dataType : 'string',
+                        width    : 60,
+                        editable : true
+                    },
+                    {
+                        header   : QUILocale.get(lg, 'grid.setting.rate'),
+                        dataIndex: 'rate',
+                        dataType : 'string',
+                        width    : 100
+                    },
+                    {
+                        header   : QUILocale.get(lg, 'grid.setting.precision'),
+                        dataIndex: 'precision',
+                        dataType : 'string',
+                        width    : 100
+                    },
+                    {
+                        header   : QUILocale.get(lg, 'grid.setting.allowed'),
+                        dataIndex: 'allowed',
+                        dataType : 'QUI',
+                        width    : 100
+                    },
+                    {
+                        header   : QUILocale.get(lg, 'grid.setting.update'),
+                        dataIndex: 'autoupdate',
+                        dataType : 'QUI',
+                        width    : 100
                     }
-                }, {
-                    name     : 'edit',
-                    text     : QUILocale.get(lg, 'grid.setting.button.edit'),
-                    textimage: 'fa fa-edit',
-                    disabled : true,
-                    events   : {
-                        onClick: function () {
-                            self.openUpdateDialog(self.$Grid.getSelectedData()[0].code);
+                ],
+                buttons          : [
+                    {
+                        name     : 'add',
+                        text     : QUILocale.get(lg, 'grid.setting.button.add'),
+                        textimage: 'fa fa-plus',
+                        events   : {
+                            onClick: this.openCreateDialog
                         }
-                    }
-                }, {
-                    type: 'separator'
-                }, {
-                    name     : 'delete',
-                    text     : QUILocale.get(lg, 'grid.setting.button.delete'),
-                    textimage: 'fa fa-trash',
-                    disabled : true,
-                    events   : {
-                        onClick: function () {
-                            var currencies = self.$Grid.getSelectedData().map(function (C) {
-                                return C.code;
-                            });
+                    },
+                    {
+                        name     : 'edit',
+                        text     : QUILocale.get(lg, 'grid.setting.button.edit'),
+                        textimage: 'fa fa-edit',
+                        disabled : true,
+                        events   : {
+                            onClick: function () {
+                                self.openUpdateDialog(self.$Grid.getSelectedData()[0].code);
+                            }
+                        }
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        name     : 'delete',
+                        text     : QUILocale.get(lg, 'grid.setting.button.delete'),
+                        textimage: 'fa fa-trash',
+                        disabled : true,
+                        events   : {
+                            onClick: function () {
+                                var currencies = self.$Grid.getSelectedData().map(function (C) {
+                                    return C.code;
+                                });
 
-                            self.openDeleteDialog(currencies);
+                                self.openDeleteDialog(currencies);
+                            }
                         }
                     }
-                }]
+                ]
             });
 
             this.$Grid.setWidth(width);
@@ -206,10 +223,10 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          */
         refresh: function () {
             return this.getCurrencies().then(function (list) {
-                var data   = [],
+                let data   = [],
                     values = this.getAttribute('values');
 
-                for (var i in list) {
+                for (let i in list) {
                     if (!list.hasOwnProperty(i)) {
                         continue;
                     }
@@ -217,7 +234,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     data.push(list[i]);
                 }
 
-                var perPage = this.$Grid.options.perPage,
+                let perPage = this.$Grid.options.perPage,
                     page    = this.$Grid.options.page,
                     start   = (page - 1) * perPage,
                     total   = data.length;
@@ -343,7 +360,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          */
         $onCurrencyStatusChange: function (Switch) {
             var currency = Switch.getAttribute('currency');
-            var values   = this.getAttribute('values');
+            var values = this.getAttribute('values');
 
 
             if (Switch.getStatus()) {
@@ -377,7 +394,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * @param {Event} event
          */
         $switchCurrencyStatus: function (event) {
-            var Target          = event.target;
+            var Target = event.target;
             var SwitchContainer = Target.getParent().getElement('.qui-switch');
 
             var Switch = QUI.Controls.getById(
