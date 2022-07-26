@@ -6,7 +6,16 @@
 
 namespace QUI\ERP\Currency;
 
+use NumberFormatter;
 use QUI;
+
+use function floatval;
+use function is_string;
+use function preg_replace;
+use function round;
+use function str_replace;
+use function strpos;
+use function trim;
 
 /**
  * Currency class
@@ -107,7 +116,7 @@ class Currency
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
-            'currency.'.$this->getCode().'.text'
+            'currency.' . $this->getCode() . '.text'
         );
     }
 
@@ -120,7 +129,7 @@ class Currency
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
-            'currency.'.$this->getCode().'.sign'
+            'currency.' . $this->getCode() . '.sign'
         );
     }
 
@@ -157,25 +166,25 @@ class Currency
      * @param null|QUI\Locale $Locale -optional
      * @return float
      */
-    public function amount($amount, $Locale = null): float
+    public function amount($amount, QUI\Locale $Locale = null): float
     {
         if (!$Locale) {
             $Locale = $this->Locale;
         }
 
         $amount = $this->format($amount, $Locale);
-        $amount = \preg_replace('/[^0-9,".]/', '', $amount);
-        $amount = \trim($amount);
+        $amount = preg_replace('/[^0-9,".]/', '', $amount);
+        $amount = trim($amount);
 
         $decimalSeparator  = $Locale->getDecimalSeparator();
         $groupingSeparator = $Locale->getGroupingSeparator();
 
-        if (\strpos($amount, $decimalSeparator) && $decimalSeparator != ' . ') {
-            $amount = \str_replace($groupingSeparator, '', $amount);
+        if (strpos($amount, $decimalSeparator) && $decimalSeparator != ' . ') {
+            $amount = str_replace($groupingSeparator, '', $amount);
         }
 
-        $amount = \str_replace(',', '.', $amount);
-        $amount = \floatval($amount);
+        $amount = str_replace(',', '.', $amount);
+        $amount = floatval($amount);
 
         return $amount;
     }
@@ -187,7 +196,7 @@ class Currency
      * @param null|QUI\Locale $Locale - optional, locale object
      * @return string
      */
-    public function format($amount, $Locale = null): string
+    public function format($amount, QUI\Locale $Locale = null): string
     {
         if (!$Locale) {
             $Locale = $this->Locale;
@@ -195,20 +204,33 @@ class Currency
 
         $localeCode = $Locale->getLocalesByLang($Locale->getCurrent());
 
-        $Formatter = new \NumberFormatter(
+        $Formatter = new NumberFormatter(
             $localeCode[0],
-            \NumberFormatter::CURRENCY,
+            NumberFormatter::CURRENCY,
             $Locale->getAccountingCurrencyPattern()
         );
 
         $Formatter->setPattern($Locale->getAccountingCurrencyPattern());
-        $Formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $this->precision);
-        
-        if (\is_string($amount)) {
-            $amount = \floatval($amount);
+        $Formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $this->precision);
+
+        if (is_string($amount)) {
+            $amount = floatval($amount);
         }
 
-        return $Formatter->formatCurrency($amount, $this->getCode());
+        if (empty($amount)) {
+            $amount = 0;
+        }
+
+        $code = $this->getCode();
+
+        if (mb_strlen($code) <= 3) {
+            return $Formatter->formatCurrency($amount, $this->getCode());
+        }
+
+        $replacer = 'ZZZ';
+        $result   = $Formatter->formatCurrency($amount, $replacer);
+
+        return str_replace($replacer, $this->getCode(), $result);
     }
 
     /**
@@ -314,7 +336,7 @@ class Currency
             return false;
         }
 
-        return \round($this->exchangeRate / $to, 8);
+        return round($this->exchangeRate / $to, 8);
     }
 
     /**
