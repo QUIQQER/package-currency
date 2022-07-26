@@ -221,7 +221,16 @@ class Currency
             $amount = 0;
         }
 
-        return $Formatter->formatCurrency($amount, $this->getCode());
+        $code = $this->getCode();
+
+        if (mb_strlen($code) <= 3) {
+            return $Formatter->formatCurrency($amount, $this->getCode());
+        }
+
+        $replacer = 'ZZZ';
+        $result   = $Formatter->formatCurrency($amount, $replacer);
+
+        return str_replace($replacer, $this->getCode(), $result);
     }
 
     /**
