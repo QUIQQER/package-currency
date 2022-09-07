@@ -8,6 +8,8 @@ namespace QUI\ERP\Currency;
 
 use QUI;
 
+use function in_array;
+
 /**
  * Currency class
  * Conversion and currency sign
@@ -128,7 +130,7 @@ class Handler
      */
     public static function getDefaultCurrency(): ?Currency
     {
-        if (is_null(self::$Default)) {
+        if (self::$Default === null) {
             try {
                 $Config = QUI::getPackage('quiqqer/currency')->getConfig();
 
@@ -136,7 +138,7 @@ class Handler
                     $Config->getValue('currency', 'defaultCurrency')
                 );
             } catch (QUI\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
+                QUI\System\Log::addError('Default currency is missing');
 
                 try {
                     self::$Default = self::getCurrency('EUR');
@@ -243,6 +245,12 @@ class Handler
 
         $allowed = explode(',', trim($allowed));
         $list    = [];
+
+        $default = self::getDefaultCurrency()->getCode();
+
+        if (!in_array($default, $allowed)) {
+            $allowed[] = $default;
+        }
 
         foreach ($allowed as $currency) {
             try {
