@@ -14,8 +14,8 @@ define('package/quiqqer/currency/bin/Currency', [
 ], function (QUI, QUIDOM, Ajax, BulkConverting) {
     "use strict";
 
-    var Converter = null;
-    var def       = 'EUR';
+    let Converter = null;
+    let def = 'EUR';
 
     if (typeof window.DEFAULT_CURRENCY !== 'undefined') {
         def = window.DEFAULT_CURRENCY;
@@ -25,14 +25,15 @@ define('package/quiqqer/currency/bin/Currency', [
         def = window.DEFAULT_USER_CURRENCY.code;
     }
 
-    var Currencies = new Class({
+    const Currencies = new Class({
+
         Extends: QUIDOM,
         Type   : 'package/quiqqer/currency/bin/Currency',
 
         initialize: function (options) {
             this.parent(options);
 
-            this.$currency   = def;
+            this.$currency = def;
             this.$currencies = {};
         },
 
@@ -43,13 +44,16 @@ define('package/quiqqer/currency/bin/Currency', [
          */
         setCurrency: function (currencyCode) {
             this.getCurrencies().then(function (currencies) {
-                var found = currencies.find(function (Currency) {
+                const found = currencies.find(function (Currency) {
                     return Currency.code === currencyCode;
                 });
 
                 if (found) {
                     this.$currency = found.code;
-                    this.fireEvent('change', [this, found.code]);
+                    this.fireEvent('change', [
+                        this,
+                        found.code
+                    ]);
                 }
             }.bind(this));
         },
@@ -65,7 +69,7 @@ define('package/quiqqer/currency/bin/Currency', [
 
             return new Promise(function (resolve, reject) {
                 this.getCurrencies().then(function (currencies) {
-                    var found = currencies.find(function (Currency) {
+                    const found = currencies.find(function (Currency) {
                         return Currency.code === currencyCode;
                     });
 
@@ -84,7 +88,7 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         getCurrencies: function () {
-            var self = this;
+            const self = this;
 
             if (Object.getLength(this.$currencies)) {
                 return Promise.resolve(this.$currencies);
@@ -111,7 +115,7 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         convert: function (amount, currencyFrom, currencyTo) {
-            currencyTo   = currencyTo || this.$currency;
+            currencyTo = currencyTo || this.$currency;
             currencyFrom = currencyFrom || this.$currency;
 
             return new Promise(function (resolve) {
@@ -133,7 +137,7 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         convertWithSign: function (amount, currencyFrom, currencyTo) {
-            currencyTo   = currencyTo || this.$currency;
+            currencyTo = currencyTo || this.$currency;
             currencyFrom = currencyFrom || this.$currency;
 
             if (!amount) {
@@ -156,7 +160,9 @@ define('package/quiqqer/currency/bin/Currency', [
                         return;
                     }
 
-                    for (var i = 0, len = result.length; i < len; i++) {
+                    let i = 0, len = result.length;
+
+                    for (; i < len; i++) {
                         if (result[i].amount == amount &&
                             result[i].from === currencyFrom &&
                             result[i].to === currencyTo) {
