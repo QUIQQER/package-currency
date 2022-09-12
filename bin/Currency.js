@@ -16,13 +16,18 @@ define('package/quiqqer/currency/bin/Currency', [
 
     let Converter = null;
     let def = 'EUR';
+    let SYSTEM_CURRENCY = '';
 
+
+    // package_quiqqer_currency_ajax_setUserCurrency
     if (typeof window.DEFAULT_CURRENCY !== 'undefined') {
         def = window.DEFAULT_CURRENCY;
+        SYSTEM_CURRENCY = def;
     }
 
     if (typeof window.DEFAULT_USER_CURRENCY !== 'undefined') {
         def = window.DEFAULT_USER_CURRENCY.code;
+        SYSTEM_CURRENCY = def;
     }
 
     const Currencies = new Class({
@@ -35,6 +40,13 @@ define('package/quiqqer/currency/bin/Currency', [
 
             this.$currency = def;
             this.$currencies = {};
+
+            if (SYSTEM_CURRENCY !== this.$currency) {
+                this.fireEvent('change', [
+                    this,
+                    this.$currency
+                ]);
+            }
         },
 
         /**
@@ -67,9 +79,9 @@ define('package/quiqqer/currency/bin/Currency', [
         getCurrency: function (currencyCode) {
             currencyCode = currencyCode || this.$currency;
 
-            return new Promise(function (resolve, reject) {
-                this.getCurrencies().then(function (currencies) {
-                    const found = currencies.find(function (Currency) {
+            return new Promise((resolve, reject) => {
+                this.getCurrencies().then((currencies) => {
+                    const found = currencies.find((Currency) => {
                         return Currency.code === currencyCode;
                     });
 
@@ -79,7 +91,7 @@ define('package/quiqqer/currency/bin/Currency', [
 
                     return reject();
                 });
-            }.bind(this));
+            });
         },
 
         /**
@@ -88,17 +100,15 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         getCurrencies: function () {
-            const self = this;
-
             if (Object.getLength(this.$currencies)) {
                 return Promise.resolve(this.$currencies);
             }
 
-            return new Promise(function (resolve, reject) {
-                Ajax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', function (result) {
-                    self.$currencies = result;
+            return new Promise((resolve, reject) => {
+                Ajax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', (result) => {
+                    this.$currencies = result;
 
-                    resolve(self.$currencies);
+                    resolve(this.$currencies);
                 }, {
                     'package': 'quiqqer/currency',
                     onError  : reject
@@ -118,7 +128,7 @@ define('package/quiqqer/currency/bin/Currency', [
             currencyTo = currencyTo || this.$currency;
             currencyFrom = currencyFrom || this.$currency;
 
-            return new Promise(function (resolve) {
+            return new Promise((resolve) => {
                 Ajax.get('package_quiqqer_currency_ajax_convert', resolve, {
                     'package'   : 'quiqqer/currency',
                     amount      : amount,
@@ -154,8 +164,8 @@ define('package/quiqqer/currency/bin/Currency', [
 
             Converter.add(amount, currencyFrom, currencyTo);
 
-            return new Promise(function (resolve) {
-                Converter.addEvent('onDone', function (Cnv, result) {
+            return new Promise((resolve) => {
+                Converter.addEvent('onDone', (Cnv, result) => {
                     if (!result) {
                         return;
                     }
