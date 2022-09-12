@@ -33,16 +33,16 @@ define('package/quiqqer/currency/bin/controls/Switch', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$Display  = null;
+            this.$Display = null;
             this.$DropDown = null;
-            this.$Arrow    = null;
+            this.$Arrow = null;
 
             this.addEvents({
                 onInject : this.$onInject,
                 onReplace: this.$onReplace,
-                onDestroy: function () {
+                onDestroy: () => {
                     Currencies.removeEvent('onChange', this.$onChange);
-                }.bind(this)
+                }
             });
         },
 
@@ -55,12 +55,12 @@ define('package/quiqqer/currency/bin/controls/Switch', [
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-switch',
                 html   : '<div class="quiqqer-currency-switch-display">' +
-                    '<span class="fa fa-spinner fa-spin"></span>' +
-                    '</div>' +
-                    '<div class="quiqqer-currency-switch-dd"></div>'
+                         '<span class="fa fa-spinner fa-spin"></span>' +
+                         '</div>' +
+                         '<div class="quiqqer-currency-switch-dd"></div>'
             });
 
-            this.$Display  = this.$Elm.getElement('.quiqqer-currency-switch-display');
+            this.$Display = this.$Elm.getElement('.quiqqer-currency-switch-display');
             this.$DropDown = this.$Elm.getElement('.quiqqer-currency-switch-dd');
 
             return this.$Elm;
@@ -73,9 +73,9 @@ define('package/quiqqer/currency/bin/controls/Switch', [
             Promise.all([
                 Currencies.getCurrency(),
                 Currencies.getCurrencies()
-            ]).then(function (result) {
-                var Currency   = result[0],
-                    currencies = result[1];
+            ]).then((result) => {
+                const Currency   = result[0],
+                      currencies = result[1];
 
                 this.$Display.set({
                     html : Currency.code,
@@ -92,19 +92,19 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     display: 'none'
                 });
 
-                var entryClick = function (event) {
+                const entryClick = function (event) {
                     Currencies.setCurrency(event.target.get('data-code'));
                 };
 
-                var entryHover = function (event) {
+                const entryHover = function (event) {
                     event.target.addClass('hover');
                 };
 
-                var entryOut = function (event) {
+                const entryOut = function (event) {
                     event.target.removeClass('hover');
                 };
 
-                currencies.each(function (Entry) {
+                currencies.each((Entry) => {
                     new Element('div', {
                         'class'    : 'quiqqer-currency-switch-dd-entry',
                         html       : Entry.code,
@@ -115,7 +115,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                         },
                         'data-code': Entry.code
                     }).inject(this.$DropDown);
-                }.bind(this));
+                });
 
                 this.$Arrow = new Element('span', {
                     'class': 'fa fa-angle-down quiqqer-currency-switch-arrow'
@@ -139,9 +139,19 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     focus: this.open,
                     blur : this.close
                 });
+                
+                /*
+                this.fireEvent('changeCurrency', [
+                    this,
+                    Curr
+                ]);
 
-                //currencies;
-            }.bind(this));
+                QUI.fireEvent('quiqqerCurrencyChange', [
+                    this,
+                    Curr
+                ]);
+                */
+            });
         },
 
         /**
@@ -151,7 +161,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
          * @param currencyCode
          */
         $onChange: function (Currencies, currencyCode) {
-            var self = this;
+            const self = this;
 
             Currencies.getCurrency(currencyCode).then(function (Curr) {
                 self.$Display.set({
@@ -160,8 +170,15 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                 });
 
                 QUIAjax.post('package_quiqqer_currency_ajax_setUserCurrency', function () {
-                    self.fireEvent('changeCurrency', [self, Curr]);
-                    QUI.fireEvent('quiqqerCurrencyChange', [self, Curr]);
+                    self.fireEvent('changeCurrency', [
+                        self,
+                        Curr
+                    ]);
+
+                    QUI.fireEvent('quiqqerCurrencyChange', [
+                        self,
+                        Curr
+                    ]);
                 }, {
                     'package': 'quiqqer/currency',
                     currency : Curr.code
