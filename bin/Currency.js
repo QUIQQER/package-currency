@@ -89,7 +89,7 @@ define('package/quiqqer/currency/bin/Currency', [
                         return resolve(found);
                     }
 
-                    return reject();
+                    return reject('Currency is not supported. ' + currencyCode);
                 });
             });
         },
