@@ -27,7 +27,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
             title    : false,
             texticon : false,
             autoclose: false,
-            maxHeight: 400,
+            maxHeight: 600,
             maxWidth : 600
         },
 

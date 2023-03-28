@@ -11,22 +11,22 @@ define('package/quiqqer/currency/bin/Currency', [
     'Ajax',
     'package/quiqqer/currency/bin/classes/BulkConverting'
 
-], function (QUI, QUIDOM, Ajax, BulkConverting) {
+], function (QUI, QUIDOM, QUIAjax, BulkConverting) {
     "use strict";
 
-    let Converter = null;
-    let def = 'EUR';
+    let Converter       = null;
+    let def             = 'EUR';
     let SYSTEM_CURRENCY = '';
 
 
     // package_quiqqer_currency_ajax_setUserCurrency
     if (typeof window.DEFAULT_CURRENCY !== 'undefined') {
-        def = window.DEFAULT_CURRENCY;
+        def             = window.DEFAULT_CURRENCY;
         SYSTEM_CURRENCY = def;
     }
 
     if (typeof window.DEFAULT_USER_CURRENCY !== 'undefined') {
-        def = window.DEFAULT_USER_CURRENCY.code;
+        def             = window.DEFAULT_USER_CURRENCY.code;
         SYSTEM_CURRENCY = def;
     }
 
@@ -38,8 +38,9 @@ define('package/quiqqer/currency/bin/Currency', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$currency = def;
-            this.$currencies = {};
+            this.$currency      = def;
+            this.$currencies    = {};
+            this.$currencyTypes = [];
 
             if (SYSTEM_CURRENCY !== this.$currency) {
                 this.fireEvent('change', [
@@ -74,10 +75,22 @@ define('package/quiqqer/currency/bin/Currency', [
          * Return the data of a wanted currency
          *
          * @param {String} [currencyCode] - optional, default = current currency
+         * @param {Boolean} [refresh] - Refresh data from database
          * @return {Promise}
          */
-        getCurrency: function (currencyCode) {
+        getCurrency: function (currencyCode, refresh) {
             currencyCode = currencyCode || this.$currency;
+            refresh      = refresh || false;
+
+            if (refresh) {
+                return new Promise((resolve, reject) => {
+                    QUIAjax.get('package_quiqqer_currency_ajax_getCurrency', resolve, {
+                        'package': 'quiqqer/currency',
+                        currency : currencyCode,
+                        onError  : reject
+                    });
+                });
+            }
 
             return new Promise((resolve, reject) => {
                 this.getCurrencies().then((currencies) => {
@@ -105,10 +118,31 @@ define('package/quiqqer/currency/bin/Currency', [
             }
 
             return new Promise((resolve, reject) => {
-                Ajax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', (result) => {
+                QUIAjax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', (result) => {
                     this.$currencies = result;
 
                     resolve(this.$currencies);
+                }, {
+                    'package': 'quiqqer/currency',
+                    onError  : reject
+                });
+            });
+        },
+
+        /**
+         * Return all available currency types.
+         *
+         * @returns {Promise<Array>}
+         */
+        getCurrencyTypes: function () {
+            if (this.$currencyTypes.length) {
+                return Promise.resolve(this.$currencyTypes);
+            }
+
+            return new Promise((resolve, reject) => {
+                QUIAjax.get('package_quiqqer_currency_ajax_getCurrencyTypes', (result) => {
+                    this.$currencyTypes = result;
+                    resolve(this.$currencyTypes);
                 }, {
                     'package': 'quiqqer/currency',
                     onError  : reject
@@ -125,11 +159,11 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         convert: function (amount, currencyFrom, currencyTo) {
-            currencyTo = currencyTo || this.$currency;
+            currencyTo   = currencyTo || this.$currency;
             currencyFrom = currencyFrom || this.$currency;
 
             return new Promise((resolve) => {
-                Ajax.get('package_quiqqer_currency_ajax_convert', resolve, {
+                QUIAjax.get('package_quiqqer_currency_ajax_convert', resolve, {
                     'package'   : 'quiqqer/currency',
                     amount      : amount,
                     currencyFrom: currencyFrom,
@@ -147,7 +181,7 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         convertWithSign: function (amount, currencyFrom, currencyTo) {
-            currencyTo = currencyTo || this.$currency;
+            currencyTo   = currencyTo || this.$currency;
             currencyFrom = currencyFrom || this.$currency;
 
             if (!amount) {

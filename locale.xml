@@ -72,6 +72,10 @@
             <de><![CDATA[Währungsgenauigkeit (Nachkommastellen)]]></de>
             <en><![CDATA[Currency precision (Decimal places)]]></en>
         </locale>
+        <locale name="control.currency.currencyType">
+            <de><![CDATA[Währungstyp]]></de>
+            <en><![CDATA[Currency type]]></en>
+        </locale>
 
         <locale name="window.delete.title">
             <de><![CDATA[Währung löschen]]></de>
@@ -153,6 +157,14 @@
             <de><![CDATA[Genauigkeit]]></de>
             <en><![CDATA[Precision]]></en>
         </locale>
+        <locale name="grid.setting.typeTitle">
+            <de><![CDATA[Währungstyp]]></de>
+            <en><![CDATA[Currency type]]></en>
+        </locale>
+        <locale name="grid.typeTitle.default">
+            <de><![CDATA[Standard]]></de>
+            <en><![CDATA[Default]]></en>
+        </locale>
 
         <locale name="ecb.import.button.text">
             <de><![CDATA[EZB Import]]></de>
@@ -180,6 +192,12 @@
     </groups>
 
     <groups name="quiqqer/currency" datatype="php,js">
+
+        <locale name="currencyType.default.title">
+            <de><![CDATA[Standard]]></de>
+            <en><![CDATA[Default]]></en>
+        </locale>
+
         <locale name="package.title">
             <de><![CDATA[QUIQQER - Währungen]]></de>
             <en><![CDATA[QUIQQER - Currency]]></en>
