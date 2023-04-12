@@ -2,6 +2,7 @@
     "name": "quiqqer\/currency",
     "type": "quiqqer-module",
     "description": "Integrates different currencies in QUIQQER",
+    "version": "1.4.0",
     "license": "GPL-3.0+",
     "authors": [
         {
