@@ -11,10 +11,14 @@
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_currency_ajax_update',
-    function ($currency, $code, $rate, $precision) {
+    function ($currency, $code, $rate, $precision, $type, $customData) {
+        $customData = !empty($customData) ? json_decode($customData, true) : null;
+
         QUI\ERP\Currency\Handler::updateCurrency($currency, [
-            'rate' => $rate,
-            'code' => $code
+            'rate'       => $rate,
+            'code'       => $code,
+            'type'       => !empty($type) ? $type : \QUI\ERP\Currency\Handler::CURRENCY_TYPE_DEFAULT,
+            'customData' => $customData
         ]);
 
         if (isset($precision)) {
@@ -23,6 +27,6 @@ QUI::$Ajax->registerFunction(
             ]);
         }
     },
-    ['currency', 'code', 'rate', 'precision'],
+    ['currency', 'code', 'rate', 'precision', 'type', 'customData'],
     'Permission::checkAdminUser'
 );

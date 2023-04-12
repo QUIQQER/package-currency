@@ -8,6 +8,9 @@
             <field type="int(1) DEFAULT 0">autoupdate</field>
             <field type="int(2) DEFAULT 2">precision</field>
 
+            <field type="varchar(255) NOT NULL DEFAULT 'default'">type</field>
+            <field type="TEXT NULL DEFAULT NULL">customData</field>
+
             <primary>currency</primary>
             <index>currency</index>
         </table>

@@ -141,6 +141,12 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         dataIndex: 'autoupdate',
                         dataType : 'QUI',
                         width    : 100
+                    },
+                    {
+                        header   : QUILocale.get(lg, 'grid.setting.typeTitle'),
+                        dataIndex: 'typeTitle',
+                        dataType : 'string',
+                        width    : 100
                     }
                 ],
                 buttons          : [
@@ -258,7 +264,6 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         }
                     });
                 }.bind(this));
-
 
                 this.$Grid.setData({
                     data : data,
