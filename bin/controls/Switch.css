@@ -1,58 +1,60 @@
+/**********/
+/* button */
+/**********/
 .quiqqer-currency-switch {
-    float: left;
-    padding: 0 10px;
     position: relative;
-    text-align: left;
-    width: 70px;
-    z-index: 10;
+    cursor: pointer;
 }
 
-.quiqqer-currency-switch__withArrow {
-    cursor: pointer;
-    padding: 0 30px 0 10px;
+.quiqqer-currency-switch.inactive {
+    cursor: default;
 }
 
 .quiqqer-currency-switch-arrow {
-    position: absolute;
-    right: 10px;
-    top: 20px;
+    line-height: inherit;
+    margin-left: 0.25em;
 }
 
+.quiqqer-currency-switch-sign {
+    margin-right: 0.5em;
+}
+
+.quiqqer-currency-switch-display {
+    display: inline;
+}
+
+/************/
+/* dropdown */
+/************/
 .quiqqer-currency-switch-dd {
     background: #fff;
     border: 1px solid #DDDDDD;
     top: 100%;
-    left: 0;
     position: absolute;
     width: 100%;
     z-index: 1000;
+    min-width: 10rem;
+    display: none;
 }
 
-.quiqqer-currency-switch-dd:after {
-    background-color: transparent;
-    background-image: -moz-linear-gradient(center top, rgba(0, 0, 0, 0.2), transparent);
-    background-image: -webkit-gradient(linear, center top, left bottom, from(rgba(0, 0, 0, 0.2)), to(transparent));
-    background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
-    background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
-    background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
-    background-image: linear-gradient(top, rgba(0, 0, 0, 0.2), transparent);
-    bottom: -8px;
-    content: "";
-    height: 8px;
+.quiqqer-currency-switch-dd.left {
     left: 0;
-    position: absolute;
-    width: 100%;
+}
+
+.quiqqer-currency-switch-dd.right {
+    right: 0;
 }
 
 .quiqqer-currency-switch-dd-entry {
-    clear: both;
-    float: left;
-    line-height: 24px;
-    padding: 10px;
-    text-align: left;
-    width: 100%;
+    padding: 0.75em;
 }
 
 .quiqqer-currency-switch-dd-entry:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.quiqqer-currency-switch-dd-sign {
+    min-width: 1.25em;
+    display: inline-block;
+    margin-right: 0.25em;
 }
