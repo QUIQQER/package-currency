@@ -25,19 +25,34 @@ define('package/quiqqer/currency/bin/controls/Switch', [
         Binds: [
             'open',
             'close',
+            '$onImport',
             '$onInject',
             '$onReplace',
-            '$onChange'
+            '$onChange',
+            '$getBtnCurrencyCodeHtml',
+            '$getBtnCurrencySignHtml'
         ],
+
+        options: {
+            buttonshowsign  : 0, // '1' enables currency sign in button
+            dropdownshowsign: 1, // '1' enables currency sign in the dropdown
+            showarrow       : 1, // enable button arrow down
+            showloader      : 1, // enable button arrow down
+            dropdownposition: 'left', // 'right', 'left'. stick to right or left bottom control corner
+        },
 
         initialize: function (options) {
             this.parent(options);
 
-            this.$Display = null;
-            this.$DropDown = null;
-            this.$Arrow = null;
+            this.$Display          = null;
+            this.$DropDown         = null;
+            this.$Arrow            = null;
+            this.$buttonSign       = false;
+            this.$dropdownShowSign = false;
+            this.$controlImported  = false;
 
             this.addEvents({
+                onImport : this.$onImport,
                 onInject : this.$onInject,
                 onReplace: this.$onReplace,
                 onDestroy: () => {
@@ -52,18 +67,42 @@ define('package/quiqqer/currency/bin/controls/Switch', [
          * @returns {HTMLDivElement}
          */
         create: function () {
+            if (parseInt(this.getAttribute('buttonshowsign')) === 1) {
+                this.$buttonSign = true;
+            }
+
+            if (parseInt(this.getAttribute('dropdownshowsign')) === 1) {
+                this.$dropdownShowSign = true;
+            }
+
+            let loaderHtml = '';
+            if (parseInt(this.getAttribute('showloader')) === 1) {
+                loaderHtml = '<span class="fa fa-spinner fa-spin"></span>';
+            }
+
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-switch',
                 html   : '<div class="quiqqer-currency-switch-display">' +
-                         '<span class="fa fa-spinner fa-spin"></span>' +
-                         '</div>' +
-                         '<div class="quiqqer-currency-switch-dd"></div>'
+                    loaderHtml +
+                    '</div>' +
+                    '<div class="quiqqer-currency-switch-dd"></div>'
             });
 
-            this.$Display = this.$Elm.getElement('.quiqqer-currency-switch-display');
+            this.$Display  = this.$Elm.getElement('.quiqqer-currency-switch-display');
             this.$DropDown = this.$Elm.getElement('.quiqqer-currency-switch-dd');
 
+            if (this.getAttribute('dropdownposition') === 'right') {
+                this.$DropDown.classList.add('right');
+            } else {
+                this.$DropDown.classList.add('left');
+            }
+
             return this.$Elm;
+        },
+
+        $onImport: function () {
+            this.$controlImported = true;
+            this.$onInject();
         },
 
         /**
@@ -74,15 +113,24 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                 Currencies.getCurrency(),
                 Currencies.getCurrencies()
             ]).then((result) => {
+
+                // create control body if control use "onImport"
+                if (this.$controlImported) {
+                    this.$Elm.set('html', '');
+                    const Main = this.$Elm;
+                    this.create().replaces(Main);
+                }
+
                 const Currency   = result[0],
                       currencies = result[1];
 
                 this.$Display.set({
-                    html : Currency.code,
+                    html : this.$getBtnCurrencySignHtml(Currency.sign) + this.$getBtnCurrencyCodeHtml(Currency.code),
                     title: Currency.text
                 });
 
                 if (!Object.getLength(currencies)) {
+                    this.$Elm.classList.add('inactive');
                     return;
                 }
 
@@ -96,30 +144,24 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     Currencies.setCurrency(event.target.get('data-code'));
                 };
 
-                const entryHover = function (event) {
-                    event.target.addClass('hover');
-                };
-
-                const entryOut = function (event) {
-                    event.target.removeClass('hover');
-                };
 
                 currencies.each((Entry) => {
                     new Element('div', {
                         'class'    : 'quiqqer-currency-switch-dd-entry',
-                        html       : Entry.code,
+                        html       : this.$getDropdownCurrencySignHtml(Entry.sign) + this.$getDropdownCurrencyCodeHtml(
+                            Entry.code),
                         events     : {
-                            mouseenter: entryHover,
-                            mouseleave: entryOut,
-                            click     : entryClick
+                            click: entryClick
                         },
                         'data-code': Entry.code
                     }).inject(this.$DropDown);
                 });
 
-                this.$Arrow = new Element('span', {
-                    'class': 'fa fa-angle-down quiqqer-currency-switch-arrow'
-                }).inject(this.$Elm);
+                if (parseInt(this.getAttribute('showarrow')) === 1) {
+                    this.$Arrow = new Element('span', {
+                        'class': 'fa fa-angle-down quiqqer-currency-switch-arrow'
+                    }).inject(this.$Elm);
+                }
 
                 this.$Elm.set({
                     tabindex: -1,
@@ -129,9 +171,6 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     }
                 });
 
-                this.$Elm.addClass('quiqqer-currency-switch__withArrow');
-                this.$Elm.addClass('button');
-
                 this.$Elm.addEvents({
                     click: function (event) {
                         event.target.focus();
@@ -139,18 +178,6 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     focus: this.open,
                     blur : this.close
                 });
-
-                /*
-                this.fireEvent('changeCurrency', [
-                    this,
-                    Curr
-                ]);
-
-                QUI.fireEvent('quiqqerCurrencyChange', [
-                    this,
-                    Curr
-                ]);
-                */
             });
         },
 
@@ -165,7 +192,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
 
             Currencies.getCurrency(currencyCode).then(function (Curr) {
                 self.$Display.set({
-                    html : Curr.code,
+                    html : self.$getBtnCurrencySignHtml(Curr.sign) + self.$getBtnCurrencyCodeHtml(Curr.code),
                     title: Curr.text
                 });
 
@@ -211,6 +238,54 @@ define('package/quiqqer/currency/bin/controls/Switch', [
             this.$DropDown.setStyles({
                 display: 'none'
             });
+        },
+
+        /**
+         * Get button currency code html string
+         *
+         * @param code
+         * @returns {string}
+         */
+        $getBtnCurrencyCodeHtml: function (code) {
+            return '<span class="quiqqer-currency-switch-code">' + code + '</span>';
+        },
+
+        /**
+         * Get button currency signal html string
+         *
+         * @param sign
+         * @returns {string}
+         */
+        $getBtnCurrencySignHtml: function (sign) {
+            if (!this.$buttonSign) {
+                return '';
+            }
+
+            return '<span class="quiqqer-currency-switch-sign">' + sign + '</span>';
+        },
+
+        /**
+         * Get dropdown currency html string
+         *
+         * @param code
+         * @returns {string}
+         */
+        $getDropdownCurrencyCodeHtml: function (code) {
+            return '<span class="quiqqer-currency-switch-dd-code">' + code + '</span>';
+        },
+
+        /**
+         * Get dropdown currency sign html string
+         *
+         * @param sign
+         * @returns {string}
+         */
+        $getDropdownCurrencySignHtml: function (sign) {
+            if (!this.$dropdownShowSign) {
+                return '';
+            }
+
+            return '<span class="quiqqer-currency-switch-dd-sign">' + sign + '</span>';
         }
     });
 });
