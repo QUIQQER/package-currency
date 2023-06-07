@@ -14,19 +14,19 @@ define('package/quiqqer/currency/bin/Currency', [
 ], function (QUI, QUIDOM, QUIAjax, BulkConverting) {
     "use strict";
 
-    let Converter       = null;
-    let def             = 'EUR';
+    let Converter = null;
+    let def = 'EUR';
     let SYSTEM_CURRENCY = '';
 
 
     // package_quiqqer_currency_ajax_setUserCurrency
     if (typeof window.DEFAULT_CURRENCY !== 'undefined') {
-        def             = window.DEFAULT_CURRENCY;
+        def = window.DEFAULT_CURRENCY;
         SYSTEM_CURRENCY = def;
     }
 
     if (typeof window.DEFAULT_USER_CURRENCY !== 'undefined') {
-        def             = window.DEFAULT_USER_CURRENCY.code;
+        def = window.DEFAULT_USER_CURRENCY.code;
         SYSTEM_CURRENCY = def;
     }
 
@@ -38,8 +38,8 @@ define('package/quiqqer/currency/bin/Currency', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$currency      = def;
-            this.$currencies    = {};
+            this.$currency = def;
+            this.$currencies = {};
             this.$currencyTypes = [];
 
             if (SYSTEM_CURRENCY !== this.$currency) {
@@ -80,7 +80,7 @@ define('package/quiqqer/currency/bin/Currency', [
          */
         getCurrency: function (currencyCode, refresh) {
             currencyCode = currencyCode || this.$currency;
-            refresh      = refresh || false;
+            refresh = refresh || false;
 
             if (refresh) {
                 return new Promise((resolve, reject) => {
@@ -159,7 +159,7 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         convert: function (amount, currencyFrom, currencyTo) {
-            currencyTo   = currencyTo || this.$currency;
+            currencyTo = currencyTo || this.$currency;
             currencyFrom = currencyFrom || this.$currency;
 
             return new Promise((resolve) => {
@@ -181,8 +181,16 @@ define('package/quiqqer/currency/bin/Currency', [
          * @returns {Promise}
          */
         convertWithSign: function (amount, currencyFrom, currencyTo) {
-            currencyTo   = currencyTo || this.$currency;
+            currencyTo = currencyTo || this.$currency;
             currencyFrom = currencyFrom || this.$currency;
+
+            if (typeof currencyTo === 'object' && typeof currencyTo.code !== 'undefined') {
+                currencyTo = currencyTo.code;
+            }
+
+            if (typeof currencyFrom === 'object' && typeof currencyFrom.code !== 'undefined') {
+                currencyFrom = currencyFrom.code;
+            }
 
             if (!amount) {
                 amount = 0;
@@ -195,6 +203,7 @@ define('package/quiqqer/currency/bin/Currency', [
             if (Converter.isRunning() === false) {
                 Converter.removeEvents('onDone');
             }
+
 
             Converter.add(amount, currencyFrom, currencyTo);
 
@@ -213,7 +222,7 @@ define('package/quiqqer/currency/bin/Currency', [
                             break;
                         }
                     }
-
+                    
                     resolve(result[i].converted);
                 });
             });

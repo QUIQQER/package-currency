@@ -24,7 +24,7 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$bulk    = [];
+            this.$bulk = [];
             this.$running = false;
         },
 
@@ -54,9 +54,9 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
             if (!this.$running) {
                 this.$running = true;
 
-                (function () {
+                (() => {
                     this.convert();
-                }).delay(this.getAttribute('delay'), this);
+                }).delay(this.getAttribute('delay'));
             }
         },
 
@@ -66,15 +66,20 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
          * @return {Promise}
          */
         convert: function () {
-            var self = this;
+            return new Promise(function (resolve) {
+                QUIAjax.get('package_quiqqer_currency_ajax_convertWithSign', (result) => {
+                    this.fireEvent('done', [
+                        this,
+                        result
+                    ]);
 
-            return new Promise(function () {
-                QUIAjax.get('package_quiqqer_currency_ajax_convertWithSign', function (result) {
-                    self.fireEvent('done', [this, result]);
-                    self.$running = false;
+                    this.$bulk = []; // cleanup bulk
+                    this.$running = false;
+                    resolve();
                 }, {
                     'package': 'quiqqer/currency',
-                    'data'   : JSON.encode(self.$bulk)
+                    data     : JSON.encode(this.$bulk),
+                    onError  : resolve
                 });
             });
         }
