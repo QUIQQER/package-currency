@@ -66,7 +66,7 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
          * @return {Promise}
          */
         convert: function () {
-            return new Promise(function (resolve) {
+            return new Promise((resolve) => {
                 QUIAjax.get('package_quiqqer_currency_ajax_convertWithSign', (result) => {
                     this.fireEvent('done', [
                         this,
