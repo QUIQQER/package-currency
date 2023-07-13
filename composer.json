@@ -1,27 +1,27 @@
 {
-    "name": "quiqqer\/currency",
-    "type": "quiqqer-module",
-    "description": "Integrates different currencies in QUIQQER",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "Henning Leutz",
-            "email": "leutz@pcsg.de",
-            "homepage": "http:\/\/www.pcsg.de",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "email": "support@pcsg.de"
-    },
-    "require": {
-        "ext-intl": "*",
-        "quiqqer\/quiqqer": "*",
-        "quiqqer\/qui": ">=1|*@dev"
-    },
-    "autoload": {
-        "psr-4": {
-            "QUI\\ERP\\Currency\\": "src\/QUI\/ERP\/Currency"
-        }
+  "name": "quiqqer\/currency",
+  "type": "quiqqer-module",
+  "description": "Integrates different currencies in QUIQQER",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Henning Leutz",
+      "email": "leutz@pcsg.de",
+      "homepage": "http:\/\/www.pcsg.de",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "email": "support@pcsg.de"
+  },
+  "require": {
+    "ext-intl": "*",
+    "quiqqer\/quiqqer": "*",
+    "quiqqer\/qui": ">=1|*@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "QUI\\ERP\\Currency\\": "src\/QUI\/ERP\/Currency"
+    }
+  }
 }
