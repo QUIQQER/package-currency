@@ -3,9 +3,14 @@
 namespace QUI\ERP\Currency;
 
 use QUI;
+use QUI\Exception;
 
 /**
  * Class Conf
+ *
+ * The Conf class provides methods to retrieve configuration data related to currency
+ *
+ * @package YourPackage\Namespace
  */
 class Conf
 {
@@ -22,6 +27,7 @@ class Conf
      * - if no accounting currency is set, the default currency will be returned
      *
      * @return Currency|null
+     * @throws Exception
      */
     public static function getAccountingCurrency(): ?Currency
     {
@@ -50,7 +56,7 @@ class Conf
     {
         try {
             $Package = QUI::getPackage('quiqqer/currency');
-            $Config  = $Package->getConfig();
+            $Config = $Package->getConfig();
 
             return $Config->get($section, $key);
         } catch (QUI\Exception $Exception) {
