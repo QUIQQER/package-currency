@@ -28,7 +28,7 @@ class Calc
     public static function convert($amount, $currencyFrom, $currencyTo = 'EUR'): float
     {
         $From = Handler::getCurrency($currencyFrom);
-        $To   = Handler::getCurrency($currencyTo);
+        $To = Handler::getCurrency($currencyTo);
 
         return $From->convert($amount, $To);
     }
@@ -47,7 +47,7 @@ class Calc
     public static function convertWithSign($amount, $currencyFrom, $currencyTo = 'EUR'): string
     {
         $From = Handler::getCurrency($currencyFrom);
-        $To   = Handler::getCurrency($currencyTo);
+        $To = Handler::getCurrency($currencyTo);
 
         return $From->convertFormat($amount, $To);
     }
@@ -65,10 +65,10 @@ class Calc
     public static function getExchangeRateBetween($currencyFrom, $currencyTo)
     {
         $From = Handler::getCurrency($currencyFrom);
-        $To   = Handler::getCurrency($currencyTo);
+        $To = Handler::getCurrency($currencyTo);
 
         $from = $From->getExchangeRate();
-        $to   = $To->getExchangeRate();
+        $to = $To->getExchangeRate();
 
         if (!$from || !$to) {
             return false;

@@ -6,16 +6,7 @@
 
 namespace QUI\ERP\Currency;
 
-use NumberFormatter;
 use QUI;
-
-use function floatval;
-use function is_string;
-use function preg_replace;
-use function round;
-use function str_replace;
-use function strpos;
-use function trim;
 
 /**
  * Currency class

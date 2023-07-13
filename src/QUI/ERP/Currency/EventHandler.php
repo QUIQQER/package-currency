@@ -8,6 +8,8 @@ namespace QUI\ERP\Currency;
 
 use QUI;
 
+use function json_encode;
+
 /**
  * Class EventHandler
  * @package QUI\ERP\Currency
@@ -23,7 +25,7 @@ class EventHandler
             $Currency = Handler::getDefaultCurrency();
 
             $TemplateManager->extendHeader(
-                '<script>var DEFAULT_CURRENCY = "'.$Currency->getCode().'";</script>'
+                '<script>window.DEFAULT_CURRENCY = "' . $Currency->getCode() . '";</script>'
             );
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
@@ -34,7 +36,7 @@ class EventHandler
         if ($Currency) {
             $TemplateManager->extendHeader(
                 '<script>
-                    var DEFAULT_USER_CURRENCY = '.\json_encode($Currency->toArray()).';
+                    window.DEFAULT_USER_CURRENCY = ' . json_encode($Currency->toArray()) . ';
                 </script>'
             );
         }

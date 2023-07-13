@@ -6,7 +6,14 @@
 
 namespace QUI\ERP\Currency;
 
+use DOMDocument;
+use DOMElement;
+use Exception;
 use QUI;
+
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_SSL_VERIFYHOST;
+use const CURLOPT_SSL_VERIFYPEER;
 
 /**
  * Class Import
@@ -95,23 +102,23 @@ class Import
      *
      * @return array
      */
-    protected static function getECBData()
+    protected static function getECBData(): array
     {
-        $xmlfile = 'http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml';
+        $xmlFile = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
 
         try {
-            $result = QUI\Utils\Request\Url::get($xmlfile, [
-                \CURLOPT_FOLLOWLOCATION => true,
-                \CURLOPT_SSL_VERIFYHOST => false,
-                \CURLOPT_SSL_VERIFYPEER => false
+            $result = QUI\Utils\Request\Url::get($xmlFile, [
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_SSL_VERIFYPEER => false
             ]);
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
             return [];
         }
 
-        $Dom = new \DOMDocument();
+        $Dom = new DOMDocument();
         $Dom->loadXML($result);
 
         $list = $Dom->getElementsByTagName('Cube');
@@ -125,11 +132,11 @@ class Import
         ];
 
         for ($c = 0; $c < $list->length; $c++) {
-            /* @var $Cube \DOMElement */
+            /* @var $Cube DOMElement */
             $Cube = $list->item($c);
 
             $currency = $Cube->getAttribute('currency');
-            $rate     = $Cube->getAttribute('rate');
+            $rate = $Cube->getAttribute('rate');
 
             if (empty($currency)) {
                 continue;

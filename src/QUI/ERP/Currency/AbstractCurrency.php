@@ -11,7 +11,6 @@ use QUI;
 
 use function array_key_exists;
 use function floatval;
-use function is_a;
 use function is_array;
 use function is_string;
 use function preg_replace;
@@ -84,9 +83,9 @@ abstract class AbstractCurrency implements CurrencyInterface
             $this->Locale = $Locale;
         }
 
-        $this->code         = $data['currency'];
+        $this->code = $data['currency'];
         $this->exchangeRate = (float)$data['rate'];
-        $this->autoupdate   = $data['autoupdate'];
+        $this->autoupdate = $data['autoupdate'];
 
         if (isset($data['precision'])) {
             $this->precision = $data['precision'];
@@ -126,7 +125,7 @@ abstract class AbstractCurrency implements CurrencyInterface
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
-            'currency.'.$this->getCode().'.text'
+            'currency.' . $this->getCode() . '.text'
         );
     }
 
@@ -139,7 +138,7 @@ abstract class AbstractCurrency implements CurrencyInterface
     {
         return QUI::getLocale()->get(
             'quiqqer/currency',
-            'currency.'.$this->getCode().'.sign'
+            'currency.' . $this->getCode() . '.sign'
         );
     }
 
@@ -159,14 +158,14 @@ abstract class AbstractCurrency implements CurrencyInterface
     public function toArray(): array
     {
         return [
-            'text'       => $this->getText(),
-            'sign'       => $this->getSign(),
-            'code'       => $this->getCode(),
-            'rate'       => $this->getExchangeRate(),
+            'text' => $this->getText(),
+            'sign' => $this->getSign(),
+            'code' => $this->getCode(),
+            'rate' => $this->getExchangeRate(),
             'autoupdate' => $this->autoupdate(),
-            'precision'  => $this->getPrecision(),
-            'type'       => $this::getCurrencyType(),
-            'typeTitle'  => $this::getCurrencyTypeTitle(),
+            'precision' => $this->getPrecision(),
+            'type' => $this::getCurrencyType(),
+            'typeTitle' => $this::getCurrencyTypeTitle(),
             'customData' => $this->getCustomData()
         ];
     }
@@ -189,7 +188,7 @@ abstract class AbstractCurrency implements CurrencyInterface
         $amount = preg_replace('/[^0-9,".]/', '', $amount);
         $amount = trim($amount);
 
-        $decimalSeparator  = $Locale->getDecimalSeparator();
+        $decimalSeparator = $Locale->getDecimalSeparator();
         $groupingSeparator = $Locale->getGroupingSeparator();
 
         if (strpos($amount, $decimalSeparator) && $decimalSeparator != ' . ') {
@@ -241,7 +240,7 @@ abstract class AbstractCurrency implements CurrencyInterface
         }
 
         $replacer = 'ZZZ';
-        $result   = $Formatter->formatCurrency($amount, $replacer);
+        $result = $Formatter->formatCurrency($amount, $replacer);
 
         return str_replace($replacer, $this->getCode(), $result);
     }
@@ -280,15 +279,15 @@ abstract class AbstractCurrency implements CurrencyInterface
         }
 
         $Currency = Handler::getCurrency($Currency);
-        $Default  = Handler::getDefaultCurrency();
-        $default  = $Default->getCode();
+        $Default = Handler::getDefaultCurrency();
+        $default = $Default->getCode();
 
         if ($this->getCode() == $Currency->getCode()) {
             return $amount;
         }
 
         $from = $this->getCode();
-        $to   = $Currency->getCode();
+        $to = $Currency->getCode();
 
         // exchange rates are based on the default currency (eq EUR)
         // $from == 'EUR' && $to != 'EUR'
@@ -388,7 +387,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      *
      * @param string $key
      * @param $value
-     * @return mixed
+     * @return void
      */
     public function setCustomDataEntry(string $key, $value)
     {
