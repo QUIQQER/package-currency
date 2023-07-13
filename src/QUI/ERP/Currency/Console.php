@@ -7,6 +7,7 @@
 namespace QUI\ERP\Currency;
 
 use QUI;
+use QUI\Exception;
 
 /**
  * Import
@@ -16,7 +17,11 @@ use QUI;
 class Console extends QUI\System\Console\Tool
 {
     /**
-     * Konstruktor
+     * Constructor for the CurrencyImporter class.
+     *
+     * Sets the name and description of the current command.
+     *
+     * @return void
      */
     public function __construct()
     {
@@ -27,6 +32,7 @@ class Console extends QUI\System\Console\Tool
     /**
      * (non-PHPdoc)
      *
+     * @throws Exception
      * @see \QUI\System\Console\Tool::execute()
      */
     public function execute()

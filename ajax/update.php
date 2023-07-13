@@ -15,9 +15,9 @@ QUI::$Ajax->registerFunction(
         $customData = !empty($customData) ? json_decode($customData, true) : null;
 
         QUI\ERP\Currency\Handler::updateCurrency($currency, [
-            'rate'       => $rate,
-            'code'       => $code,
-            'type'       => !empty($type) ? $type : \QUI\ERP\Currency\Handler::CURRENCY_TYPE_DEFAULT,
+            'rate' => $rate,
+            'code' => $code,
+            'type' => !empty($type) ? $type : \QUI\ERP\Currency\Handler::CURRENCY_TYPE_DEFAULT,
             'customData' => $customData
         ]);
 

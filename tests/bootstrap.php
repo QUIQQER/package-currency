@@ -4,8 +4,7 @@
 // phpunit --coverage-text .
 
 $quiqqerPackageDir = dirname(dirname(__FILE__));
-$packageDir        = dirname(dirname($quiqqerPackageDir));
+$packageDir = dirname(dirname($quiqqerPackageDir));
 
 // include quiqqer bootstrap for tests
-require $packageDir .'/quiqqer/quiqqer/tests/bootstrap.php';
-
+require $packageDir . '/quiqqer/quiqqer/tests/bootstrap.php';
