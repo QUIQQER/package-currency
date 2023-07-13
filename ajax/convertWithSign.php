@@ -13,18 +13,18 @@
 QUI::$Ajax->registerFunction(
     'package_quiqqer_currency_ajax_convertWithSign',
     function ($data) {
-        $data   = json_decode($data, true);
+        $data = json_decode($data, true);
         $result = [];
 
         foreach ($data as $entry) {
-            $amount       = $entry['amount'];
+            $amount = $entry['amount'];
             $currencyFrom = $entry['from'];
-            $currencyTo   = $entry['to'];
+            $currencyTo = $entry['to'];
 
             $result[] = [
-                'amount'    => $entry['amount'],
-                'from'      => $entry['from'],
-                'to'        => $entry['to'],
+                'amount' => $entry['amount'],
+                'from' => $entry['from'],
+                'to' => $entry['to'],
                 'converted' => QUI\ERP\Currency\Calc::convertWithSign($amount, $currencyFrom, $currencyTo)
             ];
         }
