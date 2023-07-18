@@ -267,7 +267,9 @@ abstract class AbstractCurrency implements CurrencyInterface
     public function convert($amount, $Currency)
     {
         if (!is_numeric($amount)) {
-            QUI\System\Log::addError('Only numeric are allowed Currency->convert()');
+            QUI\System\Log::addError('Only numeric are allowed Currency->convert()', [
+                '$amount' => $amount
+            ]);
 
             $Exception = new QUI\Exception(
                 QUI::getLocale()->get('quiqqer/quiqqer', 'exception.error')
