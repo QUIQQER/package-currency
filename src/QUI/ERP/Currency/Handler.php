@@ -7,7 +7,6 @@ use QUI;
 use QUI\Locale;
 
 use function class_exists;
-use function get_class;
 use function in_array;
 use function is_a;
 use function is_array;
@@ -353,6 +352,10 @@ class Handler
      */
     public static function getCurrency($currency): Currency
     {
+        if ($currency instanceof Currency) {
+            return $currency;
+        }
+
         $data = self::getData();
         $code = null;
 
@@ -360,8 +363,6 @@ class Handler
             $code = $currency;
         } elseif (is_array($currency) && isset($currency['code'])) {
             $code = $currency['code'];
-        } elseif (get_class($currency) == Currency::class) {
-            return $currency;
         }
 
         if (isset($data[$code])) {
