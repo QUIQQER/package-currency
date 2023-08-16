@@ -179,7 +179,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         disabled: true,
                         events: {
                             onClick: function () {
-                                var currencies = self.$Grid.getSelectedData().map(function (C) {
+                                const currencies = self.$Grid.getSelectedData().map(function (C) {
                                     return C.code;
                                 });
 
@@ -194,14 +194,14 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
             this.$Grid.addEvents({
                 onClick: function () {
-                    var selected = self.$Grid.getSelectedIndices(),
+                    const selected = self.$Grid.getSelectedIndices(),
                         buttons = self.$Grid.getButtons();
 
-                    var Edit = buttons.filter(function (Btn) {
+                    const Edit = buttons.filter(function (Btn) {
                         return Btn.getAttribute('name') === 'edit';
                     })[0];
 
-                    var Delete = buttons.filter(function (Btn) {
+                    const Delete = buttons.filter(function (Btn) {
                         return Btn.getAttribute('name') === 'delete';
                     })[0];
 
@@ -271,13 +271,13 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                     page: page
                 });
 
-                var buttons = this.$Grid.getButtons();
+                const buttons = this.$Grid.getButtons();
 
-                var Edit = buttons.filter(function (Btn) {
+                const Edit = buttons.filter(function (Btn) {
                     return Btn.getAttribute('name') === 'edit';
                 })[0];
 
-                var Delete = buttons.filter(function (Btn) {
+                const Delete = buttons.filter(function (Btn) {
                     return Btn.getAttribute('name') === 'delete';
                 })[0];
 
@@ -291,11 +291,11 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * update values to the input field
          */
         update: function () {
-            var allowed = [],
+            const allowed = [],
                 values = this.getAttribute('values');
 
             if (typeOf(values) === 'object') {
-                for (var i in values) {
+                for (const i in values) {
                     if (!values.hasOwnProperty(i)) {
                         continue;
                     }
@@ -364,8 +364,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * @param {Object} Switch
          */
         $onCurrencyStatusChange: function (Switch) {
-            var currency = Switch.getAttribute('currency');
-            var values = this.getAttribute('values');
+            const currency = Switch.getAttribute('currency');
+            const values = this.getAttribute('values');
 
 
             if (Switch.getStatus()) {
@@ -379,7 +379,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             this.setAttribute('values', values);
             this.update();
 
-            var PanelNode = this.getElm().getParent('.qui-panel'),
+            const PanelNode = this.getElm().getParent('.qui-panel'),
                 Panel = QUI.Controls.getById(PanelNode.get('data-quiid'));
 
             if (!Panel) {
@@ -399,10 +399,10 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * @param {Event} event
          */
         $switchCurrencyStatus: function (event) {
-            var Target = event.target;
-            var SwitchContainer = Target.getParent().getElement('.qui-switch');
+            const Target = event.target;
+            const SwitchContainer = Target.getParent().getElement('.qui-switch');
 
-            var Switch = QUI.Controls.getById(
+            const Switch = QUI.Controls.getById(
                 SwitchContainer.get('data-quiid')
             );
 
@@ -468,8 +468,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 return;
             }
 
-            var self = this,
-                text, information;
+            const self = this;
+            let text, information;
 
             if (currencies.length === 1) {
                 text = QUILocale.get(lg, 'window.delete.text', {
@@ -523,7 +523,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * Opens the create dialog
          */
         openCreateDialog: function () {
-            var self = this;
+            const self = this;
 
             new QUIPrompt({
                 icon: 'fa fa-money',
