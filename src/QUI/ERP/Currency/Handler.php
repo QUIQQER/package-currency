@@ -104,21 +104,46 @@ class Handler
         $textData = QUI\Translator::getVarData($localeGroup, $localeText);
         $signData = QUI\Translator::getVarData($localeGroup, $localeSign);
 
-        if (empty($textData)) {
-            QUI\Translator::addUserVar(
+        // text
+        try {
+            QUI\Translator::add(
                 'quiqqer/currency',
                 'currency.' . $currency . '.text',
+                'quiqqer/currency'
+            );
+        } catch (QUI\Exception $e) {
+        }
+
+        if (empty($textData)) {
+            QUI\Translator::edit(
+                'quiqqer/currency',
+                'currency.' . $currency . '.text',
+                'quiqqer/currency',
                 $languageData
             );
         }
 
-        if (empty($signData)) {
-            QUI\Translator::addUserVar(
+        // sign
+        try {
+            QUI\Translator::add(
                 'quiqqer/currency',
                 'currency.' . $currency . '.sign',
-                $languageData
+                'quiqqer/currency'
+            );
+        } catch (QUI\Exception $e) {
+        }
+
+
+        if (empty($signData)) {
+            QUI\Translator::edit(
+                'quiqqer/currency',
+                'currency.' . $currency . '.sign',
+                'quiqqer/currency',
+                $signData
             );
         }
+
+        QUI\Translator::publish('quiqqer/currency');
     }
 
     /**
@@ -134,6 +159,18 @@ class Handler
         QUI::getDataBase()->delete(self::table(), [
             'currency' => $currency
         ]);
+
+        QUI\Translator::delete(
+            'quiqqer/currency',
+            'currency.' . $currency . '.text'
+        );
+
+        QUI\Translator::delete(
+            'quiqqer/currency',
+            'currency.' . $currency . '.sign'
+        );
+
+        QUI\Translator::publish('quiqqer/currency');
     }
 
     /**
@@ -414,7 +451,8 @@ class Handler
     {
         QUI\Permissions\Permission::checkPermission('currency.edit');
 
-        $Currency = self::getCurrency($currency);
+        // check if currency exists
+        self::getCurrency($currency);
 
         $dbData = [];
 
@@ -431,15 +469,27 @@ class Handler
         }
 
         if (isset($data['code'])) {
-            // set locale
-            QUI\Translator::addUserVar(
+            try {
+                QUI\Translator::add(
+                    'quiqqer/currency',
+                    'currency.' . $data['code'] . '.sign',
+                    'quiqqer/currency'
+                );
+            } catch (QUI\Exception $e) {
+            }
+
+
+            QUI\Translator::edit(
                 'quiqqer/currency',
-                'currency.' . $Currency->getCode() . '.sign',
+                'currency.' . $currency . '.sign',
+                'quiqqer/currency',
                 [
                     'en' => $data['code'],
                     'de' => $data['code']
                 ]
             );
+
+            QUI\Translator::publish('quiqqer/currency');
         }
 
         if (isset($data['rate'])) {

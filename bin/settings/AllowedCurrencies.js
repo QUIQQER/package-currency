@@ -27,7 +27,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/currency/bin/settings/AllowedCurrencies',
+        Type: 'package/quiqqer/currency/bin/settings/AllowedCurrencies',
 
         Binds: [
             'refresh',
@@ -78,17 +78,17 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-allowed',
-                html   : '<div class="quiqqer-currency-allowed-container"></div>'
+                html: '<div class="quiqqer-currency-allowed-container"></div>'
             }).wraps(this.$Input);
 
-            const self     = this,
-                  Settings = this.$Elm.getParent('.qui-xml-panel-row-item');
+            const self = this,
+                Settings = this.$Elm.getParent('.qui-xml-panel-row-item');
 
             if (Settings) {
                 Settings.setStyles({
-                    height  : 300,
+                    height: 300,
                     overflow: 'hidden',
-                    width   : '100%'
+                    width: '100%'
                 });
             }
 
@@ -99,71 +99,71 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             let width = this.$Container.getSize().x;
 
             this.$Grid = new Grid(this.$Container, {
-                pagination       : true,
+                pagination: true,
                 multipleSelection: true,
-                height           : 300,
-                width            : width,
-                columnModel      : [
+                height: 300,
+                width: width,
+                columnModel: [
                     {
-                        header   : QUILocale.get(lg, 'grid.setting.currency'),
+                        header: QUILocale.get(lg, 'grid.setting.currency'),
                         dataIndex: 'code',
-                        dataType : 'string',
-                        width    : 60,
-                        editable : true
+                        dataType: 'string',
+                        width: 60,
+                        editable: true
                     },
                     {
-                        header   : QUILocale.get(lg, 'grid.setting.sign'),
+                        header: QUILocale.get(lg, 'grid.setting.sign'),
                         dataIndex: 'sign',
-                        dataType : 'string',
-                        width    : 60,
-                        editable : true
+                        dataType: 'string',
+                        width: 60,
+                        editable: true
                     },
                     {
-                        header   : QUILocale.get(lg, 'grid.setting.rate'),
+                        header: QUILocale.get(lg, 'grid.setting.rate'),
                         dataIndex: 'rate',
-                        dataType : 'string',
-                        width    : 100
+                        dataType: 'string',
+                        width: 100
                     },
                     {
-                        header   : QUILocale.get(lg, 'grid.setting.precision'),
+                        header: QUILocale.get(lg, 'grid.setting.precision'),
                         dataIndex: 'precision',
-                        dataType : 'string',
-                        width    : 100
+                        dataType: 'string',
+                        width: 100
                     },
                     {
-                        header   : QUILocale.get(lg, 'grid.setting.allowed'),
+                        header: QUILocale.get(lg, 'grid.setting.allowed'),
                         dataIndex: 'allowed',
-                        dataType : 'QUI',
-                        width    : 100
+                        dataType: 'QUI',
+                        width: 100
                     },
                     {
-                        header   : QUILocale.get(lg, 'grid.setting.update'),
+                        header: QUILocale.get(lg, 'grid.setting.update'),
                         dataIndex: 'autoupdate',
-                        dataType : 'QUI',
-                        width    : 100
+                        dataType: 'QUI',
+                        width: 100
                     },
                     {
-                        header   : QUILocale.get(lg, 'grid.setting.typeTitle'),
+                        header: QUILocale.get(lg, 'grid.setting.typeTitle'),
                         dataIndex: 'typeTitle',
-                        dataType : 'string',
-                        width    : 100
+                        dataType: 'string',
+                        width: 100
                     }
                 ],
-                buttons          : [
+                buttons: [
                     {
-                        name     : 'add',
-                        text     : QUILocale.get(lg, 'grid.setting.button.add'),
+                        name: 'add',
+                        text: QUILocale.get(lg, 'grid.setting.button.add'),
                         textimage: 'fa fa-plus',
-                        events   : {
+                        events: {
                             onClick: this.openCreateDialog
                         }
                     },
                     {
-                        name     : 'edit',
-                        text     : QUILocale.get(lg, 'grid.setting.button.edit'),
+                        name: 'edit',
+                        text: QUILocale.get(lg, 'grid.setting.button.edit'),
                         textimage: 'fa fa-edit',
-                        disabled : true,
-                        events   : {
+                        disabled: true,
+                        events: {
                             onClick: function () {
                                 self.openUpdateDialog(self.$Grid.getSelectedData()[0].code);
                             }
@@ -173,11 +173,11 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         type: 'separator'
                     },
                     {
-                        name     : 'delete',
-                        text     : QUILocale.get(lg, 'grid.setting.button.delete'),
+                        name: 'delete',
+                        text: QUILocale.get(lg, 'grid.setting.button.delete'),
                         textimage: 'fa fa-trash',
-                        disabled : true,
-                        events   : {
+                        disabled: true,
+                        events: {
                             onClick: function () {
                                 var currencies = self.$Grid.getSelectedData().map(function (C) {
                                     return C.code;
@@ -195,7 +195,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             this.$Grid.addEvents({
                 onClick: function () {
                     var selected = self.$Grid.getSelectedIndices(),
-                        buttons  = self.$Grid.getButtons();
+                        buttons = self.$Grid.getButtons();
 
                     var Edit = buttons.filter(function (Btn) {
                         return Btn.getAttribute('name') === 'edit';
@@ -229,7 +229,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          */
         refresh: function () {
             return this.getCurrencies().then(function (list) {
-                let data   = [],
+                let data = [],
                     values = this.getAttribute('values');
 
                 for (let i in list) {
@@ -241,34 +241,34 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 }
 
                 let perPage = this.$Grid.options.perPage,
-                    page    = this.$Grid.options.page,
-                    start   = (page - 1) * perPage,
-                    total   = data.length;
+                    page = this.$Grid.options.page,
+                    start = (page - 1) * perPage,
+                    total = data.length;
 
                 data = data.splice(start, perPage);
 
                 data.each(function (entry, i) {
                     data[i].allowed = new QUISwitch({
-                        status  : (typeof values[entry.code] !== 'undefined'),
+                        status: (typeof values[entry.code] !== 'undefined'),
                         currency: entry.code,
-                        events  : {
+                        events: {
                             onChange: this.$onCurrencyStatusChange
                         }
                     });
 
                     data[i].autoupdate = new QUISwitch({
-                        status  : entry.autoupdate,
+                        status: entry.autoupdate,
                         currency: entry.code,
-                        events  : {
+                        events: {
                             onChange: this.$changeAutoUpdate
                         }
                     });
                 }.bind(this));
 
                 this.$Grid.setData({
-                    data : data,
+                    data: data,
                     total: total,
-                    page : page
+                    page: page
                 });
 
                 var buttons = this.$Grid.getButtons();
@@ -292,7 +292,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          */
         update: function () {
             var allowed = [],
-                values  = this.getAttribute('values');
+                values = this.getAttribute('values');
 
             if (typeOf(values) === 'object') {
                 for (var i in values) {
@@ -317,7 +317,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_currency_ajax_getCurrencies', resolve, {
                     'package': 'quiqqer/currency',
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -335,9 +335,9 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_delete', resolve, {
-                    'package' : 'quiqqer/currency',
+                    'package': 'quiqqer/currency',
                     currencies: JSON.encode(currencies),
-                    onError   : reject
+                    onError: reject
                 });
             });
         },
@@ -352,8 +352,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_create', resolve, {
                     'package': 'quiqqer/currency',
-                    currency : currency,
-                    onError  : reject
+                    currency: currency,
+                    onError: reject
                 });
             });
         },
@@ -380,7 +380,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             this.update();
 
             var PanelNode = this.getElm().getParent('.qui-panel'),
-                Panel     = QUI.Controls.getById(PanelNode.get('data-quiid'));
+                Panel = QUI.Controls.getById(PanelNode.get('data-quiid'));
 
             if (!Panel) {
                 return;
@@ -418,10 +418,10 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         $changeAutoUpdate: function (Switch) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_setAutoupdate', resolve, {
-                    'package' : 'quiqqer/currency',
-                    currency  : Switch.getAttribute('currency'),
+                    'package': 'quiqqer/currency',
+                    currency: Switch.getAttribute('currency'),
                     autoupdate: Switch.getStatus() ? 1 : 0,
-                    onError   : reject
+                    onError: reject
                 });
             });
         },
@@ -435,7 +435,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_importFromECB', resolve, {
                     'package': 'quiqqer/currency',
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -452,7 +452,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         openUpdateDialog: function (currency) {
             new CurrencyWindow({
                 currency: currency,
-                events  : {
+                events: {
                     onClose: this.refresh
                 }
             }).open();
@@ -488,19 +488,19 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             }
 
             new QUIConfirm({
-                icon       : 'fa fa-trash',
-                texticon   : 'fa fa-trash',
-                title      : QUILocale.get(lg, 'window.delete.title'),
-                text       : text,
+                icon: 'fa fa-trash',
+                texticon: 'fa fa-trash',
+                title: QUILocale.get(lg, 'window.delete.title'),
+                text: text,
                 information: information,
-                ok_button  : {
-                    text     : QUILocale.get('quiqqer/system', 'delete'),
+                ok_button: {
+                    text: QUILocale.get('quiqqer/system', 'delete'),
                     textimage: 'icon-ok fa fa-check'
                 },
-                maxHeight  : 400,
-                maxWidth   : 600,
-                autoclose  : false,
-                events     : {
+                maxHeight: 400,
+                maxWidth: 600,
+                autoclose: false,
+                events: {
                     onSubmit: function (Win) {
                         Win.Loader.show();
                         self.deleteCurrency(currencies).then(function () {
@@ -526,13 +526,13 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             var self = this;
 
             new QUIPrompt({
-                icon       : 'fa fa-money',
-                titleicon  : 'fa fa-money',
-                title      : QUILocale.get(lg, 'window.create.title'),
+                icon: 'fa fa-money',
+                titleicon: 'fa fa-money',
+                title: QUILocale.get(lg, 'window.create.title'),
                 information: QUILocale.get(lg, 'window.create.information'),
-                maxHeight  : 300,
-                maxWidth   : 450,
-                events     : {
+                maxHeight: 300,
+                maxWidth: 450,
+                events: {
                     onSubmit: function (value, Win) {
                         Win.Loader.show();
 
