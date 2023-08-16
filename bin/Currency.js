@@ -17,6 +17,7 @@ define('package/quiqqer/currency/bin/Currency', [
     let Converter = null;
     let def = 'EUR';
     let SYSTEM_CURRENCY = '';
+    let getCurrenciesFetch = false;
 
 
     // package_quiqqer_currency_ajax_setUserCurrency
@@ -33,7 +34,7 @@ define('package/quiqqer/currency/bin/Currency', [
     const Currencies = new Class({
 
         Extends: QUIDOM,
-        Type   : 'package/quiqqer/currency/bin/Currency',
+        Type: 'package/quiqqer/currency/bin/Currency',
 
         initialize: function (options) {
             this.parent(options);
@@ -86,8 +87,8 @@ define('package/quiqqer/currency/bin/Currency', [
                 return new Promise((resolve, reject) => {
                     QUIAjax.get('package_quiqqer_currency_ajax_getCurrency', resolve, {
                         'package': 'quiqqer/currency',
-                        currency : currencyCode,
-                        onError  : reject
+                        currency: currencyCode,
+                        onError: reject
                     });
                 });
             }
@@ -117,14 +118,26 @@ define('package/quiqqer/currency/bin/Currency', [
                 return Promise.resolve(this.$currencies);
             }
 
+            if (getCurrenciesFetch) {
+                return new Promise((resolve) => {
+                    (() => {
+                        this.getCurrencies().then(resolve);
+                    }).delay(50);
+                });
+            }
+
+            getCurrenciesFetch = true;
+
             return new Promise((resolve, reject) => {
                 QUIAjax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', (result) => {
                     this.$currencies = result;
 
                     resolve(this.$currencies);
+
+                    getCurrenciesFetch = false;
                 }, {
                     'package': 'quiqqer/currency',
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -145,7 +158,7 @@ define('package/quiqqer/currency/bin/Currency', [
                     resolve(this.$currencyTypes);
                 }, {
                     'package': 'quiqqer/currency',
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -164,10 +177,10 @@ define('package/quiqqer/currency/bin/Currency', [
 
             return new Promise((resolve) => {
                 QUIAjax.get('package_quiqqer_currency_ajax_convert', resolve, {
-                    'package'   : 'quiqqer/currency',
-                    amount      : amount,
+                    'package': 'quiqqer/currency',
+                    amount: amount,
                     currencyFrom: currencyFrom,
-                    currencyTo  : currencyTo
+                    currencyTo: currencyTo
                 });
             });
         },
@@ -222,7 +235,7 @@ define('package/quiqqer/currency/bin/Currency', [
                             break;
                         }
                     }
-                    
+
                     resolve(result[i].converted);
                 });
             });
