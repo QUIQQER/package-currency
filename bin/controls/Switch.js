@@ -188,13 +188,13 @@ define('package/quiqqer/currency/bin/controls/Switch', [
         /**
          * event: on change
          *
-         * @param Currencies
+         * @param CurrenciesInstance
          * @param currencyCode
          */
-        $onChange: function (Currencies, currencyCode) {
+        $onChange: function (CurrenciesInstance, currencyCode) {
             const self = this;
 
-            Currencies.getCurrency(currencyCode).then(function (Curr) {
+            CurrenciesInstance.getCurrency(currencyCode).then(function (Curr) {
                 self.$Display.set({
                     html: self.$getBtnCurrencySignHtml(Curr.sign) + self.$getBtnCurrencyCodeHtml(Curr.code),
                     title: Curr.text
