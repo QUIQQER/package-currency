@@ -20,7 +20,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/currency/bin/controls/Switch',
+        Type: 'package/quiqqer/currency/bin/controls/Switch',
 
         Binds: [
             'open',
@@ -34,26 +34,26 @@ define('package/quiqqer/currency/bin/controls/Switch', [
         ],
 
         options: {
-            buttonshowsign  : 0, // '1' enables currency sign in button
+            buttonshowsign: 0, // '1' enables currency sign in button
             dropdownshowsign: 1, // '1' enables currency sign in the dropdown
-            showarrow       : 1, // enable button arrow down
-            showloader      : 1, // enable button arrow down
+            showarrow: 1, // enable button arrow down
+            showloader: 1, // enable button arrow down
             dropdownposition: 'left', // 'right', 'left'. stick to right or left bottom control corner
         },
 
         initialize: function (options) {
             this.parent(options);
 
-            this.$Display          = null;
-            this.$DropDown         = null;
-            this.$Arrow            = null;
-            this.$buttonSign       = false;
+            this.$Display = null;
+            this.$DropDown = null;
+            this.$Arrow = null;
+            this.$buttonSign = false;
             this.$dropdownShowSign = false;
-            this.$controlImported  = false;
+            this.$controlImported = false;
 
             this.addEvents({
-                onImport : this.$onImport,
-                onInject : this.$onInject,
+                onImport: this.$onImport,
+                onInject: this.$onInject,
                 onReplace: this.$onReplace,
                 onDestroy: () => {
                     Currencies.removeEvent('onChange', this.$onChange);
@@ -82,13 +82,13 @@ define('package/quiqqer/currency/bin/controls/Switch', [
 
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-switch',
-                html   : '<div class="quiqqer-currency-switch-display">' +
+                html: '<div class="quiqqer-currency-switch-display">' +
                     loaderHtml +
                     '</div>' +
                     '<div class="quiqqer-currency-switch-dd"></div>'
             });
 
-            this.$Display  = this.$Elm.getElement('.quiqqer-currency-switch-display');
+            this.$Display = this.$Elm.getElement('.quiqqer-currency-switch-display');
             this.$DropDown = this.$Elm.getElement('.quiqqer-currency-switch-dd');
 
             if (this.getAttribute('dropdownposition') === 'right') {
@@ -110,10 +110,14 @@ define('package/quiqqer/currency/bin/controls/Switch', [
          */
         $onInject: function () {
             Promise.all([
-                Currencies.getCurrency(),
+                new Promise(function (resolve) {
+                    Currencies.getCurrency().then(resolve).catch(() => {
+                        // use default ist current currency is not allowed
+                        Currencies.getCurrency(window.DEFAULT_CURRENCY).then(resolve);
+                    });
+                }),
                 Currencies.getCurrencies()
             ]).then((result) => {
-
                 // create control body if control use "onImport"
                 if (this.$controlImported) {
                     this.$Elm.set('html', '');
@@ -121,11 +125,11 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     this.create().replaces(Main);
                 }
 
-                const Currency   = result[0],
-                      currencies = result[1];
+                const Currency = result[0],
+                    currencies = result[1];
 
                 this.$Display.set({
-                    html : this.$getBtnCurrencySignHtml(Currency.sign) + this.$getBtnCurrencyCodeHtml(Currency.code),
+                    html: this.$getBtnCurrencySignHtml(Currency.sign) + this.$getBtnCurrencyCodeHtml(Currency.code),
                     title: Currency.text
                 });
 
@@ -147,10 +151,10 @@ define('package/quiqqer/currency/bin/controls/Switch', [
 
                 currencies.each((Entry) => {
                     new Element('div', {
-                        'class'    : 'quiqqer-currency-switch-dd-entry',
-                        html       : this.$getDropdownCurrencySignHtml(Entry.sign) + this.$getDropdownCurrencyCodeHtml(
+                        'class': 'quiqqer-currency-switch-dd-entry',
+                        html: this.$getDropdownCurrencySignHtml(Entry.sign) + this.$getDropdownCurrencyCodeHtml(
                             Entry.code),
-                        events     : {
+                        events: {
                             click: entryClick
                         },
                         'data-code': Entry.code
@@ -165,8 +169,8 @@ define('package/quiqqer/currency/bin/controls/Switch', [
 
                 this.$Elm.set({
                     tabindex: -1,
-                    styles  : {
-                        outline       : 'none',
+                    styles: {
+                        outline: 'none',
                         '-moz-outline': 'none'
                     }
                 });
@@ -176,7 +180,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                         event.target.focus();
                     },
                     focus: this.open,
-                    blur : this.close
+                    blur: this.close
                 });
             });
         },
@@ -192,7 +196,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
 
             Currencies.getCurrency(currencyCode).then(function (Curr) {
                 self.$Display.set({
-                    html : self.$getBtnCurrencySignHtml(Curr.sign) + self.$getBtnCurrencyCodeHtml(Curr.code),
+                    html: self.$getBtnCurrencySignHtml(Curr.sign) + self.$getBtnCurrencyCodeHtml(Curr.code),
                     title: Curr.text
                 });
 
@@ -210,7 +214,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                     ]);
                 }, {
                     'package': 'quiqqer/currency',
-                    currency : Curr.code
+                    currency: Curr.code
                 });
             });
         },
