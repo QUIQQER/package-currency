@@ -145,7 +145,17 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                 });
 
                 const entryClick = function (event) {
-                    Currencies.setCurrency(event.target.get('data-code'));
+                    let Target = event.target;
+
+                    if (!Target.hasClass('quiqqer-currency-switch-dd-entry')) {
+                        Target = Target.getParent('.quiqqer-currency-switch-dd-entry');
+                    }
+
+                    if (!Target) {
+                        return;
+                    }
+
+                    Currencies.setCurrency(Target.get('data-code'));
                 };
 
 
@@ -155,7 +165,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                         html: this.$getDropdownCurrencySignHtml(Entry.sign) + this.$getDropdownCurrencyCodeHtml(
                             Entry.code),
                         events: {
-                            click: entryClick
+                            mousedown: entryClick
                         },
                         'data-code': Entry.code
                     }).inject(this.$DropDown);
@@ -192,24 +202,22 @@ define('package/quiqqer/currency/bin/controls/Switch', [
          * @param currencyCode
          */
         $onChange: function (CurrenciesInstance, currencyCode) {
-            const self = this;
-
-            CurrenciesInstance.getCurrency(currencyCode).then(function (Curr) {
-                self.$Display.set({
-                    html: self.$getBtnCurrencySignHtml(Curr.sign) + self.$getBtnCurrencyCodeHtml(Curr.code),
+            CurrenciesInstance.getCurrency(currencyCode).then((Curr) => {
+                this.$Display.set({
+                    html: this.$getBtnCurrencySignHtml(Curr.sign) + this.$getBtnCurrencyCodeHtml(Curr.code),
                     title: Curr.text
                 });
 
-                QUIAjax.post('package_quiqqer_currency_ajax_setUserCurrency', function () {
+                QUIAjax.post('package_quiqqer_currency_ajax_setUserCurrency', () => {
                     window.DEFAULT_USER_CURRENCY = Curr;
 
-                    self.fireEvent('changeCurrency', [
-                        self,
+                    this.fireEvent('changeCurrency', [
+                        this,
                         Curr
                     ]);
 
                     QUI.fireEvent('quiqqerCurrencyChange', [
-                        self,
+                        this,
                         Curr
                     ]);
                 }, {
