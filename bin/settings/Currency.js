@@ -26,7 +26,7 @@ define('package/quiqqer/currency/bin/settings/Currency', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/currency/bin/settings/Currency',
+        Type: 'package/quiqqer/currency/bin/settings/Currency',
 
         Binds: [
             '$onInject'
@@ -39,15 +39,15 @@ define('package/quiqqer/currency/bin/settings/Currency', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$Form      = null;
-            this.$Code      = null;
-            this.$Rate      = null;
+            this.$Form = null;
+            this.$Code = null;
+            this.$Rate = null;
             this.$Precision = null;
 
             this.Loader = new QUILoader();
 
-            this.$TranslationTitle   = null;
-            this.$TranslationSign    = null;
+            this.$TranslationTitle = null;
+            this.$TranslationSign = null;
             this.$CurrencyTypeSelect = null;
 
             this.$ExtraSettingsContainer = null;
@@ -65,15 +65,15 @@ define('package/quiqqer/currency/bin/settings/Currency', [
         create: function () {
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-setting',
-                html   : Mustache.render(template, {
-                    currencyTitle          : QUILocale.get('quiqqer/system', 'title'),
-                    currencyCode           : QUILocale.get(lg, 'control.currency.code'),
-                    currencySign           : QUILocale.get(lg, 'control.currency.sign'),
-                    currencyExchangeRate   : QUILocale.get(lg, 'control.currency.rate'),
+                html: Mustache.render(template, {
+                    currencyTitle: QUILocale.get('quiqqer/system', 'title'),
+                    currencyCode: QUILocale.get(lg, 'control.currency.code'),
+                    currencySign: QUILocale.get(lg, 'control.currency.sign'),
+                    currencyExchangeRate: QUILocale.get(lg, 'control.currency.rate'),
                     currencyCodeDescription: QUILocale.get(lg, 'control.currency.code.decription'),
-                    currencyPrecision      : QUILocale.get(lg, 'control.currency.precision'),
-                    titleCurrencyType      : QUILocale.get(lg, 'control.currency.titleCurrencyType'),
-                    currencyType           : QUILocale.get(lg, 'control.currency.currencyType')
+                    currencyPrecision: QUILocale.get(lg, 'control.currency.precision'),
+                    titleCurrencyType: QUILocale.get(lg, 'control.currency.titleCurrencyType'),
+                    currencyType: QUILocale.get(lg, 'control.currency.currencyType')
                 })
             });
 
@@ -81,9 +81,9 @@ define('package/quiqqer/currency/bin/settings/Currency', [
 
             this.$Form = this.$Elm.getElement('form');
 
-            this.$Code               = this.$Form.elements.code;
-            this.$Rate               = this.$Form.elements.rate;
-            this.$Precision          = this.$Form.elements.precision;
+            this.$Code = this.$Form.elements.code;
+            this.$Rate = this.$Form.elements.rate;
+            this.$Precision = this.$Form.elements.precision;
             this.$CurrencyTypeSelect = this.$Form.elements.type;
 
             this.$ExtraSettingsContainer = this.$Elm.getElement('.quiqqer-currency-setting-extra');
@@ -96,17 +96,19 @@ define('package/quiqqer/currency/bin/settings/Currency', [
          */
         $onInject: function () {
             const TitleContainer = this.getElm().getElement('.currency-title'),
-                  SignContainer  = this.getElm().getElement('.currency-sign'),
-                  currency       = this.getAttribute('currency');
+                SignContainer = this.getElm().getElement('.currency-sign'),
+                currency = this.getAttribute('currency');
 
             this.$TranslationTitle = new Translation({
                 'group': 'quiqqer/currency',
-                'var'  : 'currency.' + currency + '.text'
+                'var': 'currency.' + currency + '.text',
+                'package': 'quiqqer/currency'
             }).inject(TitleContainer);
 
             this.$TranslationSign = new Translation({
                 'group': 'quiqqer/currency',
-                'var'  : 'currency.' + currency + '.sign'
+                'var': 'currency.' + currency + '.sign',
+                'package': 'quiqqer/currency'
             }).inject(SignContainer);
 
 
@@ -116,18 +118,18 @@ define('package/quiqqer/currency/bin/settings/Currency', [
                 Currencies.getCurrency(this.getAttribute('currency'), true),
                 Currencies.getCurrencyTypes()
             ]).then((result) => {
-                const Currency      = result[0];
+                const Currency = result[0];
                 const currencyTypes = result[1];
 
-                this.$Code.value      = Currency.code;
-                this.$Rate.value      = Currency.rate;
+                this.$Code.value = Currency.code;
+                this.$Rate.value = Currency.rate;
                 this.$Precision.value = Currency.precision;
 
                 // Load select with currency types
                 currencyTypes.forEach((CurrencyType) => {
                     new Element('option', {
                         value: CurrencyType.type,
-                        html : CurrencyType.typeTitle
+                        html: CurrencyType.typeTitle
                     }).inject(this.$CurrencyTypeSelect);
                 });
 
@@ -179,12 +181,12 @@ define('package/quiqqer/currency/bin/settings/Currency', [
                     this.$TranslationSign.save()
                 ]).then(() => {
                     QUIAjax.post('package_quiqqer_currency_ajax_update', resolve, {
-                        'package' : 'quiqqer/currency',
-                        currency  : this.getAttribute('currency'),
-                        code      : this.$Code.value,
-                        rate      : this.$Rate.value,
-                        precision : this.$Precision.value,
-                        type      : this.$CurrencyTypeSelect.value,
+                        'package': 'quiqqer/currency',
+                        currency: this.getAttribute('currency'),
+                        code: this.$Code.value,
+                        rate: this.$Rate.value,
+                        precision: this.$Precision.value,
+                        type: this.$CurrencyTypeSelect.value,
                         customData: JSON.encode(QUIFormUtils.getDataFromNode(this.$ExtraSettingsContainer))
                     });
                 });
