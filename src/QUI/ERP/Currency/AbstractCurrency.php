@@ -317,7 +317,9 @@ abstract class AbstractCurrency implements CurrencyInterface
      */
     public function convertFormat($amount, $Currency): string
     {
-        $Currency = Handler::getCurrency($Currency);
+        if (!($Currency instanceof Currency)) {
+            $Currency = Handler::getCurrency($Currency);
+        }
 
         return $Currency->format(
             $this->convert($amount, $Currency)
