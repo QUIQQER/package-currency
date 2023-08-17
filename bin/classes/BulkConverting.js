@@ -14,8 +14,9 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
     "use strict";
 
     return new Class({
+
         Extends: QUIDOM,
-        Type   : 'package/quiqqer/currency/bin/classes/BulkConverting',
+        Type: 'package/quiqqer/currency/bin/classes/BulkConverting',
 
         options: {
             delay: 200
@@ -45,10 +46,19 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
          * @param currencyTo
          */
         add: function (amount, currencyFrom, currencyTo) {
+            // if already at the converting list
+            // we don't need it
+            for (let i = 0, len = this.$bulk.length; i < len; i++) {
+                if (this.$bulk.amount === amount && this.$bulk.from === currencyFrom && this.$bulk.to === currencyTo) {
+                    return;
+                }
+            }
+
             this.$bulk.push({
                 amount: amount,
-                from  : currencyFrom,
-                to    : currencyTo
+                from: currencyFrom,
+                to: currencyTo,
+                id: String.uniqueID()
             });
 
             if (!this.$running) {
@@ -66,6 +76,12 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
          * @return {Promise}
          */
         convert: function () {
+            let list = {};
+
+            this.$bulk.forEach((bulkEntry) => {
+                list[bulkEntry.id] = bulkEntry;
+            });
+
             return new Promise((resolve) => {
                 QUIAjax.get('package_quiqqer_currency_ajax_convertWithSign', (result) => {
                     this.fireEvent('done', [
@@ -73,15 +89,27 @@ define('package/quiqqer/currency/bin/classes/BulkConverting', [
                         result
                     ]);
 
-                    this.$bulk = []; // cleanup bulk
+                    this.$cleanupBulk(result);
                     this.$running = false;
+
+                    if (this.$bulk.length) {
+                        return this.convert().then(resolve);
+                    }
+
                     resolve();
                 }, {
                     'package': 'quiqqer/currency',
-                    data     : JSON.encode(this.$bulk),
-                    onError  : resolve
+                    data: JSON.encode(list),
+                    onError: resolve
                 });
             });
+        },
+
+        $cleanupBulk: function (result) {
+            const resultAmounts = new Set(result.map(item => item.amount));
+            const filteredBulk = this.$bulk.filter(item => !resultAmounts.has(item.amount));
+
+            this.$bulk = filteredBulk;
         }
     });
 });
