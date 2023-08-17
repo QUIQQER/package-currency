@@ -236,6 +236,10 @@ define('package/quiqqer/currency/bin/Currency', [
                         }
                     }
 
+                    if (typeof result[i] === 'undefined' || typeof result[i].converted === 'undefined') {
+                        return;
+                    }
+
                     resolve(result[i].converted);
                 });
             });

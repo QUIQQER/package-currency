@@ -25,7 +25,8 @@ QUI::$Ajax->registerFunction(
                 'amount' => $entry['amount'],
                 'from' => $entry['from'],
                 'to' => $entry['to'],
-                'converted' => QUI\ERP\Currency\Calc::convertWithSign($amount, $currencyFrom, $currencyTo)
+                'converted' => QUI\ERP\Currency\Calc::convertWithSign($amount, $currencyFrom, $currencyTo),
+                'id' => $entry['id']
             ];
         }
 
