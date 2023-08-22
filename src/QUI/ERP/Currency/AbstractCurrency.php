@@ -12,6 +12,9 @@ use QUI;
 use function array_key_exists;
 use function floatval;
 use function is_array;
+use function is_float;
+use function is_int;
+use function is_numeric;
 use function is_string;
 use function preg_replace;
 use function round;
@@ -174,12 +177,16 @@ abstract class AbstractCurrency implements CurrencyInterface
      * Return the float amount for the currency
      * example for the most currencies -> 0.11223 = 0.11
      *
-     * @param float|string $amount
+     * @param float|int|string $amount
      * @param null|QUI\Locale $Locale -optional
      * @return float
      */
     public function amount($amount, QUI\Locale $Locale = null): float
     {
+        if (is_float($amount) || is_int($amount)) {
+            return $amount;
+        }
+
         if (!$Locale) {
             $Locale = $this->Locale;
         }
