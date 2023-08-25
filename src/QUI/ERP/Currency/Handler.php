@@ -480,7 +480,7 @@ class Handler
         if (!empty($data['customData'])) {
             $dbData['customData'] = json_encode($data['customData']);
         }
-        
+
         if (isset($data['rate'])) {
             $dbData['rate'] = floatval($data['rate']);
         }
