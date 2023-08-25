@@ -10,9 +10,10 @@ define('package/quiqqer/currency/bin/controls/Select', [
 
     'qui/QUI',
     'qui/controls/elements/Select',
+    'package/quiqqer/currency/bin/Currency',
     'Locale'
 
-], function(QUI, QUIElementSelect, QUILocale) {
+], function(QUI, QUIElementSelect, Currencies, QUILocale) {
     'use strict';
 
     const lg = 'quiqqer/currency';
@@ -62,7 +63,41 @@ define('package/quiqqer/currency/bin/controls/Select', [
          * @returns {Promise}
          */
         currencySearch: function(value) {
-            return new Promise();
+            return new Promise((resolve) => {
+                require(['package/quiqqer/currency/bin/settings/AllowedCurrencies'], (AllowedCurrencies) => {
+                    let GetCurrencies;
+
+                    if (this.getAttribute('onlyAllowed')) {
+                        GetCurrencies = Currencies.getCurrencies();
+                    } else {
+                        GetCurrencies = new AllowedCurrencies().getCurrencies();
+                    }
+
+                    GetCurrencies.then((list) => {
+                        let result = [], data;
+                        value = value.toLowerCase();
+
+
+                        for (let currency in list) {
+                            if (!list.hasOwnProperty(currency)) {
+                                continue;
+                            }
+
+                            data = list[currency];
+                            
+                            if (data.text.toLowerCase().indexOf(value) !== -1) {
+                                result.push({
+                                    icon: 'fa fa-money',
+                                    title: '#' + data.code + ' - <b>' + data.text + '</b>',
+                                    id: data.code
+                                });
+                            }
+                        }
+
+                        resolve(result);
+                    });
+                });
+            });
         },
 
         /**
@@ -80,8 +115,6 @@ define('package/quiqqer/currency/bin/controls/Select', [
                 new Search({
                     events: {
                         onSubmit: function(Win, values) {
-                            console.log(values);
-
                             for (let i = 0, len = values.length; i < len; i++) {
                                 self.addItem(values[i]);
                             }
