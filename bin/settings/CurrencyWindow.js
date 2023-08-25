@@ -9,12 +9,13 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
     'Locale',
     'package/quiqqer/currency/bin/settings/Currency'
 
-], function (QUI, QUIConfirm, QUILocale, Currency) {
-    "use strict";
+], function(QUI, QUIConfirm, QUILocale, Currency) {
+    'use strict';
 
     return new Class({
+        
         Extends: QUIConfirm,
-        Type   : 'package/quiqqer/currency/bin/settings/CurrencyWindow',
+        Type: 'package/quiqqer/currency/bin/settings/CurrencyWindow',
 
         Binds: [
             '$onOpen',
@@ -22,16 +23,16 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
         ],
 
         options: {
-            currency : false,
-            icon     : 'fa fa-money',
-            title    : false,
-            texticon : false,
+            currency: false,
+            icon: 'fa fa-money',
+            title: false,
+            texticon: false,
             autoclose: false,
             maxHeight: 600,
-            maxWidth : 600
+            maxWidth: 600
         },
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.setAttribute(
                 'title',
                 QUILocale.get('quiqqer/currency', 'control.currency.title', {
@@ -44,7 +45,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
             this.$Currency = null;
 
             this.addEvents({
-                onOpen  : this.$onOpen,
+                onOpen: this.$onOpen,
                 onSubmit: this.$onSubmit
             });
         },
@@ -52,7 +53,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
         /**
          * event : on open
          */
-        $onOpen: function () {
+        $onOpen: function() {
             this.$Currency = new Currency({
                 currency: this.getAttribute('currency')
             }).inject(this.getContent());
@@ -61,10 +62,10 @@ define('package/quiqqer/currency/bin/settings/CurrencyWindow', [
         /**
          * event : on submit
          */
-        $onSubmit: function () {
+        $onSubmit: function() {
             this.Loader.show();
 
-            this.$Currency.save().then(function () {
+            this.$Currency.save().then(function() {
                 this.Loader.hide();
                 this.close();
             }.bind(this));
