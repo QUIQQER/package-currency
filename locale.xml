@@ -62,7 +62,7 @@
         </locale>
         <locale name="control.currency.sign">
             <de><![CDATA[Währungsszeichen]]></de>
-            <en><![CDATA[Currency code]]></en>
+            <en><![CDATA[Currency sign]]></en>
         </locale>
         <locale name="control.currency.rate">
             <de><![CDATA[Umrechnungskurs]]></de>
