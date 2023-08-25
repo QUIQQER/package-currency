@@ -146,10 +146,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
 
             return new Promise((resolve, reject) => {
 
-                require([
-                    'package/quiqqer/currency/bin/Currency',
-                    'package/quiqqer/currency/bin/settings/AllowedCurrencies'
-                ], (Currencies, AllowedCurrencies) => {
+                require(['package/quiqqer/currency/bin/settings/AllowedCurrencies'], (AllowedCurrencies) => {
                     let GetCurrencies;
 
                     if (this.getAttribute('onlyAllowed')) {
@@ -160,7 +157,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
 
                     GetCurrencies.then((list) => {
                         let data = [];
-                        
+
                         for (let code in list) {
                             if (!list.hasOwnProperty(code)) {
                                 continue;

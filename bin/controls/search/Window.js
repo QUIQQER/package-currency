@@ -63,7 +63,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
          * @returns {HTMLDivElement}
          */
         $onOpen: function(Win) {
-            var self = this,
+            const self = this,
                 Content = Win.getContent();
 
             Content.set('html', '');
@@ -101,7 +101,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
          * @fires onSubmit
          */
         submit: function() {
-            var selected = this.$Search.getSelectedData();
+            let selected = this.$Search.getSelectedData();
 
             if (!selected.length) {
                 return;
