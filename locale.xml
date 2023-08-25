@@ -601,5 +601,13 @@
             <de><![CDATA[&nbsp;]]></de>
             <en><![CDATA[&nbsp;]]></en>
         </locale>
+        <locale name="control.select.search.placeholder">
+            <de><![CDATA[Währungen suchen ...]]></de>
+            <en><![CDATA[Search for a currency ...]]></en>
+        </locale>
+        <locale name="window.search.title">
+            <de><![CDATA[Währungen suchen ...]]></de>
+            <en><![CDATA[Search for a currency ...]]></en>
+        </locale>
     </groups>
 </locales>
