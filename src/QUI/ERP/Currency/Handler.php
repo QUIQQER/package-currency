@@ -14,6 +14,7 @@ use function is_string;
 use function json_decode;
 use function json_encode;
 use function mb_strtolower;
+use function mb_substr;
 
 /**
  * Currency class
@@ -103,6 +104,17 @@ class Handler
         $textData = QUI\Translator::getVarData($localeGroup, $localeText);
         $signData = QUI\Translator::getVarData($localeGroup, $localeSign);
 
+        foreach (QUI::availableLanguages() as $language) {
+            if (!isset($textData[$language])) {
+                $textData[$language] = $currency;
+            }
+
+            if (!isset($signData[$language])) {
+                $signData[$language] = mb_substr($currency, 0, 1);
+            }
+        }
+
+
         // text
         try {
             QUI\Translator::add(
@@ -113,12 +125,12 @@ class Handler
         } catch (QUI\Exception $e) {
         }
 
-        if (empty($textData)) {
+        if (!empty($textData)) {
             QUI\Translator::edit(
                 'quiqqer/currency',
                 'currency.' . $currency . '.text',
                 'quiqqer/currency',
-                $languageData
+                $textData
             );
         }
 
@@ -133,7 +145,7 @@ class Handler
         }
 
 
-        if (empty($signData)) {
+        if (!empty($signData)) {
             QUI\Translator::edit(
                 'quiqqer/currency',
                 'currency.' . $currency . '.sign',
@@ -468,31 +480,7 @@ class Handler
         if (!empty($data['customData'])) {
             $dbData['customData'] = json_encode($data['customData']);
         }
-
-        if (isset($data['code'])) {
-            try {
-                QUI\Translator::add(
-                    'quiqqer/currency',
-                    'currency.' . $data['code'] . '.sign',
-                    'quiqqer/currency'
-                );
-            } catch (QUI\Exception $e) {
-            }
-
-
-            QUI\Translator::edit(
-                'quiqqer/currency',
-                'currency.' . $currency . '.sign',
-                'quiqqer/currency',
-                [
-                    'en' => $data['code'],
-                    'de' => $data['code']
-                ]
-            );
-
-            QUI\Translator::publish('quiqqer/currency');
-        }
-
+        
         if (isset($data['rate'])) {
             $dbData['rate'] = floatval($data['rate']);
         }
