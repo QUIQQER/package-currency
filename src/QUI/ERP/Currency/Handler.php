@@ -297,20 +297,24 @@ class Handler
      * Return all allowed currencies
      *
      * @return Currency[] - [Currency, Currency, Currency]
-     * @throws QUI\Exception
      */
     public static function getAllowedCurrencies(): array
     {
-        $Config = QUI::getPackage('quiqqer/currency')->getConfig();
-        $allowed = $Config->getValue('currency', 'allowedCurrencies');
+        try {
+            $Config = QUI::getPackage('quiqqer/currency')->getConfig();
+            $allowed = $Config->getValue('currency', 'allowedCurrencies');
 
-        $allowed = explode(',', trim($allowed));
-        $list = [];
+            $allowed = explode(',', trim($allowed));
+            $list = [];
 
-        $default = self::getDefaultCurrency()->getCode();
+            $default = self::getDefaultCurrency()->getCode();
 
-        if (!in_array($default, $allowed)) {
-            $allowed[] = $default;
+            if (!in_array($default, $allowed)) {
+                $allowed[] = $default;
+            }
+        } catch (QUI\Exception $e) {
+            QUI\System\Log::addError($e->getMessage());
+            return [];
         }
 
         foreach ($allowed as $currency) {
@@ -579,7 +583,7 @@ class Handler
                     ];
                 }
             } catch (QUI\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
+                QUI\System\Log::addNotice($Exception->getMessage());
             }
         }
 
