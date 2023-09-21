@@ -583,7 +583,7 @@ class Handler
                     ];
                 }
             } catch (QUI\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
+                QUI\System\Log::addNotice($Exception->getMessage());
             }
         }
 
