@@ -19,8 +19,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
     'css!package/quiqqer/currency/bin/settings/AllowedCurrencies.css'
 
-], function (QUI, QUIControl, QUISwitch, QUIConfirm, QUIPrompt, QUIAjax, QUILocale, Grid, CurrencyWindow) {
-    "use strict";
+], function(QUI, QUIControl, QUISwitch, QUIConfirm, QUIPrompt, QUIAjax, QUILocale, Grid, CurrencyWindow) {
+    'use strict';
 
     const lg = 'quiqqer/currency';
 
@@ -43,7 +43,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             values: {}
         },
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.parent(options);
 
             this.$Input = null;
@@ -59,7 +59,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         /**
          * event : on import
          */
-        $onImport: function () {
+        $onImport: function() {
             let i, len;
 
             this.$Input = this.getElm();
@@ -164,7 +164,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         textimage: 'fa fa-edit',
                         disabled: true,
                         events: {
-                            onClick: function () {
+                            onClick: function() {
                                 self.openUpdateDialog(self.$Grid.getSelectedData()[0].code);
                             }
                         }
@@ -178,8 +178,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                         textimage: 'fa fa-trash',
                         disabled: true,
                         events: {
-                            onClick: function () {
-                                const currencies = self.$Grid.getSelectedData().map(function (C) {
+                            onClick: function() {
+                                const currencies = self.$Grid.getSelectedData().map(function(C) {
                                     return C.code;
                                 });
 
@@ -193,28 +193,30 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             this.$Grid.setWidth(width);
 
             this.$Grid.addEvents({
-                onClick: function () {
+                onClick: function() {
                     const selected = self.$Grid.getSelectedIndices(),
                         buttons = self.$Grid.getButtons();
 
-                    const Edit = buttons.filter(function (Btn) {
+                    const Edit = buttons.filter(function(Btn) {
                         return Btn.getAttribute('name') === 'edit';
                     })[0];
 
-                    const Delete = buttons.filter(function (Btn) {
+                    const Delete = buttons.filter(function(Btn) {
                         return Btn.getAttribute('name') === 'delete';
                     })[0];
 
                     if (selected.length === 1) {
                         Edit.enable();
                         Delete.enable();
-                    } else if (selected.length > 1) {
-                        Edit.disable();
-                        Delete.enable();
+                    } else {
+                        if (selected.length > 1) {
+                            Edit.disable();
+                            Delete.enable();
+                        }
                     }
                 },
 
-                onDblClick: function () {
+                onDblClick: function() {
                     self.openUpdateDialog(self.$Grid.getSelectedData()[0].code);
                 },
 
@@ -227,8 +229,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         /**
          * refresh the currency list
          */
-        refresh: function () {
-            return this.getCurrencies().then(function (list) {
+        refresh: function() {
+            return this.getCurrencies().then(function(list) {
                 let data = [],
                     values = this.getAttribute('values');
 
@@ -247,7 +249,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
                 data = data.splice(start, perPage);
 
-                data.each(function (entry, i) {
+                data.each(function(entry, i) {
                     data[i].allowed = new QUISwitch({
                         status: (typeof values[entry.code] !== 'undefined'),
                         currency: entry.code,
@@ -273,11 +275,11 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
                 const buttons = this.$Grid.getButtons();
 
-                const Edit = buttons.filter(function (Btn) {
+                const Edit = buttons.filter(function(Btn) {
                     return Btn.getAttribute('name') === 'edit';
                 })[0];
 
-                const Delete = buttons.filter(function (Btn) {
+                const Delete = buttons.filter(function(Btn) {
                     return Btn.getAttribute('name') === 'delete';
                 })[0];
 
@@ -290,7 +292,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         /**
          * update values to the input field
          */
-        update: function () {
+        update: function() {
             const allowed = [],
                 values = this.getAttribute('values');
 
@@ -313,8 +315,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * Return all available currencies
          * @returns {Promise}
          */
-        getCurrencies: function () {
-            return new Promise(function (resolve, reject) {
+        getCurrencies: function() {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.get('package_quiqqer_currency_ajax_getCurrencies', resolve, {
                     'package': 'quiqqer/currency',
                     onError: reject
@@ -328,12 +330,12 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * @param {Array|String} currencies
          * @returns {Promise}
          */
-        deleteCurrency: function (currencies) {
+        deleteCurrency: function(currencies) {
             if (typeOf(currencies) === 'string') {
                 currencies = [currencies];
             }
 
-            return new Promise(function (resolve, reject) {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_delete', resolve, {
                     'package': 'quiqqer/currency',
                     currencies: JSON.encode(currencies),
@@ -348,8 +350,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * @param {String} currency
          * @returns {Promise}
          */
-        createCurrency: function (currency) {
-            return new Promise(function (resolve, reject) {
+        createCurrency: function(currency) {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_create', resolve, {
                     'package': 'quiqqer/currency',
                     currency: currency,
@@ -363,7 +365,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          *
          * @param {Object} Switch
          */
-        $onCurrencyStatusChange: function (Switch) {
+        $onCurrencyStatusChange: function(Switch) {
             const currency = Switch.getAttribute('currency');
             const values = this.getAttribute('values');
 
@@ -398,7 +400,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          *
          * @param {Event} event
          */
-        $switchCurrencyStatus: function (event) {
+        $switchCurrencyStatus: function(event) {
             const Target = event.target;
             const SwitchContainer = Target.getParent().getElement('.qui-switch');
 
@@ -415,8 +417,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * @param {Object} Switch
          * @return {Promise}
          */
-        $changeAutoUpdate: function (Switch) {
-            return new Promise(function (resolve, reject) {
+        $changeAutoUpdate: function(Switch) {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_setAutoupdate', resolve, {
                     'package': 'quiqqer/currency',
                     currency: Switch.getAttribute('currency'),
@@ -431,8 +433,8 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          *
          * @returns {Promise}
          */
-        $importFromECB: function () {
-            return new Promise(function (resolve, reject) {
+        $importFromECB: function() {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.post('package_quiqqer_currency_ajax_importFromECB', resolve, {
                     'package': 'quiqqer/currency',
                     onError: reject
@@ -449,7 +451,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          *
          * @param {String} currency
          */
-        openUpdateDialog: function (currency) {
+        openUpdateDialog: function(currency) {
             new CurrencyWindow({
                 currency: currency,
                 events: {
@@ -463,7 +465,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          *
          * @param {Array} currencies
          */
-        openDeleteDialog: function (currencies) {
+        openDeleteDialog: function(currencies) {
             if (!currencies.length) {
                 return;
             }
@@ -501,17 +503,17 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 maxWidth: 600,
                 autoclose: false,
                 events: {
-                    onSubmit: function (Win) {
+                    onSubmit: function(Win) {
                         Win.Loader.show();
-                        self.deleteCurrency(currencies).then(function () {
+                        self.deleteCurrency(currencies).then(function() {
 
-                            self.refresh().then(function () {
+                            self.refresh().then(function() {
                                 self.update();
                                 Win.Loader.hide();
                                 Win.close();
                             });
 
-                        }, function () {
+                        }, function() {
                             Win.Loader.hide();
                         });
                     }
@@ -522,7 +524,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         /**
          * Opens the create dialog
          */
-        openCreateDialog: function () {
+        openCreateDialog: function() {
             const self = this;
 
             new QUIPrompt({
@@ -533,13 +535,13 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 maxHeight: 300,
                 maxWidth: 450,
                 events: {
-                    onSubmit: function (value, Win) {
+                    onSubmit: function(value, Win) {
                         Win.Loader.show();
 
-                        self.createCurrency(value).then(function () {
+                        self.createCurrency(value).then(function() {
                             Win.close();
                             self.openUpdateDialog(value);
-                        }, function () {
+                        }, function() {
                             Win.Loader.hide();
                         });
                     }
