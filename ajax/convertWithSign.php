@@ -20,12 +20,29 @@ QUI::$Ajax->registerFunction(
             $amount = $entry['amount'];
             $currencyFrom = $entry['from'];
             $currencyTo = $entry['to'];
+            $converted = QUI\ERP\Currency\Calc::convert($amount, $currencyFrom, $currencyTo);
+            $convertedRound = $converted;
+
+            $numberAsString = strval($converted);
+            $exploded = explode('.', $numberAsString);
+            $numberOfDecimalPlaces = isset($exploded[1]) ? strlen($exploded[1]) : 0;
+
+            if ($numberOfDecimalPlaces > 4) {
+                $CurrencyTo = QUI\ERP\Currency\Handler::getCurrency($currencyTo);
+
+                $priceRounded = round($converted, 4);
+                $PriceDisplay = new QUI\ERP\Money\Price($priceRounded, $CurrencyTo);
+                $convertedRound = '~' . $PriceDisplay->getDisplayPrice();
+            } else {
+                $convertedRound = QUI\ERP\Currency\Calc::convertWithSign($convertedRound, $currencyFrom, $currencyTo);
+            }
 
             $result[] = [
                 'amount' => $entry['amount'],
                 'from' => $entry['from'],
                 'to' => $entry['to'],
                 'converted' => QUI\ERP\Currency\Calc::convertWithSign($amount, $currencyFrom, $currencyTo),
+                'convertedRound' => $convertedRound,
                 'id' => $entry['id']
             ];
         }

@@ -7,6 +7,7 @@
 namespace QUI\ERP\Currency;
 
 use QUI;
+use QUI\Package\Package;
 
 use function json_encode;
 
@@ -40,5 +41,21 @@ class EventHandler
                 </script>'
             );
         }
+    }
+
+    /**
+     * Clears the currency list cache if the package config of 'quiqqer/currency' is saved
+     *
+     * @param Package $Package The package object.
+     * @param array $params Additional parameters passed to the method.
+     * @return void
+     */
+    public static function onPackageConfigSave(Package $Package, array $params)
+    {
+        if ($Package->getName() !== 'quiqqer/currency') {
+            return;
+        }
+
+        QUI\Cache\Manager::clear('quiqqer/currency/list');
     }
 }
