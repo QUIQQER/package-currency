@@ -240,6 +240,14 @@ abstract class AbstractCurrency implements CurrencyInterface
             $amount = 0;
         }
 
+        // double precision bug
+        if ($this->precision > 2) {
+            // 0.93134354524138 MEM wurde durch den formatter zu 0.9313435452413777 MEM angezeigt
+            // problem:double precision
+            $amount = (string)$amount;
+            $amount = floatval($amount);
+        }
+
         $code = $this->getCode();
 
         if (mb_strlen($code) <= 3) {
