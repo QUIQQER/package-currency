@@ -10,6 +10,8 @@
  * @return array
  */
 
+use QUI\ERP\Currency\Handler;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_currency_ajax_convertWithSign',
     function ($data) {
@@ -27,7 +29,10 @@ QUI::$Ajax->registerFunction(
             $exploded = explode('.', $numberAsString);
             $numberOfDecimalPlaces = isset($exploded[1]) ? strlen($exploded[1]) : 0;
 
-            if ($numberOfDecimalPlaces > 4) {
+            if (
+                Handler::getCurrency($currencyTo)->getCurrencyType() !== Handler::CURRENCY_TYPE_DEFAULT
+                && $numberOfDecimalPlaces > 4
+            ) {
                 $CurrencyTo = QUI\ERP\Currency\Handler::getCurrency($currencyTo);
 
                 $priceRounded = round($converted, 4);
