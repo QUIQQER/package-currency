@@ -38,7 +38,7 @@
             </params>
 
             <categories>
-                <category name="currencies" index="2">
+                <category name="currencies">
 
                     <text>
                         <locale group="quiqqer/currency" var="currency.title"/>
