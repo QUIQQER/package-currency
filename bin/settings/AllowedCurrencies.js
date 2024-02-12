@@ -60,11 +60,10 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
          * event : on import
          */
         $onImport: function() {
-            let i, len;
-
             this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
+            /*
             if (this.$Input.value !== '') {
                 let values = {};
                 let value = this.$Input.value.split(',');
@@ -75,6 +74,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
 
                 this.setAttribute('values', values);
             }
+            */
 
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-allowed',
@@ -101,7 +101,7 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
             this.$Grid = new Grid(this.$Container, {
                 pagination: true,
                 multipleSelection: true,
-                height: 300,
+                height: 400,
                 width: width,
                 columnModel: [
                     {
@@ -223,14 +223,33 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 onRefresh: this.refresh
             });
 
-            this.$Grid.refresh();
+            this.$Grid.showLoader();
+
+            this.getAllowedCurrencies().then((result) => {
+                this.$Input.value = result.map((currency) => {
+                    return currency.code;
+                }).join(',');
+
+                let i, len;
+                let values = {};
+                let value = this.$Input.value.split(',');
+
+                for (i = 0, len = value.length; i < len; i++) {
+                    values[value[i]] = 1;
+                }
+
+                this.setAttribute('values', values);
+                this.$Grid.refresh();
+            });
         },
 
         /**
          * refresh the currency list
          */
         refresh: function() {
-            return this.getCurrencies().then(function(list) {
+            this.$Grid.showLoader();
+
+            return this.getCurrencies().then((list) => {
                 let data = [],
                     values = this.getAttribute('values');
 
@@ -286,7 +305,9 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
                 Edit.disable();
                 Delete.disable();
 
-            }.bind(this));
+                this.$Grid.hideLoader();
+
+            });
         },
 
         /**
@@ -318,6 +339,20 @@ define('package/quiqqer/currency/bin/settings/AllowedCurrencies', [
         getCurrencies: function() {
             return new Promise(function(resolve, reject) {
                 QUIAjax.get('package_quiqqer_currency_ajax_getCurrencies', resolve, {
+                    'package': 'quiqqer/currency',
+                    onError: reject
+                });
+            });
+        },
+
+        /**
+         * Return all allowed (active) currencies
+         *
+         * @returns {Promise}
+         */
+        getAllowedCurrencies: function() {
+            return new Promise((resolve, reject) => {
+                QUIAjax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', resolve, {
                     'package': 'quiqqer/currency',
                     onError: reject
                 });
