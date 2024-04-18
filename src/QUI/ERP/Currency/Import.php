@@ -26,14 +26,14 @@ class Import
      *
      * @throws QUI\Exception
      */
-    public static function importCurrenciesFromECB()
+    public static function importCurrenciesFromECB(): void
     {
         $values = self::getECBData();
 
         foreach ($values as $currency => $rate) {
             try {
                 Handler::getCurrency($currency);
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
                 // currency not exists, we must create it
                 Handler::createCurrency($currency, $rate);
             }
@@ -50,7 +50,7 @@ class Import
      *
      * @throws QUI\Exception
      */
-    public static function import()
+    public static function import(): void
     {
         $values = self::getECBData();
 

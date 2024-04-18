@@ -35,10 +35,9 @@ class Console extends QUI\System\Console\Tool
      * @throws Exception
      * @see \QUI\System\Console\Tool::execute()
      */
-    public function execute()
+    public function execute(): void
     {
         Import::import();
-
         QUI::getEvents()->fireEvent('quiqqerCurrencyImport');
     }
 }
