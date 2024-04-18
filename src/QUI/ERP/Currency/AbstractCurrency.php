@@ -8,7 +8,6 @@ namespace QUI\ERP\Currency;
 
 use NumberFormatter;
 use QUI;
-
 use QUI\Exception;
 
 use function array_key_exists;
