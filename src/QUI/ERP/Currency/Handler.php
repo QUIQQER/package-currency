@@ -362,11 +362,11 @@ class Handler
     /**
      * Return a currency
      *
-     * @param string|Currency $currency
+     * @param Currency|string|array $currency
      * @return Currency
      * @throws QUI\Exception
      */
-    public static function getCurrency($currency): Currency
+    public static function getCurrency(Currency|string|array $currency): Currency
     {
         if ($currency instanceof Currency) {
             return $currency;

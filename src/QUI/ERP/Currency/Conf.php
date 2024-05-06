@@ -39,7 +39,7 @@ class Conf
             return Handler::getCurrency(
                 self::conf('currency', 'accountingCurrency')
             );
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             return Handler::getDefaultCurrency();
         }
     }
@@ -47,19 +47,19 @@ class Conf
     /**
      * Return currency conf
      *
-     * @param $section
-     * @param $key
+     * @param string $section
+     * @param string|null $key
      *
      * @return array|bool|string
      */
-    public static function conf($section, $key)
+    public static function conf(string $section, ?string $key): bool|array|string
     {
         try {
             $Package = QUI::getPackage('quiqqer/currency');
             $Config = $Package->getConfig();
 
             return $Config->get($section, $key);
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
         }
 
         return false;

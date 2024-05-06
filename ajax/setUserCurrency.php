@@ -12,11 +12,10 @@ QUI::$Ajax->registerFunction(
     function ($currency) {
         $allowed = QUI\ERP\Currency\Handler::getAllowedCurrencies();
         $allowed = \array_map(function ($Currency) {
-            /* @var $Currency \QUI\ERP\Currency\Currency */
             return $Currency->getCode();
         }, $allowed);
 
-        $allowed = \array_flip($allowed);
+        $allowed = array_flip($allowed);
 
         if (!isset($allowed[$currency])) {
             return;

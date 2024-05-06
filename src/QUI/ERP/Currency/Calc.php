@@ -18,15 +18,18 @@ class Calc
     /**
      * Convert the amount from one to another currency
      *
-     * @param float|string $amount
-     * @param string|Currency $currencyFrom - based currency
-     * @param string|Currency $currencyTo - optional, wanted currency, default = EUR
+     * @param float|int|string $amount
+     * @param string|array|Currency $currencyFrom - based currency
+     * @param array|string|Currency $currencyTo - optional, wanted currency, default = EUR
      * @return float
      *
      * @throws QUI\Exception
      */
-    public static function convert($amount, $currencyFrom, $currencyTo = 'EUR'): float
-    {
+    public static function convert(
+        float|int|string $amount,
+        Currency|array|string $currencyFrom,
+        Currency|array|string $currencyTo = 'EUR'
+    ): float {
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
 
@@ -36,16 +39,18 @@ class Calc
     /**
      * Convert with currency sign
      *
-     * @param float|string $amount
-     * @param string|Currency $currencyFrom - based currency
-     * @param string|Currency $currencyTo - optional, wanted currency, default = EUR
-     *
+     * @param float|int|string $amount
+     * @param array|string|Currency $currencyFrom - based currency
+     * @param array|string|Currency $currencyTo - optional, wanted currency, default = EUR
      * @return string
      *
      * @throws QUI\Exception
      */
-    public static function convertWithSign($amount, $currencyFrom, $currencyTo = 'EUR'): string
-    {
+    public static function convertWithSign(
+        float|int|string $amount,
+        Currency|array|string $currencyFrom,
+        Currency|array|string $currencyTo = 'EUR'
+    ): string {
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
 
@@ -55,15 +60,16 @@ class Calc
     /**
      * Return the exchange rate between two currencies
      *
-     * @param string|Currency $currencyFrom
-     * @param string|Currency $currencyTo
-     *
+     * @param array|string|Currency $currencyFrom
+     * @param array|string|Currency $currencyTo
      * @return float|boolean
      *
      * @throws QUI\Exception
      */
-    public static function getExchangeRateBetween($currencyFrom, $currencyTo)
-    {
+    public static function getExchangeRateBetween(
+        Currency|array|string $currencyFrom,
+        Currency|array|string $currencyTo
+    ): float|bool {
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
 
