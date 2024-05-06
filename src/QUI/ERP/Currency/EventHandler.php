@@ -20,7 +20,7 @@ class EventHandler
     /**
      * @param QUI\Template $TemplateManager
      */
-    public static function onTemplateGetHeader(QUI\Template $TemplateManager)
+    public static function onTemplateGetHeader(QUI\Template $TemplateManager): void
     {
         try {
             $Currency = Handler::getDefaultCurrency();
@@ -50,7 +50,7 @@ class EventHandler
      * @param array $params Additional parameters passed to the method.
      * @return void
      */
-    public static function onPackageConfigSave(Package $Package, array $params)
+    public static function onPackageConfigSave(Package $Package, array $params): void
     {
         if ($Package->getName() !== 'quiqqer/currency') {
             return;

@@ -8,6 +8,7 @@ namespace QUI\ERP\Currency;
 
 use NumberFormatter;
 use QUI;
+use QUI\Exception;
 
 use function array_key_exists;
 use function floatval;
@@ -35,27 +36,27 @@ abstract class AbstractCurrency implements CurrencyInterface
     /**
      * @var string
      */
-    protected $code;
+    protected string $code;
 
     /**
      * @var integer
      */
-    protected $precision = 2;
+    protected int $precision = 2;
 
     /**
      * @var float|bool
      */
-    protected $exchangeRate = false;
+    protected bool|float $exchangeRate = false;
 
     /**
      * @var int
      */
-    protected $autoupdate = 1;
+    protected mixed $autoupdate = 1;
 
     /**
-     * @var QUI\Locale
+     * @var ?QUI\Locale
      */
-    protected $Locale;
+    protected ?QUI\Locale $Locale;
 
     protected array $customData = [];
 
@@ -104,7 +105,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      *
      * @param QUI\Locale $Locale
      */
-    public function setLocale(QUI\Locale $Locale)
+    public function setLocale(QUI\Locale $Locale): void
     {
         $this->Locale = $Locale;
     }
@@ -203,9 +204,8 @@ abstract class AbstractCurrency implements CurrencyInterface
         }
 
         $amount = str_replace(',', '.', $amount);
-        $amount = floatval($amount);
 
-        return $amount;
+        return floatval($amount);
     }
 
     /**
@@ -275,11 +275,11 @@ abstract class AbstractCurrency implements CurrencyInterface
      *
      * @param float|string $amount
      * @param string|CurrencyInterface $Currency
-     * @return float
+     * @return float|int|string
      *
-     * @throws QUI\Exception
+     * @throws Exception
      */
-    public function convert($amount, $Currency)
+    public function convert($amount, $Currency): float|int|string
     {
         if (!is_numeric($amount)) {
             QUI\System\Log::addError('Only numeric are allowed Currency->convert()', [
@@ -347,7 +347,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param boolean|string|Currency $Currency - optional, default = false -> return own exchange rate
      * @return float|boolean
      */
-    public function getExchangeRate($Currency = false)
+    public function getExchangeRate($Currency = false): float|bool
     {
         if ($Currency === false) {
             return $this->exchangeRate;
@@ -376,7 +376,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      *
      * @param float|integer $rate
      */
-    public function setExchangeRate($rate)
+    public function setExchangeRate($rate): void
     {
         $this->exchangeRate = (float)$rate;
     }
@@ -408,7 +408,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param $value
      * @return void
      */
-    public function setCustomDataEntry(string $key, $value)
+    public function setCustomDataEntry(string $key, $value): void
     {
         $this->customData[$key] = $value;
     }
@@ -419,7 +419,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param string $key
      * @return mixed
      */
-    public function getCustomDataEntry(string $key)
+    public function getCustomDataEntry(string $key): mixed
     {
         if (array_key_exists($key, $this->customData)) {
             return $this->customData[$key];
