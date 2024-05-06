@@ -18,10 +18,9 @@ class Cron
      * Start import
      * @throws QUI\Exception
      */
-    public static function import()
+    public static function import(): void
     {
         Import::import();
-
         QUI::getEvents()->fireEvent('quiqqerCurrencyImport');
     }
 }

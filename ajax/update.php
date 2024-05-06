@@ -9,6 +9,9 @@
  *
  * @return array
  */
+
+use QUI\ERP\Currency\Handler;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_currency_ajax_update',
     function ($currency, $code, $rate, $precision, $type, $customData) {
@@ -17,7 +20,7 @@ QUI::$Ajax->registerFunction(
         QUI\ERP\Currency\Handler::updateCurrency($currency, [
             'rate' => $rate,
             'code' => $code,
-            'type' => !empty($type) ? $type : \QUI\ERP\Currency\Handler::CURRENCY_TYPE_DEFAULT,
+            'type' => !empty($type) ? $type : Handler::CURRENCY_TYPE_DEFAULT,
             'customData' => $customData
         ]);
 

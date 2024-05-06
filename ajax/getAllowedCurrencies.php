@@ -14,7 +14,6 @@ QUI::$Ajax->registerFunction('package_quiqqer_currency_ajax_getAllowedCurrencies
     $allowed = QUI\ERP\Currency\Handler::getAllowedCurrencies();
     $result = [];
 
-    /* @var $Currency \QUI\ERP\Currency\Currency */
     foreach ($allowed as $Currency) {
         $result[] = $Currency->toArray();
     }
