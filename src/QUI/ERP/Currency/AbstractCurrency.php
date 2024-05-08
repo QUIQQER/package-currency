@@ -287,7 +287,7 @@ abstract class AbstractCurrency implements CurrencyInterface
             ]);
 
             $Exception = new QUI\Exception(
-                QUI::getLocale()->get('quiqqer/quiqqer', 'exception.error')
+                QUI::getLocale()->get('quiqqer/core', 'exception.error')
             );
 
             QUI\System\Log::writeException($Exception);
