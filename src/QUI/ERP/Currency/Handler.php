@@ -206,9 +206,18 @@ class Handler
                     self::$Default = self::getCurrency('EUR');
                 } catch (QUI\Exception $Exception) {
                     if ($Exception->getCode() === 404) {
-                        // add EUR
-                        self::createCurrency('EUR');
-                        self::$Default = self::getCurrency('EUR');
+                        try {
+                            // add EUR
+                            self::createCurrency('EUR');
+                            self::$Default = self::getCurrency('EUR');
+                        } catch (QUI\Exception $Exception) {
+                            // database may not be available here, return a dummy EUR currency object
+                            self::$Default = new Currency([
+                                'currency' => 'EUR',
+                                'rate' => 1,
+                                'autoupdate' => 1
+                            ]);
+                        }
                     }
                 }
             }
