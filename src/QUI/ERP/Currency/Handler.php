@@ -200,7 +200,7 @@ class Handler
                     $Config->getValue('currency', 'defaultCurrency')
                 );
             } catch (QUI\Exception $Exception) {
-                QUI\System\Log::addError('Default currency is missing');
+                QUI\System\Log::addWarning('Default currency is missing');
 
                 try {
                     self::$Default = self::getCurrency('EUR');
