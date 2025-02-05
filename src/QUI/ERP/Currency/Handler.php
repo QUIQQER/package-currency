@@ -4,6 +4,7 @@ namespace QUI\ERP\Currency;
 
 use Exception;
 use QUI;
+use QUI\Interfaces\Users\User;
 use QUI\Locale;
 
 use function class_exists;
@@ -224,7 +225,7 @@ class Handler
      * @param null|QUI\Interfaces\Users\User $User - optional
      * @return Currency|null
      */
-    public static function getUserCurrency(QUI\Interfaces\Users\User $User = null): ?Currency
+    public static function getUserCurrency(null | QUI\Interfaces\Users\User $User = null): ?Currency
     {
         if ($User === null) {
             $User = QUI::getUserBySession();
@@ -260,10 +261,10 @@ class Handler
     /**
      * Return the currency of the user by its country
      *
-     * @param null $User
+     * @param User|null $User
      * @return Currency|null
      */
-    public static function getUserCurrencyByCountry($User = null): ?Currency
+    public static function getUserCurrencyByCountry(null | QUI\Interfaces\Users\User $User = null): ?Currency
     {
         if ($User === null) {
             $User = QUI::getUserBySession();
@@ -366,7 +367,7 @@ class Handler
      * @return Currency
      * @throws QUI\Exception
      */
-    public static function getCurrency(Currency|string|array $currency): Currency
+    public static function getCurrency(Currency | string | array $currency): Currency
     {
         if ($currency instanceof Currency) {
             return $currency;

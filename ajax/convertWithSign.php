@@ -18,6 +18,10 @@ QUI::$Ajax->registerFunction(
         $data = json_decode($data, true);
         $result = [];
 
+        if (!class_exists('QUI\ERP\Money\Price')) {
+            return $result;
+        }
+
         foreach ($data as $entry) {
             $amount = $entry['amount'];
             $currencyFrom = $entry['from'];
