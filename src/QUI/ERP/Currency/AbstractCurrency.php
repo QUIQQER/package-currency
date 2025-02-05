@@ -182,7 +182,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param null|QUI\Locale $Locale -optional
      * @return float
      */
-    public function amount($amount, QUI\Locale $Locale = null): float
+    public function amount($amount, null |QUI\Locale $Locale = null): float
     {
         if (is_float($amount) || is_int($amount)) {
             return $amount;
@@ -215,7 +215,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param null|QUI\Locale $Locale - optional, locale object
      * @return string
      */
-    public function format($amount, QUI\Locale $Locale = null): string
+    public function format($amount, null|QUI\Locale $Locale = null): string
     {
         if (!$Locale) {
             $Locale = $this->Locale;
