@@ -17,7 +17,7 @@ interface CurrencyInterface
      * @param QUI\Locale|null $Locale
      * @return string
      */
-    public static function getCurrencyTypeTitle(?QUI\Locale $Locale = null): string;
+    public static function getCurrencyTypeTitle(null|QUI\Locale $Locale = null): string;
 
     /**
      * Get internal identifier of the currency type.
@@ -39,7 +39,7 @@ interface CurrencyInterface
      * @param array $data
      * @param QUI\Locale|null $Locale - Locale for the currency
      */
-    public function __construct(array $data, ?QUI\Locale $Locale = null);
+    public function __construct(array $data, null|QUI\Locale $Locale = null);
 
     /**
      * Set the locale for the currency
@@ -89,7 +89,7 @@ interface CurrencyInterface
      * @param null|QUI\Locale $Locale -optional
      * @return float
      */
-    public function amount($amount, QUI\Locale $Locale = null): float;
+    public function amount($amount, null|QUI\Locale $Locale = null): float;
 
     /**
      * Format an amount
@@ -98,7 +98,7 @@ interface CurrencyInterface
      * @param null|QUI\Locale $Locale - optional, locale object
      * @return string
      */
-    public function format($amount, QUI\Locale $Locale = null): string;
+    public function format($amount, null|QUI\Locale $Locale = null): string;
 
     /**
      * updates the currency itself?

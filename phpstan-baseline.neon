@@ -1,16 +1,2 @@
 parameters:
 	ignoreErrors:
-		-
-			message: "#^Call to method getDisplayPrice\\(\\) on an unknown class QUI\\\\ERP\\\\Money\\\\Price\\.$#"
-			count: 1
-			path: ajax/convertWithSign.php
-
-		-
-			message: "#^Instantiated class QUI\\\\ERP\\\\Money\\\\Price not found\\.$#"
-			count: 1
-			path: ajax/convertWithSign.php
-
-		-
-			message: "#^Parameter \\#1 \\$User of static method QUI\\\\ERP\\\\Currency\\\\Handler\\:\\:getUserCurrencyByCountry\\(\\) expects null, QUI\\\\Interfaces\\\\Users\\\\User given\\.$#"
-			count: 2
-			path: src/QUI/ERP/Currency/Handler.php
