@@ -26,9 +26,9 @@ class Calc
      * @throws QUI\Exception
      */
     public static function convert(
-        float|int|string $amount,
-        Currency|array|string $currencyFrom,
-        Currency|array|string $currencyTo = 'EUR'
+        float | int | string $amount,
+        Currency | array | string $currencyFrom,
+        Currency | array | string $currencyTo = 'EUR'
     ): float {
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
@@ -47,9 +47,9 @@ class Calc
      * @throws QUI\Exception
      */
     public static function convertWithSign(
-        float|int|string $amount,
-        Currency|array|string $currencyFrom,
-        Currency|array|string $currencyTo = 'EUR'
+        float | int | string $amount,
+        Currency | array | string $currencyFrom,
+        Currency | array | string $currencyTo = 'EUR'
     ): string {
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
@@ -67,9 +67,9 @@ class Calc
      * @throws QUI\Exception
      */
     public static function getExchangeRateBetween(
-        Currency|array|string $currencyFrom,
-        Currency|array|string $currencyTo
-    ): float|bool {
+        Currency | array | string $currencyFrom,
+        Currency | array | string $currencyTo
+    ): float | bool {
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
 
