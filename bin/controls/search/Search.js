@@ -14,7 +14,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
 
     'css!package/quiqqer/currency/bin/controls/search/Search.css'
 
-], function(QUIControl, Currencies, QUIButton, QUISwitch, QUILocale, QUIAjax, Grid) {
+], function (QUIControl, Currencies, QUIButton, QUISwitch, QUILocale, QUIAjax, Grid) {
     'use strict';
 
     const lg = 'quiqqer/currency';
@@ -35,7 +35,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
             onlyAllowed: true
         },
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.$Container = null;
@@ -48,7 +48,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
          *
          * @returns {HTMLElement}
          */
-        create: function() {
+        create: function () {
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-search',
                 html: '',
@@ -129,7 +129,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
          *
          * @return {Promise}
          */
-        resize: function() {
+        resize: function () {
             const size = this.$Elm.getSize();
 
             return Promise.all([
@@ -141,7 +141,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
         /**
          * execute the search
          */
-        search: function() {
+        search: function () {
             this.fireEvent('searchBegin', [this]);
 
             return new Promise((resolve, reject) => {
@@ -187,7 +187,7 @@ define('package/quiqqer/currency/bin/controls/search/Search', [
          *
          * @return {Array}
          */
-        getSelectedData: function() {
+        getSelectedData: function () {
             return this.$Grid.getSelectedData();
         }
     });

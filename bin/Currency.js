@@ -143,7 +143,7 @@ define('package/quiqqer/currency/bin/Currency', [
         },
 
         /**
-         * Return all available currency types.
+         * Return default currency
          *
          * @returns {Promise}
          */

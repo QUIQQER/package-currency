@@ -9,7 +9,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
     'qui/controls/buttons/Select',
     'Ajax'
 
-], function(QUI, QUIControl, QUISelect, QUIAjax) {
+], function (QUI, QUIControl, QUISelect, QUIAjax) {
     'use strict';
 
     return new Class({
@@ -22,7 +22,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
             '$onSelectChange'
         ],
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.$Input = null;
@@ -36,7 +36,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
         /**
          * event : on import
          */
-        $onImport: function() {
+        $onImport: function () {
             this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
@@ -54,7 +54,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
                 }
             }).inject(this.$Elm);
 
-            this.getCurrencies().then(function(result) {
+            this.getCurrencies().then(function (result) {
                 for (let i in result) {
                     if (!result.hasOwnProperty(i)) {
                         continue;
@@ -84,8 +84,8 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
          * Return all available currencies
          * @returns {Promise}
          */
-        getCurrencies: function() {
-            return new Promise(function(resolve, reject) {
+        getCurrencies: function () {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_currency_ajax_getAllowedCurrencies', resolve, {
                     'package': 'quiqqer/currency',
                     onError: reject
@@ -99,7 +99,7 @@ define('package/quiqqer/currency/bin/settings/CurrencyList', [
          * @param {String} value
          * @param {Object} Select - qui/controls/buttons/Select
          */
-        $onSelectChange: function(value, Select) {
+        $onSelectChange: function (value, Select) {
             this.$Input.value = value;
             this.fireEvent('change', [
                 this,
