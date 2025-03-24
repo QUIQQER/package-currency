@@ -57,19 +57,22 @@ class Handler
      * Create a new currency
      *
      * @param string $currency - currency code
-     * @param integer|float $rate - currency exchange rate, default = 1
+     * @param float|integer $rate - currency exchange rate, default = 1
      * @param string $type (optional) - Currency type
      * @throws QUI\Exception
      */
-    public static function createCurrency(string $currency, $rate = 1, string $type = self::CURRENCY_TYPE_DEFAULT)
-    {
+    public static function createCurrency(
+        string $currency,
+        float | int | string $rate = 1,
+        string $type = self::CURRENCY_TYPE_DEFAULT
+    ): void {
         QUI\Permissions\Permission::checkPermission('currency.create');
 
         $Currency = null;
 
         try {
             $Currency = self::getCurrency($currency);
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
         }
 
         if (!is_null($Currency)) {
@@ -94,10 +97,6 @@ class Handler
         ]);
 
         // create translations
-        $languageData = [
-            'datatype' => 'js,php'
-        ];
-
         $localeGroup = 'quiqqer/currency';
         $localeText = 'currency.' . $currency . '.text';
         $localeSign = 'currency.' . $currency . '.sign';
@@ -123,7 +122,7 @@ class Handler
                 'currency.' . $currency . '.text',
                 'quiqqer/currency'
             );
-        } catch (QUI\Exception $e) {
+        } catch (QUI\Exception) {
         }
 
         if (!empty($textData)) {
@@ -142,7 +141,7 @@ class Handler
                 'currency.' . $currency . '.sign',
                 'quiqqer/currency'
             );
-        } catch (QUI\Exception $e) {
+        } catch (QUI\Exception) {
         }
 
 
@@ -164,7 +163,7 @@ class Handler
      * @param string $currency - currency code
      * @throws QUI\Exception
      */
-    public static function deleteCurrency(string $currency)
+    public static function deleteCurrency(string $currency): void
     {
         QUI\Permissions\Permission::checkPermission('currency.delete');
 
@@ -188,7 +187,7 @@ class Handler
     /**
      * Return the default currency
      *
-     * @return Currency
+     * @return Currency|null
      * @throws QUI\Exception
      */
     public static function getDefaultCurrency(): ?Currency
@@ -200,7 +199,7 @@ class Handler
                 self::$Default = self::getCurrency(
                     $Config->getValue('currency', 'defaultCurrency')
                 );
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
                 QUI\System\Log::addWarning('Default currency is missing');
 
                 try {
@@ -321,7 +320,7 @@ class Handler
         foreach ($allowed as $currency) {
             try {
                 $list[] = self::getCurrency($currency);
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
             }
         }
 
@@ -378,7 +377,7 @@ class Handler
 
         if (is_string($currency)) {
             $code = $currency;
-        } elseif (is_array($currency) && isset($currency['code'])) {
+        } elseif (isset($currency['code'])) {
             $code = $currency['code'];
         }
 
@@ -415,10 +414,10 @@ class Handler
     /**
      * Return all currency entries
      *
-     * @param Locale|boolean $Locale - optional, for translation
+     * @param Locale|null $Locale - optional, for translation
      * @return array
      */
-    public static function getCurrencies($Locale = false): array
+    public static function getCurrencies(null | QUI\Locale $Locale = null): array
     {
         if (!$Locale) {
             $Locale = QUI::getLocale();
@@ -429,12 +428,12 @@ class Handler
 
         try {
             return QUI\Cache\Manager::get($cacheNameLang);
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
         }
 
         try {
             $currencies = QUI\Cache\Manager::get($cacheName);
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             $currencies = [];
             $data = self::getData();
 
@@ -448,7 +447,7 @@ class Handler
         foreach ($currencies as $currency) {
             try {
                 $Currency = self::getCurrency($currency);
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
                 continue;
             }
 
@@ -465,7 +464,7 @@ class Handler
      * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
-    public static function updateCurrency($currency, $data)
+    public static function updateCurrency($currency, $data): void
     {
         QUI\Permissions\Permission::checkPermission('currency.edit');
 

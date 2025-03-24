@@ -46,7 +46,7 @@ abstract class AbstractCurrency implements CurrencyInterface
     /**
      * @var float|bool
      */
-    protected bool|float $exchangeRate = false;
+    protected bool | float $exchangeRate = false;
 
     /**
      * @var int
@@ -182,7 +182,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param null|QUI\Locale $Locale -optional
      * @return float
      */
-    public function amount($amount, null |QUI\Locale $Locale = null): float
+    public function amount($amount, null | QUI\Locale $Locale = null): float
     {
         if (is_float($amount) || is_int($amount)) {
             return $amount;
@@ -215,7 +215,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param null|QUI\Locale $Locale - optional, locale object
      * @return string
      */
-    public function format($amount, null|QUI\Locale $Locale = null): string
+    public function format($amount, null | QUI\Locale $Locale = null): string
     {
         if (!$Locale) {
             $Locale = $this->Locale;
@@ -279,7 +279,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      *
      * @throws Exception
      */
-    public function convert($amount, $Currency): float|int|string
+    public function convert($amount, $Currency): float | int | string
     {
         if (!is_numeric($amount)) {
             QUI\System\Log::addError('Only numeric are allowed Currency->convert()', [
@@ -347,7 +347,7 @@ abstract class AbstractCurrency implements CurrencyInterface
      * @param boolean|string|Currency $Currency - optional, default = false -> return own exchange rate
      * @return float|boolean
      */
-    public function getExchangeRate($Currency = false): float|bool
+    public function getExchangeRate($Currency = false): float | bool
     {
         if ($Currency === false) {
             return $this->exchangeRate;

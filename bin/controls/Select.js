@@ -13,7 +13,7 @@ define('package/quiqqer/currency/bin/controls/Select', [
     'package/quiqqer/currency/bin/Currency',
     'Locale'
 
-], function(QUI, QUIElementSelect, Currencies, QUILocale) {
+], function (QUI, QUIElementSelect, Currencies, QUILocale) {
     'use strict';
 
     const lg = 'quiqqer/currency';
@@ -36,7 +36,7 @@ define('package/quiqqer/currency/bin/controls/Select', [
 
         options: {},
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.setAttribute('Search', this.currencySearch);
@@ -62,7 +62,7 @@ define('package/quiqqer/currency/bin/controls/Select', [
          * @param {String} value
          * @returns {Promise}
          */
-        currencySearch: function(value) {
+        currencySearch: function (value) {
             return new Promise((resolve) => {
                 require(['package/quiqqer/currency/bin/settings/AllowedCurrencies'], (AllowedCurrencies) => {
                     let GetCurrencies;
@@ -84,7 +84,7 @@ define('package/quiqqer/currency/bin/controls/Select', [
                             }
 
                             data = list[currency];
-                            
+
                             if (data.text.toLowerCase().indexOf(value) !== -1) {
                                 result.push({
                                     icon: 'fa fa-money',
@@ -106,15 +106,15 @@ define('package/quiqqer/currency/bin/controls/Select', [
          * @param self
          * @param Btn
          */
-        $onSearchButtonClick: function(self, Btn) {
+        $onSearchButtonClick: function (self, Btn) {
             Btn.setAttribute('icon', 'fa fa-spinner fa-spin');
 
             require([
                 'package/quiqqer/currency/bin/controls/search/Window'
-            ], function(Search) {
+            ], function (Search) {
                 new Search({
                     events: {
-                        onSubmit: function(Win, values) {
+                        onSubmit: function (Win, values) {
                             for (let i = 0, len = values.length; i < len; i++) {
                                 self.addItem(values[i]);
                             }

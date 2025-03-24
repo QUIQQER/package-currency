@@ -11,7 +11,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
     'package/quiqqer/currency/bin/controls/search/Search',
     'Locale'
 
-], function(QUI, QUIControl, QUIButton, QUIConfirm, Search, QUILocale) {
+], function (QUI, QUIControl, QUIButton, QUIConfirm, Search, QUILocale) {
     'use strict';
 
     return new Class({
@@ -38,7 +38,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
             multiple: false
         },
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.$Search = null;
@@ -53,7 +53,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
          *
          * @return {Promise}
          */
-        $onResize: function() {
+        $onResize: function () {
             return this.$Search.resize();
         },
 
@@ -62,7 +62,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
          *
          * @returns {HTMLDivElement}
          */
-        $onOpen: function(Win) {
+        $onOpen: function (Win) {
             const self = this,
                 Content = Win.getContent();
 
@@ -71,15 +71,15 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
             this.$Search = new Search({
                 searchbutton: false,
                 events: {
-                    onDblClick: function() {
+                    onDblClick: function () {
                         self.submit();
                     },
 
-                    onSearchBegin: function() {
+                    onSearchBegin: function () {
                         self.Loader.show();
                     },
 
-                    onSearchEnd: function() {
+                    onSearchEnd: function () {
                         self.Loader.hide();
                     }
                 }
@@ -91,7 +91,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
         /**
          * Execute the search
          */
-        search: function() {
+        search: function () {
             this.$Search.search();
         },
 
@@ -100,7 +100,7 @@ define('package/quiqqer/currency/bin/controls/search/Window', [
          *
          * @fires onSubmit
          */
-        submit: function() {
+        submit: function () {
             let selected = this.$Search.getSelectedData();
 
             if (!selected.length) {

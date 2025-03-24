@@ -23,7 +23,7 @@ class Currency extends AbstractCurrency
      * @param QUI\Locale|null $Locale
      * @return string
      */
-    public static function getCurrencyTypeTitle(?QUI\Locale $Locale = null): string
+    public static function getCurrencyTypeTitle(null | QUI\Locale $Locale = null): string
     {
         if (empty($Locale)) {
             $Locale = QUI::getLocale();
