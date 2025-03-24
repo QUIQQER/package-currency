@@ -9,7 +9,7 @@ define('package/quiqqer/currency/bin/controls/SelectItem', [
 
     'css!package/quiqqer/currency/bin/controls/SelectItem.css'
 
-], function(QUIControl, Currencies) {
+], function (QUIControl, Currencies) {
     'use strict';
 
     return new Class({
@@ -25,7 +25,7 @@ define('package/quiqqer/currency/bin/controls/SelectItem', [
             id: false
         },
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.$Icon = null;
@@ -42,7 +42,7 @@ define('package/quiqqer/currency/bin/controls/SelectItem', [
          *
          * @returns {HTMLElement}
          */
-        create: function() {
+        create: function () {
             const self = this,
                 Elm = this.parent();
 
@@ -57,7 +57,7 @@ define('package/quiqqer/currency/bin/controls/SelectItem', [
             this.$Text = Elm.getElement('.quiqqer-currency-selectItem-text');
             this.$Destroy = Elm.getElement('.quiqqer-currency-selectItem-destroy');
 
-            this.$Destroy.addEvent('click', function() {
+            this.$Destroy.addEvent('click', function () {
                 self.destroy();
             });
 
@@ -67,7 +67,7 @@ define('package/quiqqer/currency/bin/controls/SelectItem', [
         /**
          * event : on inject
          */
-        $onInject: function() {
+        $onInject: function () {
             this.$Text.set({
                 html: '<span class="fa fa-spinner fa-spin"></span>'
             });

@@ -19,13 +19,13 @@ define('package/quiqqer/currency/bin/settings/Import', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/currency/bin/settings/Import',
+        Type: 'package/quiqqer/currency/bin/settings/Import',
 
         initialize: function (options) {
             this.parent(options);
 
-            this.$Input  = null;
-            this.$Elm    = null;
+            this.$Input = null;
+            this.$Elm = null;
             this.$Button = null;
 
             this.addEvents({
@@ -37,19 +37,19 @@ define('package/quiqqer/currency/bin/settings/Import', [
          * event : on import
          */
         $onImport: function () {
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-currency-allowed',
-                html   : '<div class="quiqqer-currency-import-container"></div>',
-                styles : {
+                html: '<div class="quiqqer-currency-import-container"></div>',
+                styles: {
                     width: '100%'
                 }
             }).wraps(this.$Input);
 
             new QUIButton({
-                text  : QUILocale.get(lg, 'ecb.import.button.text'),
+                text: QUILocale.get(lg, 'ecb.import.button.text'),
                 events: {
                     onClick: this.openDialog
                 },
@@ -69,14 +69,14 @@ define('package/quiqqer/currency/bin/settings/Import', [
          */
         openDialog: function () {
             new QUIConfirm({
-                icon       : 'fa fa-money',
-                texticon   : 'fa fa-money',
-                title      : QUILocale.get(lg, 'window.ecb.import.title'),
-                text       : QUILocale.get(lg, 'window.ecb.import.text'),
+                icon: 'fa fa-money',
+                texticon: 'fa fa-money',
+                title: QUILocale.get(lg, 'window.ecb.import.title'),
+                text: QUILocale.get(lg, 'window.ecb.import.text'),
                 information: QUILocale.get(lg, 'window.ecb.import.information'),
-                maxHeight  : 300,
-                maxWidth   : 600,
-                events     : {
+                maxHeight: 300,
+                maxWidth: 600,
+                events: {
                     onSubmit: function (Win) {
                         Win.Loader.show();
                         QUIAjax.post('package_quiqqer_currency_ajax_importFromECB', function () {

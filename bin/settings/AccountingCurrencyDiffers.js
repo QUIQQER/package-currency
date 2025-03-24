@@ -13,7 +13,7 @@ define('package/quiqqer/currency/bin/settings/AccountingCurrencyDiffers', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/currency/bin/settings/AccountingCurrencyDiffers',
+        Type: 'package/quiqqer/currency/bin/settings/AccountingCurrencyDiffers',
 
         Binds: [
             '$onImport'
@@ -30,7 +30,7 @@ define('package/quiqqer/currency/bin/settings/AccountingCurrencyDiffers', [
         },
 
         $onImport: function () {
-            var self  = this,
+            var self = this,
                 Table = this.getElm().getParent('table');
 
             this.getElm().addEvent('change', function () {

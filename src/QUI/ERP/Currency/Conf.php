@@ -52,7 +52,7 @@ class Conf
      *
      * @return array|bool|string
      */
-    public static function conf(string $section, ?string $key): bool|array|string
+    public static function conf(string $section, ?string $key): bool | array | string
     {
         try {
             $Package = QUI::getPackage('quiqqer/currency');
