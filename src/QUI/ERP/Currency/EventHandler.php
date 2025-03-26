@@ -22,22 +22,19 @@ class EventHandler
      */
     public static function onTemplateGetHeader(QUI\Template $TemplateManager): void
     {
-        try {
-            $Currency = Handler::getDefaultCurrency();
+        $TemplateManager->extendHeader(
+            '<script>
+                window.DEFAULT_CURRENCY = "' . Handler::getDefaultCurrency()->getCode() . '";
+                window.RUNTIME_CURRENCY = ' . Handler::getRuntimeCurrency()->getCode() . ';
+            </script>'
+        );
 
-            $TemplateManager->extendHeader(
-                '<script>window.DEFAULT_CURRENCY = "' . $Currency->getCode() . '";</script>'
-            );
-        } catch (QUI\Exception $Exception) {
-            QUI\System\Log::writeException($Exception, QUI\System\Log::LEVEL_WARNING);
-        }
+        $UserCurrency = Handler::getUserCurrency();
 
-        $Currency = Handler::getUserCurrency();
-
-        if ($Currency) {
+        if ($UserCurrency) {
             $TemplateManager->extendHeader(
                 '<script>
-                    window.DEFAULT_USER_CURRENCY = ' . json_encode($Currency->toArray()) . ';
+                    window.DEFAULT_USER_CURRENCY = ' . json_encode($UserCurrency->toArray()) . ';
                 </script>'
             );
         }

@@ -209,6 +209,7 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                 });
 
                 QUIAjax.post('package_quiqqer_currency_ajax_setUserCurrency', () => {
+                    /*
                     window.DEFAULT_USER_CURRENCY = Curr;
 
                     this.fireEvent('changeCurrency', [
@@ -220,6 +221,9 @@ define('package/quiqqer/currency/bin/controls/Switch', [
                         this,
                         Curr
                     ]);
+                    */
+
+                    window.location.reload();
                 }, {
                     'package': 'quiqqer/currency',
                     currency: Curr.code
