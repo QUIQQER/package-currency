@@ -603,8 +603,12 @@ class Handler
         }
 
         if (QUI::isFrontend()) {
-            self::$RuntimeCurrency = self::getUserCurrency(QUI::getUserBySession());
-            return self::$RuntimeCurrency;
+            $Currency = self::getUserCurrency(QUI::getUserBySession());
+
+            if ($Currency) {
+                self::$RuntimeCurrency = $Currency;
+                return self::$RuntimeCurrency;
+            }
         }
 
         return self::getDefaultCurrency();
