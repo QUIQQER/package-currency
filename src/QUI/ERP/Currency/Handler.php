@@ -10,7 +10,6 @@ use QUI\Locale;
 use function class_exists;
 use function in_array;
 use function is_a;
-use function is_array;
 use function is_string;
 use function json_decode;
 use function json_encode;
@@ -587,7 +586,7 @@ class Handler
     // endregion
 
     //region runtime
-    
+
     public static function getRuntimeCurrency(): Currency
     {
         if (self::$RuntimeCurrency) {

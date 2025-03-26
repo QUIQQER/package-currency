@@ -23,7 +23,7 @@ class EventHandler
     public static function onTemplateGetHeader(QUI\Template $TemplateManager): void
     {
         $TemplateManager->extendHeader(
-        '<script>
+            '<script>
                 window.DEFAULT_CURRENCY = "' . Handler::getDefaultCurrency()->getCode() . '";
                 window.RUNTIME_CURRENCY = ' . Handler::getRuntimeCurrency()->getCode() . ';
             </script>'
