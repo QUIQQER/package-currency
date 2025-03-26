@@ -33,15 +33,11 @@ class Handler
 
     /**
      * currency temp list
-     *
-     * @var array
      */
     protected static array $currencies = [];
 
-    /**
-     * @var Currency|null
-     */
     protected static ?Currency $Default = null;
+    protected static ?Currency $RuntimeCurrency = null;
 
     /**
      * Return the real table name
@@ -188,7 +184,6 @@ class Handler
      * Return the default currency
      *
      * @return Currency|null
-     * @throws QUI\Exception
      */
     public static function getDefaultCurrency(): ?Currency
     {
@@ -590,4 +585,40 @@ class Handler
         return $currencyTypes;
     }
     // endregion
+
+    //region runtime
+    
+    public static function getRuntimeCurrency(): Currency
+    {
+        if (self::$RuntimeCurrency) {
+            return self::$RuntimeCurrency;
+        }
+
+        if (QUI::getSession()->get('currency')) {
+            try {
+                $Currency = self::getCurrency(QUI::getSession()->get('currency'));
+                self::$RuntimeCurrency = $Currency;
+                return self::$RuntimeCurrency;
+            } catch (QUI\Exception) {
+            }
+        }
+
+        if (QUI::isFrontend()) {
+            self::$RuntimeCurrency = self::getUserCurrency(QUI::getUserBySession());
+            return self::$RuntimeCurrency;
+        }
+
+        return self::getDefaultCurrency();
+    }
+
+    public static function setRuntimeCurrency(Currency $currency): void
+    {
+        self::$RuntimeCurrency = $currency;
+
+        if (QUI::isFrontend()) {
+            QUI::getSession()->set('currency', $currency->getCode());
+        }
+    }
+
+    //endregion
 }
