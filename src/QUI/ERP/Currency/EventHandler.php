@@ -25,7 +25,7 @@ class EventHandler
         $TemplateManager->extendHeader(
             '<script>
                 window.DEFAULT_CURRENCY = "' . Handler::getDefaultCurrency()->getCode() . '";
-                window.RUNTIME_CURRENCY = ' . Handler::getRuntimeCurrency()->getCode() . ';
+                window.RUNTIME_CURRENCY = "' . Handler::getRuntimeCurrency()->getCode() . '";
             </script>'
         );
 
