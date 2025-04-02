@@ -52,9 +52,12 @@ class Handler
      * Create a new currency
      *
      * @param string $currency - currency code
-     * @param float|integer $rate - currency exchange rate, default = 1
+     * @param float|int|string $rate - currency exchange rate, default = 1
      * @param string $type (optional) - Currency type
+     * 
+     * @throws QUI\DataBase\Exception
      * @throws QUI\Exception
+     * @throws QUI\Permissions\Exception
      */
     public static function createCurrency(
         string $currency,
