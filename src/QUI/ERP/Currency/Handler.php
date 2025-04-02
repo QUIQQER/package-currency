@@ -36,7 +36,7 @@ class Handler
     protected static array $currencies = [];
 
     protected static ?Currency $Default = null;
-    protected static ?Currency $RuntimeCurrency = null;
+    protected static Currency $RuntimeCurrency;
 
     /**
      * Return the real table name
@@ -605,13 +605,21 @@ class Handler
         if (QUI::isFrontend()) {
             $Currency = self::getUserCurrency(QUI::getUserBySession());
 
-            if ($Currency) {
+            if ($Currency instanceof Currency) {
                 self::$RuntimeCurrency = $Currency;
                 return self::$RuntimeCurrency;
             }
         }
 
-        return self::getDefaultCurrency();
+        $Currency = self::getDefaultCurrency();
+
+        if ($Currency instanceof Currency) {
+            self::$RuntimeCurrency = $Currency;
+            return $Currency;
+        }
+
+        self::$RuntimeCurrency = self::getCurrency('EUR');
+        return self::$RuntimeCurrency;
     }
 
     public static function setRuntimeCurrency(Currency $currency): void
