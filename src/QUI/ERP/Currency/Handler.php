@@ -36,7 +36,7 @@ class Handler
     protected static array $currencies = [];
 
     protected static ?Currency $Default = null;
-    protected static Currency $RuntimeCurrency;
+    protected static ?Currency $RuntimeCurrency = null;
 
     /**
      * Return the real table name
