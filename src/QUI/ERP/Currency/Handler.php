@@ -52,9 +52,11 @@ class Handler
      * Create a new currency
      *
      * @param string $currency - currency code
-     * @param float|integer $rate - currency exchange rate, default = 1
+     * @param float|int|string $rate - currency exchange rate, default = 1
      * @param string $type (optional) - Currency type
+     *
      * @throws QUI\Exception
+     * @throws QUI\Permissions\Exception
      */
     public static function createCurrency(
         string $currency,
@@ -605,13 +607,21 @@ class Handler
         if (QUI::isFrontend()) {
             $Currency = self::getUserCurrency(QUI::getUserBySession());
 
-            if ($Currency) {
+            if ($Currency instanceof Currency) {
                 self::$RuntimeCurrency = $Currency;
                 return self::$RuntimeCurrency;
             }
         }
 
-        return self::getDefaultCurrency();
+        $Currency = self::getDefaultCurrency();
+
+        if ($Currency instanceof Currency) {
+            self::$RuntimeCurrency = $Currency;
+            return $Currency;
+        }
+
+        self::$RuntimeCurrency = self::getCurrency('EUR');
+        return self::$RuntimeCurrency;
     }
 
     public static function setRuntimeCurrency(Currency $currency): void
