@@ -9,7 +9,7 @@
  *
  * @return array
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_setAutoupdate',
     function ($currency, $autoupdate) {
         QUI\ERP\Currency\Handler::updateCurrency($currency, [

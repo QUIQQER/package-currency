@@ -10,7 +10,7 @@
  * @return array
  */
 
-QUI::$Ajax->registerFunction('package_quiqqer_currency_ajax_getAllowedCurrencies', function () {
+QUI::getAjax()->registerFunction('package_quiqqer_currency_ajax_getAllowedCurrencies', function () {
     $allowed = QUI\ERP\Currency\Handler::getAllowedCurrencies();
     $result = [];
 

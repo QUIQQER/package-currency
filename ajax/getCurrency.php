@@ -9,7 +9,7 @@
  *
  * @return array
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_getCurrency',
     function ($currency) {
         $Currency = QUI\ERP\Currency\Handler::getCurrency($currency);

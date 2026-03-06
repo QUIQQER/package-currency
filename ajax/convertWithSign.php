@@ -12,7 +12,7 @@
 
 use QUI\ERP\Currency\Handler;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_convertWithSign',
     function ($data) {
         $data = json_decode($data, true);

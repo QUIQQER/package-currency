@@ -5,6 +5,8 @@ namespace QUI\ERP\Currency;
 use QUI;
 use QUI\Exception;
 
+use function is_string;
+
 /**
  * Class Conf
  *
@@ -35,10 +37,14 @@ class Conf
             return Handler::getDefaultCurrency();
         }
 
+        $accountingCurrency = self::conf('currency', 'accountingCurrency');
+
+        if (!is_string($accountingCurrency) || $accountingCurrency === '') {
+            return Handler::getDefaultCurrency();
+        }
+
         try {
-            return Handler::getCurrency(
-                self::conf('currency', 'accountingCurrency')
-            );
+            return Handler::getCurrency($accountingCurrency);
         } catch (QUI\Exception) {
             return Handler::getDefaultCurrency();
         }
@@ -50,13 +56,16 @@ class Conf
      * @param string $section
      * @param string|null $key
      *
-     * @return array|bool|string
+     * @return array<string, mixed>|bool|string
      */
     public static function conf(string $section, ?string $key): bool | array | string
     {
         try {
             $Package = QUI::getPackage('quiqqer/currency');
             $Config = $Package->getConfig();
+            if ($Config === null) {
+                return false;
+            }
 
             return $Config->get($section, $key);
         } catch (QUI\Exception) {

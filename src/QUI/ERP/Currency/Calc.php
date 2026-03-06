@@ -19,8 +19,8 @@ class Calc
      * Convert the amount from one to another currency
      *
      * @param float|int|string $amount
-     * @param string|array|Currency $currencyFrom - based currency
-     * @param array|string|Currency $currencyTo - optional, wanted currency, default = EUR
+     * @param array<string, mixed>|string|Currency $currencyFrom - based currency
+     * @param array<string, mixed>|string|Currency $currencyTo - optional, wanted currency, default = EUR
      * @return float
      *
      * @throws QUI\Exception
@@ -33,15 +33,15 @@ class Calc
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
 
-        return $From->convert($amount, $To);
+        return (float)$From->convert($amount, $To);
     }
 
     /**
      * Convert with currency sign
      *
      * @param float|int|string $amount
-     * @param array|string|Currency $currencyFrom - based currency
-     * @param array|string|Currency $currencyTo - optional, wanted currency, default = EUR
+     * @param array<string, mixed>|string|Currency $currencyFrom - based currency
+     * @param array<string, mixed>|string|Currency $currencyTo - optional, wanted currency, default = EUR
      * @return string
      *
      * @throws QUI\Exception
@@ -60,16 +60,16 @@ class Calc
     /**
      * Return the exchange rate between two currencies
      *
-     * @param array|string|Currency $currencyFrom
-     * @param array|string|Currency $currencyTo
-     * @return float|boolean
+     * @param array<string, mixed>|string|Currency $currencyFrom
+     * @param array<string, mixed>|string|Currency $currencyTo
+     * @return float|false
      *
      * @throws QUI\Exception
      */
     public static function getExchangeRateBetween(
         Currency | array | string $currencyFrom,
         Currency | array | string $currencyTo
-    ): float | bool {
+    ): float | false {
         $From = Handler::getCurrency($currencyFrom);
         $To = Handler::getCurrency($currencyTo);
 

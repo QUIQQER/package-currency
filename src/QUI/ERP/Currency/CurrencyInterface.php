@@ -36,7 +36,7 @@ interface CurrencyInterface
     /**
      * Currency constructor.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      * @param QUI\Locale|null $Locale - Locale for the currency
      */
     public function __construct(array $data, null|QUI\Locale $Locale = null);
@@ -46,7 +46,7 @@ interface CurrencyInterface
      *
      * @param QUI\Locale $Locale
      */
-    public function setLocale(QUI\Locale $Locale);
+    public function setLocale(QUI\Locale $Locale): void;
 
     /**
      * Return the currency code
@@ -77,7 +77,7 @@ interface CurrencyInterface
     /**
      * Return the currency data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(): array;
 
@@ -142,12 +142,12 @@ interface CurrencyInterface
      *
      * @param float|integer $rate
      */
-    public function setExchangeRate($rate);
+    public function setExchangeRate($rate): void;
 
     /**
      * Get all custom data.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getCustomData(): array;
 
@@ -155,10 +155,10 @@ interface CurrencyInterface
      * Set specific custom data entry.
      *
      * @param string $key
-     * @param $value
-     * @return mixed
+     * @param mixed $value
+     * @return void
      */
-    public function setCustomDataEntry(string $key, $value);
+    public function setCustomDataEntry(string $key, mixed $value): void;
 
     /**
      * Get specific custom data entry.
