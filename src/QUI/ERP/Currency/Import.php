@@ -56,17 +56,26 @@ class Import
 
         // look if EUR is not the default currency
         $Default = Handler::getDefaultCurrency();
+        $defaultCode = $Default?->getCode();
 
-        if (!isset($values[$Default->getCode()])) {
+        if ($defaultCode === null) {
             throw new QUI\Exception([
                 'quiqqer/currency',
                 'exception.could.not.import.currencies',
-                ['currency' => $Default->getCode()]
+                ['currency' => 'unknown']
+            ]);
+        }
+
+        if (!isset($values[$defaultCode])) {
+            throw new QUI\Exception([
+                'quiqqer/currency',
+                'exception.could.not.import.currencies',
+                ['currency' => $defaultCode]
             ]);
         }
 
         // is only used if EUR is not the default currency
-        $baseRate = 1 / $values[$Default->getCode()]; // eq: 1EUR / 1$
+        $baseRate = 1 / $values[$defaultCode]; // eq: 1EUR / 1$
 
         foreach ($values as $currency => $rate) {
             try {
@@ -77,10 +86,10 @@ class Import
                 }
 
                 // is only used if EUR is not the default currency
-                if ($Default->getCode() !== 'EUR') {
+                if ($defaultCode !== 'EUR') {
                     if ($Currency->getCode() === 'EUR') {
                         $rate = $baseRate;
-                    } elseif ($Default->getCode() === $Currency->getCode()) {
+                    } elseif ($defaultCode === $Currency->getCode()) {
                         $rate = 1;
                     } else {
                         // calc the rate
@@ -100,7 +109,7 @@ class Import
     /**
      * Fetch the daily currencies rates from the ECB
      *
-     * @return array
+     * @return array<string, float>
      */
     protected static function getECBData(): array
     {
@@ -118,6 +127,10 @@ class Import
             return [];
         }
 
+        if (!is_string($result) || $result === '') {
+            return [];
+        }
+
         $Dom = new DOMDocument();
         $Dom->loadXML($result);
 
@@ -128,12 +141,14 @@ class Import
         }
 
         $values = [
-            'EUR' => '1.0'
+            'EUR' => 1.0
         ];
 
         for ($c = 0; $c < $list->length; $c++) {
-            /* @var $Cube DOMElement */
             $Cube = $list->item($c);
+            if (!$Cube instanceof DOMElement) {
+                continue;
+            }
 
             $currency = $Cube->getAttribute('currency');
             $rate = $Cube->getAttribute('rate');
@@ -142,7 +157,7 @@ class Import
                 continue;
             }
 
-            $values[$currency] = $rate;
+            $values[$currency] = (float)$rate;
         }
 
         return $values;

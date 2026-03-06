@@ -8,7 +8,7 @@
  * Imports the currencies from the ECB
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_importFromECB',
     function () {
         QUI\ERP\Currency\Import::importCurrenciesFromECB();

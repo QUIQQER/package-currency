@@ -6,7 +6,7 @@
  * @return array
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_getCurrencyTypes',
     function () {
         return QUI\ERP\Currency\Handler::getCurrencyTypes();

@@ -10,7 +10,7 @@
 
 use QUI\ERP\Currency\Handler;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_setUserCurrency',
     function ($currency) {
         $allowed = Handler::getAllowedCurrencies();

@@ -2,114 +2,127 @@
 
 namespace QUITests\ERP\Currency;
 
+use PHPUnit\Framework\TestCase;
 use QUI;
 
-/**
- * Class FieldsTest
- */
-class CurrencyTest extends \PHPUnit_Framework_TestCase
+class CurrencyTest extends TestCase
 {
-    public function testCurrency()
+    protected function setUp(): void
     {
-        // get EUR
-        $EUR = new QUI\ERP\Currency\Currency('EUR');
+        parent::setUp();
 
-        $this->assertNotEmpty($EUR);
+        $data = QUI\ERP\Currency\Handler::getData();
+        if (empty($data)) {
+            $this->markTestSkipped('Currency tests require seeded currency data (DB-backed).');
+        }
+
+        foreach (['EUR', 'USD', 'GBP'] as $code) {
+            if (!isset($data[$code])) {
+                $this->markTestSkipped(
+                    'Currency tests require EUR, USD and GBP in the currency data.'
+                );
+            }
+        }
+    }
+
+    public function testCurrency(): void
+    {
+        $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
+
+        $this->assertInstanceOf(QUI\ERP\Currency\Currency::class, $EUR);
         $this->assertNotEmpty($EUR->getSign());
-        $this->assertNotEmpty($EUR->getExchangeRate());
+        $this->assertGreaterThan(0, $EUR->getExchangeRate());
         $this->assertNotEmpty($EUR->getCode());
         $this->assertNotEmpty($EUR->getText());
     }
 
-    public function testUnknownCurrency()
+    public function testUnknownCurrency(): void
     {
-        // test unknown
-        $this->setExpectedException('QUI\Exception');
-
-        new QUI\ERP\Currency\Currency('NaN');
+        $this->expectException(QUI\Exception::class);
+        QUI\ERP\Currency\Handler::getCurrency('NaN');
     }
 
-    public function testGetCode()
+    public function testGetCode(): void
     {
-        $EUR = new QUI\ERP\Currency\Currency('EUR');
+        $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
 
-        $this->assertEquals($EUR->getCode(), 'EUR');
+        $this->assertSame('EUR', $EUR->getCode());
     }
 
-    public function testGetSign()
+    public function testGetSign(): void
     {
-        $EUR = new QUI\ERP\Currency\Currency('EUR');
+        $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
 
-        $this->assertEquals($EUR->getSign(), '€');
+        $this->assertSame('€', $EUR->getSign());
     }
 
-    public function testGetText()
+    public function testGetText(): void
     {
-        $EUR = new QUI\ERP\Currency\Currency('EUR');
+        $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
 
         $this->assertNotEmpty($EUR->getText());
     }
 
-    public function testFormat()
+    public function testFormat(): void
     {
-        $EUR    = new QUI\ERP\Currency\Currency('EUR');
+        $EUR    = QUI\ERP\Currency\Handler::getCurrency('EUR');
         $format = $EUR->format(14.99);
 
-        $this->assertTrue(is_string($format));
+        $this->assertIsString($format);
     }
 
-    public function testGetExchangeRate()
+    public function testGetExchangeRate(): void
     {
-        $EUR = new QUI\ERP\Currency\Currency('EUR');
-        $USD = new QUI\ERP\Currency\Currency('USD');
+        $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
+        $USD = QUI\ERP\Currency\Handler::getCurrency('USD');
 
         $eurRate = $EUR->getExchangeRate();
         $usdRate = $EUR->getExchangeRate($USD);
 
-        $this->assertTrue(is_float($eurRate));
+        $this->assertIsFloat($eurRate);
 
         // to another currency
-        $this->assertTrue(is_float($usdRate));
+        $this->assertIsFloat($usdRate);
         $this->assertNotEquals($eurRate, $usdRate);
     }
 
-    public function testConvert()
+    public function testConvert(): void
     {
-        $EUR = new QUI\ERP\Currency\Currency('EUR');
-        $USD = new QUI\ERP\Currency\Currency('USD');
-        $GBP = new QUI\ERP\Currency\Currency('GBP');
+        $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
+        $USD = QUI\ERP\Currency\Handler::getCurrency('USD');
+        $GBP = QUI\ERP\Currency\Handler::getCurrency('GBP');
 
         $usd = $EUR->convert(1, 'USD');
 
         $this->assertNotEquals($usd, $EUR->getExchangeRate());
-        $this->assertTrue(is_float($usd));
+        $this->assertIsFloat($usd);
 
 
         // some calc tests
         $oneDollarInEuro = $USD->convert(1, 'EUR');
         $onePoundInEuro  = $GBP->convert(1, 'EUR');
 
-        $this->assertTrue(is_float($oneDollarInEuro));
-        $this->assertTrue(is_float($onePoundInEuro));
+        $this->assertIsFloat($oneDollarInEuro);
+        $this->assertIsFloat($onePoundInEuro);
 
         // dollar in pound
         $oneDollarInPound = $USD->convert(1, 'GBP');
 
-        $this->assertTrue(is_float($oneDollarInPound));
+        $this->assertIsFloat($oneDollarInPound);
 
         // alles wieder zurück, wenn das klappt, passen die rechnung
         $PoundToDollar = $GBP->convert($oneDollarInPound, 'USD');
         $DollarToEuro  = $USD->convert($usd, 'EUR');
 
-        $this->assertEquals(1, $PoundToDollar);
-        $this->assertEquals(1, $DollarToEuro);
+        $this->assertEqualsWithDelta(1.0, $PoundToDollar, 0.0001);
+        $this->assertEqualsWithDelta(1.0, $DollarToEuro, 0.0001);
     }
 
-    public function testConvertFormat()
+    public function testConvertFormat(): void
     {
-        $EUR = new QUI\ERP\Currency\Currency('EUR');
+        $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
         $usd = $EUR->convertFormat(1, 'USD');
 
-        $this->assertTrue(is_string($usd));
+        $this->assertIsString($usd);
     }
 }

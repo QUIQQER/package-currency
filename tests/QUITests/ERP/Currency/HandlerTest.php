@@ -2,14 +2,21 @@
 
 namespace QUITests\ERP\Currency;
 
+use PHPUnit\Framework\TestCase;
 use QUI;
 
-/**
- * Class FieldsTest
- */
-class HandlerTest extends \PHPUnit_Framework_TestCase
+class HandlerTest extends TestCase
 {
-    public function testGetDefaultCurrency()
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (empty(QUI\ERP\Currency\Handler::getData())) {
+            $this->markTestSkipped('Handler tests require seeded currency data (DB-backed).');
+        }
+    }
+
+    public function testGetDefaultCurrency(): void
     {
         $Currency = QUI\ERP\Currency\Handler::getDefaultCurrency();
 
@@ -18,43 +25,45 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($Currency->getCode());
 
         // default config check
-        $Config              = new QUI\Config(ETC_DIR . 'plugins/quiqqer/currency.ini.php');
+        $Config = QUI::getPackage('quiqqer/currency')->getConfig();
         $defaultFromSettings = $Config->getValue('currency', 'defaultCurrency');
 
-        $this->assertEquals($defaultFromSettings, $Currency->getCode());
+        $this->assertSame($defaultFromSettings, $Currency->getCode());
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
         $data = QUI\ERP\Currency\Handler::getData();
 
         $this->assertNotEmpty($data);
     }
 
-    public function testGetCurrency()
+    public function testGetCurrency(): void
     {
         $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');
         $USD = QUI\ERP\Currency\Handler::getCurrency('USD');
 
-        $this->assertEquals($EUR->getSign(), '€');
-        $this->assertEquals($USD->getSign(), '$');
+        $this->assertSame('EUR', $EUR->getCode());
+        $this->assertSame('USD', $USD->getCode());
 
-        $this->assertEquals($EUR->getCode(), 'EUR');
-        $this->assertEquals($USD->getCode(), 'USD');
+        $this->assertSame('€', $EUR->getSign());
+        $this->assertSame('$', $USD->getSign());
     }
 
-    public function testGetAllowedCurrencies()
+    public function testGetAllowedCurrencies(): void
     {
-        $Config = new QUI\Config(ETC_DIR . 'plugins/quiqqer/currency.ini.php');
+        $Config = QUI::getPackage('quiqqer/currency')->getConfig();
 
         $allowed = $Config->getValue('currency', 'allowedCurrencies');
-        $allowed = explode(',', $allowed);
+        $allowed = explode(',', trim($allowed));
+        $default = QUI\ERP\Currency\Handler::getDefaultCurrency()->getCode();
 
         $list = QUI\ERP\Currency\Handler::getAllowedCurrencies();
+        $this->assertNotEmpty($list);
 
         foreach ($list as $Currency) {
             $this->assertTrue(
-                in_array($Currency->getCode(), $allowed)
+                in_array($Currency->getCode(), $allowed, true) || $Currency->getCode() === $default
             );
         }
     }

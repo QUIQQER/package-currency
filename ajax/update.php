@@ -12,7 +12,7 @@
 
 use QUI\ERP\Currency\Handler;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_update',
     function ($currency, $code, $rate, $precision, $type, $customData) {
         $customData = !empty($customData) ? json_decode($customData, true) : null;
