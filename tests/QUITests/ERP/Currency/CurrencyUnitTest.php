@@ -12,6 +12,8 @@ class CurrencyUnitTest extends TestCase
     private Currency $USD;
     private Currency $GBP;
     private ?Currency $originalDefault = null;
+    /** @var array<string, array<string, mixed>> */
+    private array $originalCurrencies = [];
 
     protected function setUp(): void
     {
@@ -21,6 +23,13 @@ class CurrencyUnitTest extends TestCase
         $this->USD = $this->createCurrency('USD', 1.2);
         $this->GBP = $this->createCurrency('GBP', 0.8);
 
+        $this->originalCurrencies = $this->getCurrenciesFromHandler();
+        $this->setCurrenciesOnHandler([
+            'EUR' => $this->createCurrencyData('EUR', 1.0),
+            'USD' => $this->createCurrencyData('USD', 1.2),
+            'GBP' => $this->createCurrencyData('GBP', 0.8)
+        ]);
+
         $this->originalDefault = $this->getDefaultCurrencyFromHandler();
         $this->setDefaultCurrencyOnHandler($this->EUR);
     }
@@ -28,6 +37,7 @@ class CurrencyUnitTest extends TestCase
     protected function tearDown(): void
     {
         $this->setDefaultCurrencyOnHandler($this->originalDefault);
+        $this->setCurrenciesOnHandler($this->originalCurrencies);
         parent::tearDown();
     }
 
@@ -58,13 +68,22 @@ class CurrencyUnitTest extends TestCase
 
     private function createCurrency(string $code, float $rate): Currency
     {
-        return new Currency([
+        return new Currency($this->createCurrencyData($code, $rate));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function createCurrencyData(string $code, float $rate): array
+    {
+        return [
             'currency' => $code,
             'rate' => $rate,
             'autoupdate' => 1,
             'precision' => 2,
-            'customData' => []
-        ]);
+            'customData' => [],
+            'type' => 'default'
+        ];
     }
 
     private function setDefaultCurrencyOnHandler(?Currency $Currency): void
@@ -82,5 +101,29 @@ class CurrencyUnitTest extends TestCase
         $property->setAccessible(true);
 
         return $property->getValue();
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function getCurrenciesFromHandler(): array
+    {
+        $reflection = new \ReflectionClass(Handler::class);
+        $property = $reflection->getProperty('currencies');
+        $property->setAccessible(true);
+        $value = $property->getValue();
+
+        return is_array($value) ? $value : [];
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $currencies
+     */
+    private function setCurrenciesOnHandler(array $currencies): void
+    {
+        $reflection = new \ReflectionClass(Handler::class);
+        $property = $reflection->getProperty('currencies');
+        $property->setAccessible(true);
+        $property->setValue(null, $currencies);
     }
 }
