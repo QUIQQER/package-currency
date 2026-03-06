@@ -2,24 +2,24 @@
 
 namespace QUITests\ERP\Currency;
 
+use PHPUnit\Framework\TestCase;
 use QUI;
 
-/**
- * Class FieldsTest
- */
-class ImportTest extends \PHPUnit_Framework_TestCase
+class ImportTest extends TestCase
 {
-    /**
-     * Create child test
-     * @throws \QUI\Exception
-     */
-    public function testImport()
+    public function testImport(): void
     {
-        QUI\ERP\Currency\Import::importCurrenciesFromECB();
+        try {
+            QUI\ERP\Currency\Import::importCurrenciesFromECB();
+        } catch (QUI\Exception $Exception) {
+            $this->markTestSkipped(
+                'ECB import currently unavailable in test environment: ' . $Exception->getMessage()
+            );
+        }
 
-        $result = QUI::getDataBase()->fetch(array(
+        $result = QUI::getDataBase()->fetch([
             'from' => QUI\ERP\Currency\Handler::table()
-        ));
+        ]);
 
         $this->assertNotEmpty($result);
     }
