@@ -7,6 +7,24 @@ use QUI;
 
 class CurrencyTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $data = QUI\ERP\Currency\Handler::getData();
+        if (empty($data)) {
+            $this->markTestSkipped('Currency tests require seeded currency data (DB-backed).');
+        }
+
+        foreach (['EUR', 'USD', 'GBP'] as $code) {
+            if (!isset($data[$code])) {
+                $this->markTestSkipped(
+                    'Currency tests require EUR, USD and GBP in the currency data.'
+                );
+            }
+        }
+    }
+
     public function testCurrency(): void
     {
         $EUR = QUI\ERP\Currency\Handler::getCurrency('EUR');

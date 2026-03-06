@@ -7,6 +7,15 @@ use QUI;
 
 class HandlerTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (empty(QUI\ERP\Currency\Handler::getData())) {
+            $this->markTestSkipped('Handler tests require seeded currency data (DB-backed).');
+        }
+    }
+
     public function testGetDefaultCurrency(): void
     {
         $Currency = QUI\ERP\Currency\Handler::getDefaultCurrency();
