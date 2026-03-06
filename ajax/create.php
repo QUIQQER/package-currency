@@ -10,7 +10,7 @@
  * @return array
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_create',
     function ($currency) {
         QUI\ERP\Currency\Handler::createCurrency($currency);

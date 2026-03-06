@@ -32,6 +32,8 @@ class Handler
 
     /**
      * currency temp list
+     *
+     * @var array<string, array<string, mixed>>
      */
     protected static array $currencies = [];
 
@@ -191,10 +193,16 @@ class Handler
         if (self::$Default === null) {
             try {
                 $Config = QUI::getPackage('quiqqer/currency')->getConfig();
+                $defaultCurrency = $Config?->getValue('currency', 'defaultCurrency');
 
-                self::$Default = self::getCurrency(
-                    $Config->getValue('currency', 'defaultCurrency')
-                );
+                if (!is_string($defaultCurrency) || $defaultCurrency === '') {
+                    throw new QUI\Exception(
+                        ['quiqqer/currency', 'currency.not.found'],
+                        404
+                    );
+                }
+
+                self::$Default = self::getCurrency($defaultCurrency);
             } catch (QUI\Exception) {
                 QUI\System\Log::addWarning('Default currency is missing');
 
@@ -267,7 +275,11 @@ class Handler
 
         try {
             $Config = QUI::getPackage('quiqqer/currency')->getConfig();
-            $allowed = $Config->getValue('currency', 'allowedCurrencies');
+            $allowed = $Config?->getValue('currency', 'allowedCurrencies');
+            if (!is_string($allowed)) {
+                return null;
+            }
+
             $allowed = explode(',', trim($allowed));
             $allowed = array_flip($allowed);
 
@@ -298,12 +310,20 @@ class Handler
     {
         try {
             $Config = QUI::getPackage('quiqqer/currency')->getConfig();
-            $allowed = $Config->getValue('currency', 'allowedCurrencies');
+            $allowed = $Config?->getValue('currency', 'allowedCurrencies');
+            if (!is_string($allowed)) {
+                return [];
+            }
 
             $allowed = explode(',', trim($allowed));
             $list = [];
+            $defaultCurrency = self::getDefaultCurrency();
 
-            $default = self::getDefaultCurrency()->getCode();
+            if (!$defaultCurrency instanceof Currency) {
+                return [];
+            }
+
+            $default = $defaultCurrency->getCode();
 
             if (!in_array($default, $allowed)) {
                 $allowed[] = $default;
@@ -326,7 +346,7 @@ class Handler
     /**
      * Return the currency db data
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getData(): array
     {
@@ -342,10 +362,17 @@ class Handler
             }
 
             foreach ($data as $entry) {
-                $entry['type'] = mb_strtolower($entry['type']);
+                if (!is_array($entry) || !isset($entry['currency']) || !is_string($entry['currency'])) {
+                    continue;
+                }
+
+                $entry['type'] = isset($entry['type']) && is_string($entry['type'])
+                    ? mb_strtolower($entry['type'])
+                    : self::CURRENCY_TYPE_DEFAULT;
 
                 if (!empty($entry['customData'])) {
-                    $entry['customData'] = json_decode($entry['customData'], true);
+                    $customData = json_decode((string)$entry['customData'], true);
+                    $entry['customData'] = is_array($customData) ? $customData : [];
                 }
 
                 self::$currencies[$entry['currency']] = $entry;
@@ -358,7 +385,7 @@ class Handler
     /**
      * Return a currency
      *
-     * @param Currency|string|array $currency
+     * @param Currency|string|array<string, mixed> $currency
      * @return Currency
      * @throws QUI\Exception
      */
@@ -373,18 +400,25 @@ class Handler
 
         if (is_string($currency)) {
             $code = $currency;
-        } elseif (isset($currency['code'])) {
+        } elseif (isset($currency['code']) && is_string($currency['code'])) {
             $code = $currency['code'];
         }
 
-        if (isset($data[$code])) {
+        if ($code !== null && isset($data[$code])) {
             $class = Currency::class;
+            $currencyData = $data[$code];
 
-            if (!empty($data[$code]['type'])) {
-                $class = self::getCurrencyClassByType($data[$code]['type']);
+            if (!empty($currencyData['type']) && is_string($currencyData['type'])) {
+                $class = self::getCurrencyClassByType($currencyData['type']);
             }
 
-            return new $class($data[$code]);
+            $Currency = new $class($currencyData);
+
+            if ($Currency instanceof Currency) {
+                return $Currency;
+            }
+
+            return new Currency($currencyData);
         }
 
         throw new QUI\Exception(
@@ -411,7 +445,7 @@ class Handler
      * Return all currency entries
      *
      * @param Locale|null $Locale - optional, for translation
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getCurrencies(null | QUI\Locale $Locale = null): array
     {
@@ -423,12 +457,18 @@ class Handler
         $cacheNameLang = 'quiqqer/currency/list/' . $Locale->getCurrent();
 
         try {
-            return QUI\Cache\Manager::get($cacheNameLang);
+            $cacheResult = QUI\Cache\Manager::get($cacheNameLang);
+            if (is_array($cacheResult)) {
+                return $cacheResult;
+            }
         } catch (QUI\Exception) {
         }
 
         try {
             $currencies = QUI\Cache\Manager::get($cacheName);
+            if (!is_array($currencies)) {
+                $currencies = [];
+            }
         } catch (QUI\Exception) {
             $currencies = [];
             $data = self::getData();
@@ -454,13 +494,13 @@ class Handler
     }
 
     /**
-     * @param $currency
-     * @param $data
+     * @param Currency|string|array<string, mixed> $currency
+     * @param array<string, mixed> $data
      *
      * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
-    public static function updateCurrency($currency, $data): void
+    public static function updateCurrency(Currency | string | array $currency, array $data): void
     {
         QUI\Permissions\Permission::checkPermission('currency.edit');
 
@@ -533,13 +573,12 @@ class Handler
     /**
      * Get available currency types (provided by <currency> package.xml providers).
      *
-     * @return array
-     * [
-     *     'type' => 'xyz',
-     *     'typeTitle' => 'Currency Type XYZ',
-     *     'class' => Class path,
-     *     'settingsFormHtml' => string|null
-     * ]
+     * @return array<int, array{
+     *     type: string,
+     *     typeTitle: string,
+     *     class: string,
+     *     settingsFormHtml: string|null
+     * }>
      */
     public static function getCurrencyTypes(): array
     {
@@ -595,9 +634,12 @@ class Handler
             return self::$RuntimeCurrency;
         }
 
-        if (QUI::getSession()->get('currency')) {
+        $Session = QUI::getSession();
+        $runtimeCode = $Session?->get('currency');
+
+        if (is_string($runtimeCode) && $runtimeCode !== '') {
             try {
-                $Currency = self::getCurrency(QUI::getSession()->get('currency'));
+                $Currency = self::getCurrency($runtimeCode);
                 self::$RuntimeCurrency = $Currency;
                 return self::$RuntimeCurrency;
             } catch (QUI\Exception) {
@@ -629,7 +671,7 @@ class Handler
         self::$RuntimeCurrency = $currency;
 
         if (QUI::isFrontend()) {
-            QUI::getSession()->set('currency', $currency->getCode());
+            QUI::getSession()?->set('currency', $currency->getCode());
         }
     }
 

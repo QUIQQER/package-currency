@@ -58,17 +58,20 @@ abstract class AbstractCurrency implements CurrencyInterface
      */
     protected ?QUI\Locale $Locale;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $customData = [];
 
     /**
      * Currency constructor.
      *
-     * @param array $data
-     * @param boolean|QUI\Locale $Locale - Locale for the currency
+     * @param array<string, mixed> $data
+     * @param null|QUI\Locale $Locale - Locale for the currency
      *
      * @throws QUI\Exception
      */
-    public function __construct(array $data, $Locale = false)
+    public function __construct(array $data, null | QUI\Locale $Locale = null)
     {
         if (!isset($data['currency']) && isset($data['code'])) {
             $data['currency'] = $data['code'];
@@ -81,11 +84,7 @@ abstract class AbstractCurrency implements CurrencyInterface
             );
         }
 
-        if (!$Locale) {
-            $this->Locale = QUI::getLocale();
-        } else {
-            $this->Locale = $Locale;
-        }
+        $this->Locale = $Locale ?? QUI::getLocale();
 
         $this->code = $data['currency'];
         $this->exchangeRate = (float)$data['rate'];
@@ -157,7 +156,7 @@ abstract class AbstractCurrency implements CurrencyInterface
     /**
      * Return the currency data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {
@@ -188,16 +187,20 @@ abstract class AbstractCurrency implements CurrencyInterface
             return $amount;
         }
 
-        if (!$Locale) {
-            $Locale = $this->Locale;
-        }
+        $Locale = $Locale ?? $this->Locale ?? QUI::getLocale();
 
         $amount = $this->format($amount, $Locale);
-        $amount = preg_replace('/[^0-9,".]/', '', $amount);
+        $amount = preg_replace('/[^0-9,".]/', '', $amount) ?? '';
         $amount = trim($amount);
 
         $decimalSeparator = $Locale->getDecimalSeparator();
         $groupingSeparator = $Locale->getGroupingSeparator();
+        if (is_array($decimalSeparator)) {
+            $decimalSeparator = isset($decimalSeparator[0]) ? (string)$decimalSeparator[0] : '';
+        } else {
+            $decimalSeparator = (string)$decimalSeparator;
+        }
+        $groupingSeparator = (string)$groupingSeparator;
 
         if (strpos($amount, $decimalSeparator) && $decimalSeparator != ' . ') {
             $amount = str_replace($groupingSeparator, '', $amount);
@@ -217,19 +220,19 @@ abstract class AbstractCurrency implements CurrencyInterface
      */
     public function format($amount, null | QUI\Locale $Locale = null): string
     {
-        if (!$Locale) {
-            $Locale = $this->Locale;
-        }
+        $Locale = $Locale ?? $this->Locale ?? QUI::getLocale();
 
         $localeCode = $Locale->getLocalesByLang($Locale->getCurrent());
+        $locale = isset($localeCode[0]) ? (string)$localeCode[0] : (string)$Locale->getCurrent();
+        $pattern = (string)$Locale->getAccountingCurrencyPattern();
 
         $Formatter = new NumberFormatter(
-            $localeCode[0],
+            $locale,
             NumberFormatter::CURRENCY,
-            $Locale->getAccountingCurrencyPattern()
+            $pattern
         );
 
-        $Formatter->setPattern($Locale->getAccountingCurrencyPattern());
+        $Formatter->setPattern($pattern);
         $Formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $this->precision);
 
         if (is_string($amount)) {
@@ -251,11 +254,11 @@ abstract class AbstractCurrency implements CurrencyInterface
         $code = $this->getCode();
 
         if (mb_strlen($code) <= 3) {
-            return $Formatter->formatCurrency($amount, $this->getCode());
+            return $Formatter->formatCurrency($amount, $this->getCode()) ?: '';
         }
 
         $replacer = 'ZZZ';
-        $result = $Formatter->formatCurrency($amount, $replacer);
+        $result = $Formatter->formatCurrency($amount, $replacer) ?: '';
 
         return str_replace($replacer, $this->getCode(), $result);
     }
@@ -295,9 +298,15 @@ abstract class AbstractCurrency implements CurrencyInterface
             throw $Exception;
         }
 
+        $amount = (float)$amount;
+
+        if ($Currency instanceof CurrencyInterface && !$Currency instanceof Currency) {
+            $Currency = $Currency->getCode();
+        }
+
         $Currency = Handler::getCurrency($Currency);
         $Default = Handler::getDefaultCurrency();
-        $default = $Default->getCode();
+        $default = $Default?->getCode() ?? 'EUR';
 
         if ($this->getCode() == $Currency->getCode()) {
             return $amount;
@@ -309,17 +318,31 @@ abstract class AbstractCurrency implements CurrencyInterface
         // exchange rates are based on the default currency (eq EUR)
         // $from == 'EUR' && $to != 'EUR'
         if ($from == $default && $to != $default) {
-            return $amount * $Currency->getExchangeRate();
+            $targetRate = $Currency->getExchangeRate();
+            if ($targetRate === false) {
+                return $amount;
+            }
+
+            return $amount * $targetRate;
         }
 
         // $from != 'EUR' && $to == 'EUR'
         if ($from != $default && $to == $default) {
-            return $amount * (1 / $this->getExchangeRate());
+            $sourceRate = $this->getExchangeRate();
+            if ($sourceRate === false || $sourceRate == 0.0) {
+                return $amount;
+            }
+
+            return $amount * (1 / $sourceRate);
         }
 
-        $currency = $this->convert($amount, $default);
+        $currency = (float)$this->convert($amount, $default);
+        $targetRate = $Currency->getExchangeRate();
+        if ($targetRate === false) {
+            return $currency;
+        }
 
-        return $currency * $Currency->getExchangeRate();
+        return $currency * $targetRate;
     }
 
     /**
@@ -351,6 +374,10 @@ abstract class AbstractCurrency implements CurrencyInterface
     {
         if ($Currency === false) {
             return $this->exchangeRate;
+        }
+
+        if ($Currency === true) {
+            return false;
         }
 
         try {
@@ -394,7 +421,7 @@ abstract class AbstractCurrency implements CurrencyInterface
     /**
      * Get all custom data.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getCustomData(): array
     {
@@ -405,10 +432,10 @@ abstract class AbstractCurrency implements CurrencyInterface
      * Set specific custom data entry.
      *
      * @param string $key
-     * @param $value
+     * @param mixed $value
      * @return void
      */
-    public function setCustomDataEntry(string $key, $value): void
+    public function setCustomDataEntry(string $key, mixed $value): void
     {
         $this->customData[$key] = $value;
     }

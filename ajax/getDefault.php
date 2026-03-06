@@ -9,10 +9,11 @@
  *
  * @return array
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_getDefault',
     function () {
-        return QUI\ERP\Currency\Handler::getDefaultCurrency()->toArray();
+        $Default = QUI\ERP\Currency\Handler::getDefaultCurrency();
+        return $Default instanceof QUI\ERP\Currency\Currency ? $Default->toArray() : [];
     },
     false,
     'Permission::checkAdminUser'

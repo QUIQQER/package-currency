@@ -10,7 +10,7 @@
  * @return array
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_currency_ajax_convert',
     function ($amount, $currencyFrom, $currencyTo) {
         return QUI\ERP\Currency\Calc::convert($amount, $currencyFrom, $currencyTo);
